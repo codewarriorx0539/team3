@@ -19,9 +19,9 @@ public class FileProcessor
     {
         ArrayList<String> listOfWords = new ArrayList<>();
         String firstPass = fileAsAString.toLowerCase();
-        String [] strings = firstPass.split("\\.");
+        String [] sentences = firstPass.split("\\.");
         
-        for(String s : strings)
+        for(String s : sentences)
         {
             String [] words = s.replaceAll("[^a-zA-Z\\d\\s]", "").trim().split("\\s");
             listOfWords.addAll(Arrays.asList(words));
