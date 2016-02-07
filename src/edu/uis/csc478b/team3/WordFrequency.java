@@ -81,7 +81,7 @@ public class WordFrequency
             }
         }
         
-        return new WordFrequencyResults(masterTotal,compareTotal, similarWords);
+        return new WordFrequencyResults(masterTotal, compareTotal, similarWords);
     }
     
     

@@ -12,11 +12,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Jake
  */
-@XmlRootElement
 public class ConfigComparison 
 {
     String suspectFile;
     String masterFile;
+    String commonWordsFile;
     boolean filterCommonWords;
     
     float INSERT_COST;        

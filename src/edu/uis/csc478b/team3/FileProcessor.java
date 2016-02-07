@@ -2,7 +2,6 @@
 package edu.uis.csc478b.team3;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -42,12 +41,17 @@ public class FileProcessor
     /**
      * 
      * @param fileAsAString
+     * @param listOfSentences
      * @return 
      */
-    public ArrayList<String> getSentences( String fileAsAString )
+    public int getSentences( String fileAsAString, ArrayList<String> listOfSentences)
     {
-        ArrayList<String> listOfSentences = new ArrayList<>();
+        if(listOfSentences == null)
+        {
+            throw new NullPointerException();
+        }
         
+        int totalWords = 0;
         String firstPass = fileAsAString.toLowerCase();
         String [] sentences = firstPass.split( REGEX_PERIOD );
         
@@ -55,6 +59,9 @@ public class FileProcessor
         {
             String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim();
             String [] words = formatedSentence.split( REGEX_WHITESPACE );
+            
+            totalWords = totalWords + words.length;
+            
             for(String word : words)
             {
                 if(commonWords.containsKey(word) == false)
@@ -65,18 +72,23 @@ public class FileProcessor
             listOfSentences.add( formatedSentence );
         }
         
-        return listOfSentences;
+        return totalWords;
     }
     
     /**
      * 
      * @param fileAsAString
+     * @param listOfWordsOfSentences
      * @return 
      */
-    public ArrayList< ArrayList<String> > getWordsOfSentences( String fileAsAString )
+    public int getWordsOfSentences( String fileAsAString, ArrayList< ArrayList<String> >  listOfWordsOfSentences)
     {
-        ArrayList< ArrayList<String> > listOfWordsOfSentences = new ArrayList<>();
+        if(listOfWordsOfSentences == null)
+        {
+            throw new NullPointerException();
+        }
         
+        int totalWords = 0;
         String firstPass = fileAsAString.toLowerCase();
         String [] sentences = firstPass.split( REGEX_PERIOD );
         
@@ -84,6 +96,7 @@ public class FileProcessor
         {
             String [] words = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim().split( REGEX_WHITESPACE );
             ArrayList<String> wordsInSentence = new ArrayList<String>();
+            totalWords = totalWords + words.length;
             
             for(String word : words)
             {
@@ -96,6 +109,6 @@ public class FileProcessor
             listOfWordsOfSentences.add( wordsInSentence );
         }
         
-        return listOfWordsOfSentences;
+        return totalWords;
     }
 }
