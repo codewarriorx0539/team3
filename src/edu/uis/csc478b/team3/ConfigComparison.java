@@ -18,6 +18,15 @@ public class ConfigComparison
     float DELETION_COST;      
     float SUBSTITUTION_COST; 
 
+    public String getCommonWordsFile() {
+        return commonWordsFile;
+    }
+
+    @XmlElement
+    public void setCommonWordsFile(String commonWordsFile) {
+        this.commonWordsFile = commonWordsFile;
+    }
+
     public String getSuspectFile() 
     {
         return suspectFile;
