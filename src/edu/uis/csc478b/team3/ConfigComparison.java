@@ -18,6 +18,10 @@ public class ConfigComparison
     String suspectFile;
     String masterFile;
     boolean filterCommonWords;
+    
+    float INSERT_COST;        
+    float DELETION_COST;      
+    float SUBSTITUTION_COST; 
 
     public String getSuspectFile() 
     {

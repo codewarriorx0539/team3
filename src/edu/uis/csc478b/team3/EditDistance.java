@@ -8,13 +8,13 @@ package edu.uis.csc478b.team3;
  */
 public class EditDistance 
 {
-    float INSERT_COST;        // Move Right 1.0
-    float DELETION_COST;      // Move Down 1.2
-    float SUBSTITUTION_COST;  // Move Diagonal 1.5
+    private float INSERT_COST;        // Move Right 1.0
+    private float DELETION_COST;      // Move Down 1.2
+    private float SUBSTITUTION_COST;  // Move Diagonal 1.5
     
     // To optimize space and speed I set the maximum size of the string to create a N x N grid
     // I reuse the grid for subsequent comparisons to reduce allocation costs.
-    static int LENGTH = 8192;
+    static final int LENGTH = 8192;
     
     float table[][];
     
@@ -64,5 +64,35 @@ public class EditDistance
         }
 
         return table[masterStringLen][compareStringLen];
+    }
+    
+    public float getINSERT_COST() 
+    {
+        return INSERT_COST;
+    }
+
+    public void setINSERT_COST(float INSERT_COST) 
+    {
+        this.INSERT_COST = INSERT_COST;
+    }
+
+    public float getDELETION_COST() 
+    {
+        return DELETION_COST;
+    }
+
+    public void setDELETION_COST(float DELETION_COST) 
+    {
+        this.DELETION_COST = DELETION_COST;
+    }
+
+    public float getSUBSTITUTION_COST() 
+    {
+        return SUBSTITUTION_COST;
+    }
+
+    public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
+    {
+        this.SUBSTITUTION_COST = SUBSTITUTION_COST;
     }
 }
