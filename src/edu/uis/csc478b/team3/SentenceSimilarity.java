@@ -1,6 +1,8 @@
 
 package edu.uis.csc478b.team3;
 
+import java.util.ArrayList;
+
 /**
  * Test similarity
  * 
@@ -26,15 +28,9 @@ public class SentenceSimilarity
         this.threshold = threshold;
     }
     
-    public boolean similarity(String compare, String master)
+    public boolean similarity(ArrayList<String> suspectSentences, ArrayList<String> masterSentences)
     {
-        if( threshold >= distance.getDistance(compare, master))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+       
+        return true;
     }
 }

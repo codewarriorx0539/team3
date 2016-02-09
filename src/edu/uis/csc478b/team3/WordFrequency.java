@@ -23,7 +23,7 @@ public class WordFrequency
      * @param master
      * @return 
      */
-    public WordFrequencyResults frequency( ArrayList< ArrayList<String> > compare, ArrayList< ArrayList<String> > master)
+    public boolean frequency( ArrayList< ArrayList<String> > compare, ArrayList< ArrayList<String> > master)
     {
         float masterTotal = 0;
         float compareTotal = 0;
@@ -81,7 +81,8 @@ public class WordFrequency
             }
         }
         
-        return new WordFrequencyResults(masterTotal, compareTotal, similarWords);
+        // masterTotal, compareTotal, similarWords - calc stats
+        return true;
     }
     
     

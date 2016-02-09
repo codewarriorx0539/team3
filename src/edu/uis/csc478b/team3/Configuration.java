@@ -15,6 +15,11 @@ public class Configuration
 {
     ArrayList<ConfigComparison> list;
     
+    public ArrayList<ConfigComparison> getConfigs()
+    {
+        return list;
+    }
+    
     /**
      * 
      * @param list 
