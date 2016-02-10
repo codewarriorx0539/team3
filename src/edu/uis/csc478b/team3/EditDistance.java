@@ -8,23 +8,24 @@ package edu.uis.csc478b.team3;
  */
 public class EditDistance 
 {
-    private float INSERT_COST;        // Move Right 1.0
-    private float DELETION_COST;      // Move Down 1.2
-    private float SUBSTITUTION_COST;  // Move Diagonal 1.5
-    
-    // To optimize space and speed I set the maximum size of the string to create a N x N grid
-    // I reuse the grid for subsequent comparisons to reduce allocation costs.
-    static final int LENGTH = 8192;
+    private float INSERT_COST;      
+    private float DELETION_COST; 
+    private float SUBSTITUTION_COST;
     
     float table[][];
     
     public EditDistance()
     {
-        table = new float[LENGTH][LENGTH];
-        
-        INSERT_COST = 1.0f;        // Move Right 1.0
-        DELETION_COST = 1.2f;      // Move Down 1.2
-        SUBSTITUTION_COST = 1.5f;  // Move Diagonal 1.5
+        setINSERT_COST(1.0f);           // Move Right 1.0
+        setDELETION_COST(1.2f);         // Move Down 1.2
+        setSUBSTITUTION_COST(1.5f);     // Move Diagonal 1.5  
+    }
+    
+    public EditDistance( float INSERT_COST, float DELETION_COST, float SUBSTITUTION_COST)
+    {
+        this.INSERT_COST = INSERT_COST;                 
+        this.DELETION_COST = DELETION_COST;             
+        this.SUBSTITUTION_COST = SUBSTITUTION_COST;     
     }
     
     /**
@@ -37,6 +38,8 @@ public class EditDistance
     {
         int masterStringLen = masterString.length();
         int compareStringLen = compareString.length();
+        
+        table = new float[ masterStringLen + 1 ][ compareStringLen + 1];
         
         for(int i =0; i < masterStringLen + 1; i++)
         {
@@ -71,7 +74,7 @@ public class EditDistance
         return INSERT_COST;
     }
 
-    public void setINSERT_COST(float INSERT_COST) 
+    public final void setINSERT_COST(float INSERT_COST) 
     {
         this.INSERT_COST = INSERT_COST;
     }
@@ -81,7 +84,7 @@ public class EditDistance
         return DELETION_COST;
     }
 
-    public void setDELETION_COST(float DELETION_COST) 
+    public final void setDELETION_COST(float DELETION_COST) 
     {
         this.DELETION_COST = DELETION_COST;
     }
@@ -91,7 +94,7 @@ public class EditDistance
         return SUBSTITUTION_COST;
     }
 
-    public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
+    public final void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
     {
         this.SUBSTITUTION_COST = SUBSTITUTION_COST;
     }

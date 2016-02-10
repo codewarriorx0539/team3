@@ -12,21 +12,20 @@ import java.util.TreeMap;
  */
 public class WordFrequency 
 {
-    
     TreeMap<String, Integer> compareMap;
     TreeMap<String, Integer> masterMap;
    
-    
+    int DIFFERENCE_THRESHOLD;
     /**
      * 
      * @param compare
      * @param master
      * @return 
      */
-    public boolean frequency( ArrayList< ArrayList<String> > compare, ArrayList< ArrayList<String> > master)
+    public WordFrequencyResults frequency( ArrayList< ArrayList<String> > compare, ArrayList< ArrayList<String> > master)
     {
-        float masterTotal = 0;
-        float compareTotal = 0;
+        int masterTotal = 0;
+        int compareTotal = 0;
         
         if( compare == null || master == null )
         {
@@ -71,8 +70,8 @@ public class WordFrequency
             }
         }
         
-        
         float similarWords = 0;
+        
         for(Map.Entry<String,Integer> entry : compareMap.entrySet()) 
         {
             if( masterMap.containsKey(entry.getKey()) == true)
@@ -81,8 +80,8 @@ public class WordFrequency
             }
         }
         
-        // masterTotal, compareTotal, similarWords - calc stats
-        return true;
+        
+        return new WordFrequencyResults( masterTotal, compareTotal, similarWords);
     }
     
     

@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,34 +34,74 @@ public class Plagiarism
         config = (Configuration) jaxbUnmarshaller.unmarshal(file);
     }
     
-    public void scanDoc(ConfigComparison config)
+    public void scanDoc(ConfigComparison config) throws IOException
     {
         String masterFile = config.getMasterFile();
         String suspectFile = config.getSuspectFile();
+        int DIFFERENCE_THRESHOLD = 0;
+        int FREQUENCY_DIFFERENCE_THRESHOLD = 0;
+        
+        float SIMILAR_WORDS_THRESHOLD = 0;
+        float DOCUMENT_SIMILARITY_THRESHOLD = 0;
+        
         ArrayList<ArrayList<String> > mWords = new ArrayList<ArrayList<String> >();
         ArrayList<ArrayList<String> > sWords = new ArrayList<ArrayList<String> >();
+        
         ArrayList<String> mSentences = new ArrayList<String>();
         ArrayList<String> sSentences = new ArrayList<String>();
         
         
-        FileProcessor mProcessor = new FileProcessor();
-        mProcessor.getSentences(masterFile, mSentences);
-        mProcessor.getWordsOfSentences(masterFile, mWords);
+        FileProcessor fileProcessor = new FileProcessor();
         
-        FileProcessor sProcessor = new FileProcessor();
-        mProcessor.getSentences(suspectFile, sSentences);
-        sProcessor.getWordsOfSentences(suspectFile, sWords);
+        String mText = fileProcessor.fileAsAString(masterFile);
+        fileProcessor.getSentences(mText, mSentences);
+        fileProcessor.getWordsOfSentences(mText, mWords);
+        
+        String sText = fileProcessor.fileAsAString(suspectFile);
+        fileProcessor.getSentences(sText, sSentences);
+        fileProcessor.getWordsOfSentences(sText, sWords);
         
         
         /////////////////////// Compute Word Frequency
         WordFrequency freq = new WordFrequency();
         
-        if(freq.frequency(sWords, mWords) == true)
+        WordFrequencyResults results = freq.frequency(sWords, mWords);
+        
+        if( DIFFERENCE_THRESHOLD > Math.abs( results.getMasterTotal() - results.getCompareTotal())  )
+        // This means that if there is a large difference in the number of words between documents then it is unlikely to be similar in any way
+        {
+            System.out.println("Plagairism is NOT detected in file: " + suspectFile);
+            return;
+        }
+        
+        if( FREQUENCY_DIFFERENCE_THRESHOLD > Math.abs( results.getMasterTotal() - results.getCompareTotal()) )
+        // This is specific to word frequency
+        {
+            float percentageSimilar = ( results.getSimilarWords() / results.getMasterTotal() );
+
+            if( percentageSimilar >= SIMILAR_WORDS_THRESHOLD )
+            {
+                System.out.println("Plagairism detected in file: " + suspectFile);
+                return;
+            }
+        }
+        ///////////////////////
+        
+        
+        /////////////////////// Compute Document Similarity
+        EditDistance dist = new EditDistance();
+        
+        String cleanMasterText = fileProcessor.removePuncuation(mText);
+        String cleanSuspectText = fileProcessor.removePuncuation(sText);
+        
+        
+        if( DOCUMENT_SIMILARITY_THRESHOLD >= dist.getDistance(cleanMasterText, cleanSuspectText) )
         {
             System.out.println("Plagairism detected in file: " + suspectFile);
             return;
         }
-        ///////////////////////////////////////
+        ///////////////////////
+        
         
         
         /////////////////////// Compute Sentence Similarity
@@ -74,6 +115,7 @@ public class Plagiarism
         ///////////////////////////////////////
         
         
+        System.out.println("We were unable to classify: " + suspectFile + " Please inspect manually.");
     }
     
     /**
@@ -111,6 +153,8 @@ public class Plagiarism
             
         } catch (JAXBException ex) 
         {
+            Logger.getLogger(Plagiarism.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(Plagiarism.class.getName()).log(Level.SEVERE, null, ex);
         }
         

@@ -1,8 +1,12 @@
 
 package edu.uis.csc478b.team3;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Parse a file and return the data as a list of sentences which are a list of words
@@ -16,7 +20,7 @@ public class FileProcessor
     final private String REGEX_WHITESPACE = "\\s";
     
     boolean commonFilter;
-    HashMap<String,Integer> commonWords;
+    HashSet<String> commonWords;
     
     public FileProcessor()
     {
@@ -33,26 +37,50 @@ public class FileProcessor
         this.commonFilter = commonFilter;
     }
     
-    public void setCommonWords( HashMap<String,Integer> commonWords)
+    public void setCommonWords( HashSet<String> commonWords)
     {
         this.commonWords = commonWords;
     }
     
+    public String fileAsAString(String file) throws IOException
+    {
+        return new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
+    }
+    
+    public String removePuncuation( String text )
+    {
+        return text.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "" );
+    }
+    
+    public void readCommonWordsFile( String file ) throws IOException
+    {
+        final String COMMA = ",";
+        String text = fileAsAString( file );
+         
+        String [] words = text.toLowerCase().split(COMMA);
+        
+        for(String word : words)
+        {
+            commonWords.add( word.trim() );
+        }   
+    }
+    
     /**
      * 
-     * @param fileAsAString
+     * @param file
      * @param listOfSentences
-     * @return 
+     * @return
+     * @throws IOException 
      */
-    public int getSentences( String fileAsAString, ArrayList<String> listOfSentences)
+    public int getSentences( String text, ArrayList<String> listOfSentences) throws IOException
     {
         if(listOfSentences == null)
         {
             throw new NullPointerException();
         }
         
-        int totalWords = 0;
-        String firstPass = fileAsAString.toLowerCase();
+        int totalSentences = 0;
+        String firstPass = text.toLowerCase();
         String [] sentences = firstPass.split( REGEX_PERIOD );
         
         for(String s : sentences)
@@ -60,11 +88,11 @@ public class FileProcessor
             String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim();
             String [] words = formatedSentence.split( REGEX_WHITESPACE );
             
-            totalWords = totalWords + words.length;
+            totalSentences = totalSentences++;
             
             for(String word : words)
             {
-                if(commonWords.containsKey(word) == false)
+                if(commonWords.contains(word) == false)
                 {
                    formatedSentence = formatedSentence.replace(word, "");
                 }
@@ -72,16 +100,17 @@ public class FileProcessor
             listOfSentences.add( formatedSentence );
         }
         
-        return totalWords;
+        return totalSentences;
     }
     
     /**
      * 
-     * @param fileAsAString
+     * @param file
      * @param listOfWordsOfSentences
-     * @return 
+     * @return
+     * @throws IOException 
      */
-    public int getWordsOfSentences( String fileAsAString, ArrayList< ArrayList<String> >  listOfWordsOfSentences)
+    public int getWordsOfSentences( String text, ArrayList< ArrayList<String> >  listOfWordsOfSentences) throws IOException
     {
         if(listOfWordsOfSentences == null)
         {
@@ -89,7 +118,7 @@ public class FileProcessor
         }
         
         int totalWords = 0;
-        String firstPass = fileAsAString.toLowerCase();
+        String firstPass = text.toLowerCase();
         String [] sentences = firstPass.split( REGEX_PERIOD );
         
         for(String s : sentences)
@@ -100,7 +129,7 @@ public class FileProcessor
             
             for(String word : words)
             {
-                if(commonWords.containsKey(word) == false)
+                if(commonWords.contains(word) == false)
                 {
                     wordsInSentence.add(word);
                 }
