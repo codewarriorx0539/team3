@@ -17,7 +17,7 @@ public class EditDistance
     public EditDistance()
     {
         setINSERT_COST(1.0f);           // Move Right 1.0
-        setDELETION_COST(1.2f);         // Move Down 1.2
+        setDELETION_COST(1.0f);         // Move Down 1.0
         setSUBSTITUTION_COST(1.5f);     // Move Diagonal 1.5  
     }
     

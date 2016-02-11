@@ -8,12 +8,41 @@ public class ConfigComparison
     String suspectFile;         // Relative Path
     String masterFile;          // Relative Path
     String commonWordsFile;     // Relative Path
+
     boolean filterCommonWords;
     
+
+    /*
+        TEST CLUMPS. PARTS OF DOCUEMNTS MIGHT BE CUT AND PASTES BUT WE WANT TO AVOID FALSE POSITVE CITATION
+    
+        CLUMPS CONSIST OF % OF DOCUMENT. IF THESE BLOCKS ARE PREDOMINANT IN CLUMPS WE HAVE A CUT AND PASTER.
+        POSITIONALLY ALIGN CLUMPS SINCE PLAGIARSM TRYS TO FOLLOW SAME FLOW
+    
+        ALSO LOOK FOR PEPPER PLAGIARIZERS trigger no trigger trigger no trigger
+    
+    */
+    
+    
+    
+    /// How many different words can the documents differ by
+    int DIFFERENCE_THRESHOLD;
+    
+    /// Are the frequencies of uncommon words similar
+    int FREQUENCY_DIFFERENCE_THRESHOLD;
+    
+    /// Whats is the threshold if we edit distance both documents
+    float DOCUMENT_SIMILARITY_THRESHOLD; 
+    
+    /// Test sentences N to the left and right.
+    int SENTENCE_SIMILARITY_RANGE;
+    float SENTENCE_SIMILARITY_THRESHOLD;
+            
     float INSERT_COST;        
     float DELETION_COST;      
     float SUBSTITUTION_COST; 
 
+    
+    
     public float getINSERT_COST() 
     {
         return INSERT_COST;

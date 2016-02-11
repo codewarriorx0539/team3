@@ -34,10 +34,11 @@ public class Plagiarism
         config = (Configuration) jaxbUnmarshaller.unmarshal(file);
     }
     
-    public void scanDoc(ConfigComparison config) throws IOException
+    public String scanDoc(ConfigComparison config) throws IOException
     {
         String masterFile = config.getMasterFile();
         String suspectFile = config.getSuspectFile();
+        
         int DIFFERENCE_THRESHOLD = 0;
         int FREQUENCY_DIFFERENCE_THRESHOLD = 0;
         
@@ -50,6 +51,7 @@ public class Plagiarism
         ArrayList<String> mSentences = new ArrayList<String>();
         ArrayList<String> sSentences = new ArrayList<String>();
         
+        String output;
         
         FileProcessor fileProcessor = new FileProcessor();
         
@@ -70,10 +72,14 @@ public class Plagiarism
         if( DIFFERENCE_THRESHOLD > Math.abs( results.getMasterTotal() - results.getCompareTotal())  )
         // This means that if there is a large difference in the number of words between documents then it is unlikely to be similar in any way
         {
-            System.out.println("Plagairism is NOT detected in file: " + suspectFile);
-            return;
+            output = "We were unable to classify: " + suspectFile + " Please inspect manually." + System.lineSeparator();
+            return output;
         }
+
+        output = "PASSED DIFFERENCE THRESHOLD" + System.lineSeparator();
+        /////////////////////////////////////
         
+        /////////////////////////////////////
         if( FREQUENCY_DIFFERENCE_THRESHOLD > Math.abs( results.getMasterTotal() - results.getCompareTotal()) )
         // This is specific to word frequency
         {
@@ -81,11 +87,12 @@ public class Plagiarism
 
             if( percentageSimilar >= SIMILAR_WORDS_THRESHOLD )
             {
-                System.out.println("Plagairism detected in file: " + suspectFile);
-                return;
+                output = output + "ALERT PLAGIARISM (FREQUENCY DIFFERENCE THRESHOLD): " + suspectFile + System.lineSeparator();
+                return output;
             }
         }
-        ///////////////////////
+        output = output + "PASSED FREQUENCY DIFFERENCE THRESHOLD" + System.lineSeparator();
+        /////////////////////////////////////
         
         
         /////////////////////// Compute Document Similarity
@@ -94,14 +101,14 @@ public class Plagiarism
         String cleanMasterText = fileProcessor.removePuncuation(mText);
         String cleanSuspectText = fileProcessor.removePuncuation(sText);
         
-        
         if( DOCUMENT_SIMILARITY_THRESHOLD >= dist.getDistance(cleanMasterText, cleanSuspectText) )
         {
-            System.out.println("Plagairism detected in file: " + suspectFile);
-            return;
+            output = output + "ALERT PLAGIARISM (DOCUMENT SIMILARITY THRESHOLD): " + suspectFile + System.lineSeparator();
+            
+            return output;
         }
+        output = output + "PASSED DOCUMENT SIMILARITY THRESHOLD" + System.lineSeparator();
         ///////////////////////
-        
         
         
         /////////////////////// Compute Sentence Similarity
@@ -109,13 +116,16 @@ public class Plagiarism
         
         if( sentenceSim.similarity(sSentences, mSentences) == true )
         {
-            System.out.println("Plagairism detected in file: " + suspectFile);
-            return;
+            output = output + "ALERT PLAGIARISM (SENTENCE SIMILARITY): " + suspectFile + System.lineSeparator();
+            return output;
         }
+        output = output + "PASSED SENTENCE SIMILARITY" + System.lineSeparator();
         ///////////////////////////////////////
         
         
-        System.out.println("We were unable to classify: " + suspectFile + " Please inspect manually.");
+        output = output + "We were unable to classify: " + suspectFile + " Please inspect manually." + System.lineSeparator();
+        
+        return output;
     }
     
     /**
@@ -148,7 +158,12 @@ public class Plagiarism
             
             for(ConfigComparison config : configs)
             {
-                plag.scanDoc(config);/// This can kick off new threads to complete in parallel.
+                String output = plag.scanDoc(config);/// This can kick off new threads to complete in parallel.
+                
+                synchronized(System.out)
+                {
+                    System.out.println(output);
+                }
             }
             
         } catch (JAXBException ex) 

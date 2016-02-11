@@ -54,6 +54,8 @@ public class FileProcessor
     
     public void readCommonWordsFile( String file ) throws IOException
     {
+        commonWords.clear();
+        
         final String COMMA = ",";
         String text = fileAsAString( file );
          
