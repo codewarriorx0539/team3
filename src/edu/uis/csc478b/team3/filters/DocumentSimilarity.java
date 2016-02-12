@@ -1,22 +1,69 @@
 
 package edu.uis.csc478b.team3.filters;
 
+import edu.uis.csc478b.team3.EditDistance;
+import edu.uis.csc478b.team3.config.ConfigDocumentSimilarity;
+import edu.uis.csc478b.team3.config.PlagiarismTest;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class DocumentSimilarity extends Filter
 {
-    public DocumentSimilarity(){}
+    ConfigDocumentSimilarity config;
+    EditDistance editDistance;
     
-    public DocumentSimilarity( ArrayList<ArrayList<String> > mWords, ArrayList<ArrayList<String> > sWords, ArrayList<String> mSentences , ArrayList<String> sSentences )
+    public DocumentSimilarity()
     {
-        super(mWords, sWords, mSentences, sSentences);
+        editDistance = new EditDistance();
+    }
+    
+    public DocumentSimilarity( PlagiarismTest testConfig )
+    {
+        super(testConfig);
+        editDistance = new EditDistance();
+        config = testConfig.getConfigDocumentSimilarity();
     }
 
     @Override
     public String runPlagiarismTest() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String result = "";
+        
+        editDistance.setINSERT_COST(config.getINSERT_COST());
+        editDistance.setDELETION_COST(config.getDELETION_COST());
+        editDistance.setSUBSTITUTION_COST(config.getSUBSTITUTION_COST());
+        
+        float threshold = config.getDOCUMENT_SIMILARITY_THRESHOLD();
+        
+        
+        try 
+        {
+            String master = fileProcessor.fileAsAString(masterFile);
+            String suspect = fileProcessor.fileAsAString(suspectFile);
+            
+            master = fileProcessor.removePuncuation(master);
+            suspect = fileProcessor.removePuncuation(suspect);
+            
+            if( threshold >= editDistance.getDistance(suspect, master) )
+            {
+                result = result + "DocumentSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+            }
+            else
+            {
+                result = result + "DocumentSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+            }
+            
+            result = result + config.getConfigSetup() + System.lineSeparator();
+            
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(DocumentSimilarity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return result;
     }
     
     /*
@@ -46,10 +93,5 @@ public class DocumentSimilarity extends Filter
             output = output + "PASSED DOCUMENT SIMILARITY THRESHOLD" + System.lineSeparator();
             ///////////////////////
     */
-
-    @Override
-    public void readData(String masterFile, String suspectFile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
     
 }

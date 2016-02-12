@@ -1,26 +1,32 @@
 
-package edu.uis.csc478b.team3;
+package edu.uis.csc478b.team3.config;
 
-import edu.uis.csc478b.team3.config.ConfigWordFrequency;
-import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
-import edu.uis.csc478b.team3.config.ConfigDocumentSimilarity;
 import javax.xml.bind.annotation.XmlElement;
 
 public class PlagiarismTest 
 {
     String suspectFile;         // Relative Path
     String masterFile;          // Relative Path
+    
     String commonWordsFile;     // Relative Path
-
     boolean filterCommonWords;
     
     ConfigDocumentSimilarity configDocumentSimilarity;
     ConfigSentenceSimilarity configSentenceSimilarity;
     ConfigWordFrequency configWordFrequency;
-
-    /// How many different words can the documents differ by
-    int DIFFERENCE_THRESHOLD;
     
+    public PlagiarismTest()
+    {
+        suspectFile = "";         // Relative Path
+        masterFile = "";          // Relative Path
+        commonWordsFile = "";     // Relative Path
+        filterCommonWords = false;
+        
+        configDocumentSimilarity = new ConfigDocumentSimilarity();
+        configSentenceSimilarity = new ConfigSentenceSimilarity();
+        configWordFrequency = new ConfigWordFrequency();
+    }
+
     /*
         TEST CLUMPS. PARTS OF DOCUEMNTS MIGHT BE CUT AND PASTES BUT WE WANT TO AVOID FALSE POSITVE CITATION
     
@@ -61,17 +67,6 @@ public class PlagiarismTest
     public void setConfigWordFrequency(ConfigWordFrequency configWordFrequency) 
     {
         this.configWordFrequency = configWordFrequency;
-    }
-
-    public int getDIFFERENCE_THRESHOLD() 
-    {
-        return DIFFERENCE_THRESHOLD;
-    }
-
-    @XmlElement
-    public void setDIFFERENCE_THRESHOLD(int DIFFERENCE_THRESHOLD) 
-    {
-        this.DIFFERENCE_THRESHOLD = DIFFERENCE_THRESHOLD;
     }
     
     public String getCommonWordsFile()

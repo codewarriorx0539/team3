@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration>
+    <configs>
+        <commonWordsFile></commonWordsFile>
+        <configDocumentSimilarity>
+            <DELETION_COST>1.0</DELETION_COST>
+            <DOCUMENT_SIMILARITY_THRESHOLD>100.0</DOCUMENT_SIMILARITY_THRESHOLD>
+            <INSERT_COST>1.0</INSERT_COST>
+            <SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
+        </configDocumentSimilarity>
+        <configSentenceSimilarity>
+            <DELETION_COST>1.0</DELETION_COST>
+            <INSERT_COST>1.0</INSERT_COST>
+            <SENTENCE_SIMILARITY_RANGE>3</SENTENCE_SIMILARITY_RANGE>
+            <SENTENCE_SIMILARITY_THRESHOLD>100.0</SENTENCE_SIMILARITY_THRESHOLD>
+            <SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
+        </configSentenceSimilarity>
+        <configWordFrequency>
+            <DIFFERENCE_THRESHOLD>1000</DIFFERENCE_THRESHOLD>
+            <FREQUENCY_DIFFERENCE_THRESHOLD>0.7</FREQUENCY_DIFFERENCE_THRESHOLD>
+        </configWordFrequency>
+        <filterCommonWords>false</filterCommonWords>
+        <masterFile>master.txt</masterFile>
+        <suspectFile>suspect.txt</suspectFile>
+    </configs>
+    <notes>hello</notes>
+</configuration>

@@ -3,7 +3,7 @@ package edu.uis.csc478b.team3.config;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class ConfigDocumentSimilarity 
+public class ConfigDocumentSimilarity extends Config
 {
     /// Whats is the threshold if we edit distance both documents
     float DOCUMENT_SIMILARITY_THRESHOLD; 
@@ -11,6 +11,15 @@ public class ConfigDocumentSimilarity
     float INSERT_COST;        
     float DELETION_COST;      
     float SUBSTITUTION_COST; 
+    
+    public ConfigDocumentSimilarity()
+    {
+        DOCUMENT_SIMILARITY_THRESHOLD = 100;
+                
+        INSERT_COST = 1.0f;        
+        DELETION_COST = 1.0f;    
+        SUBSTITUTION_COST = 1.5f;
+    }
 
     public float getDOCUMENT_SIMILARITY_THRESHOLD() 
     {
@@ -54,5 +63,19 @@ public class ConfigDocumentSimilarity
     public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
     {
         this.SUBSTITUTION_COST = SUBSTITUTION_COST;
+    }
+
+    @Override
+    public String getConfigSetup() 
+    {
+        String setup;
+        
+        setup = "DOCUMENT_SIMILARITY_THRESHOLD: " + DOCUMENT_SIMILARITY_THRESHOLD + System.lineSeparator(); 
+        
+        setup = setup + "INSERT_COST: " + INSERT_COST + System.lineSeparator();
+        setup = setup + "DELETION_COST: " + DELETION_COST + System.lineSeparator();
+        setup = setup + "SUBSTITUTION_COST: " + SUBSTITUTION_COST + System.lineSeparator();
+    
+        return setup;
     }
 }

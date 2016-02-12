@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3;
 
 
+import edu.uis.csc478b.team3.config.PlagiarismTest;
 import edu.uis.csc478b.team3.config.Configuration;
 import edu.uis.csc478b.team3.filters.DocumentSimilarity;
 import edu.uis.csc478b.team3.filters.Filter;
@@ -39,7 +40,6 @@ public class Plagiarism implements Runnable
 
             for(Filter filter : filters)
             {
-                filter.readData(config.getMasterFile(), config.getSuspectFile());
                 output = output + filter.runPlagiarismTest();
             }
            
@@ -56,24 +56,37 @@ public class Plagiarism implements Runnable
    
     public static void main(String[] args) 
     {
-        try
+        
+        if( args.length == 0)
         {
-            if( args.length == 0)
+            try 
             {
                 File file = new File("configuration.xml");
+                
                 Configuration configuration = new Configuration();
+                PlagiarismTest plag = new PlagiarismTest();
+                ArrayList<PlagiarismTest> list = new ArrayList<PlagiarismTest>();
+                list.add(plag);
+                configuration.setConfigs(list);
                 
                 JAXBContext jaxbContext = JAXBContext.newInstance(Configuration.class);
                 Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-
+                
                 jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
+                
                 jaxbMarshaller.marshal(configuration, file);
                 jaxbMarshaller.marshal(configuration, System.out);
-                
-                return;
-            }
             
+            } catch (JAXBException ex) 
+            {
+                Logger.getLogger(Plagiarism.class.getName()).log(Level.SEVERE, null, ex);
+            }
+ 
+            return;  
+        }
+            
+        try
+        {
             
             String fileName = args[0];
             // Read in XML config file
@@ -92,9 +105,9 @@ public class Plagiarism implements Runnable
                 
                ArrayList<Filter> filters = new ArrayList<>();
                
-               filters.add(new WordFrequency());
-               filters.add(new DocumentSimilarity());
-               filters.add(new SentenceSimilarity());
+               filters.add(new WordFrequency( config ));
+               filters.add(new DocumentSimilarity( config ));
+               filters.add(new SentenceSimilarity( config ));
                
                executor.execute( new Plagiarism( config, filters) );
             }

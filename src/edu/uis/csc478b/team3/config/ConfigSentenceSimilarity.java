@@ -3,7 +3,7 @@ package edu.uis.csc478b.team3.config;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class ConfigSentenceSimilarity 
+public class ConfigSentenceSimilarity extends Config
 {
     /// Test sentences N to the left and right.
     int SENTENCE_SIMILARITY_RANGE;
@@ -12,6 +12,16 @@ public class ConfigSentenceSimilarity
     float INSERT_COST;        
     float DELETION_COST;      
     float SUBSTITUTION_COST; 
+    
+    public ConfigSentenceSimilarity()
+    {
+        SENTENCE_SIMILARITY_RANGE = 3;
+        SENTENCE_SIMILARITY_THRESHOLD = 100;
+                
+        INSERT_COST = 1.0f;        
+        DELETION_COST = 1.0f;    
+        SUBSTITUTION_COST = 1.5f;
+    }
 
     public int getSENTENCE_SIMILARITY_RANGE() 
     {
@@ -66,5 +76,20 @@ public class ConfigSentenceSimilarity
     public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
     {
         this.SUBSTITUTION_COST = SUBSTITUTION_COST;
+    }
+    
+    @Override
+    public String getConfigSetup() 
+    {
+        String setup;
+        
+        setup = "SENTENCE_SIMILARITY_RANGE: " + SENTENCE_SIMILARITY_RANGE + System.lineSeparator();
+        setup = setup + "SENTENCE_SIMILARITY_THRESHOLD: " + SENTENCE_SIMILARITY_THRESHOLD + System.lineSeparator();
+        
+        setup = setup + "INSERT_COST: " + INSERT_COST + System.lineSeparator();
+        setup = setup + "DELETION_COST: " + DELETION_COST + System.lineSeparator();
+        setup = setup + "SUBSTITUTION_COST: " + SUBSTITUTION_COST + System.lineSeparator();
+        
+        return setup;
     }
 }

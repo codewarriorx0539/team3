@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.FileProcessor;
+import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 
 public abstract class Filter 
@@ -31,19 +32,28 @@ public abstract class Filter
     public Filter()
     {
         fileProcessor = new FileProcessor();
+        
+        mWords = new ArrayList<ArrayList<String> >();
+        sWords = new ArrayList<ArrayList<String> >();
+        mSentences = new ArrayList<String>();
+        sSentences = new ArrayList<String>();
+        
     }
     
-    public Filter( ArrayList<ArrayList<String> > mWords, ArrayList<ArrayList<String> > sWords, ArrayList<String> mSentences , ArrayList<String> sSentences )
+    public Filter( PlagiarismTest config )
     {
-        this.mWords = mWords;
-        this.sWords = sWords;
-        this.mSentences = mSentences;
-        this.sSentences = sSentences;
+        fileProcessor = new FileProcessor();
+        
+        this.masterFile = config.getMasterFile();
+        this.suspectFile = config.getSuspectFile();
+        
+        mWords = new ArrayList<ArrayList<String> >();
+        sWords = new ArrayList<ArrayList<String> >();
+        mSentences = new ArrayList<String>();
+        sSentences = new ArrayList<String>();
     }
     
     abstract public String runPlagiarismTest();
-    
-    abstract public void readData( String masterFile, String suspectFile);
 
     public ArrayList<ArrayList<String>> getmWords() {
         return mWords;

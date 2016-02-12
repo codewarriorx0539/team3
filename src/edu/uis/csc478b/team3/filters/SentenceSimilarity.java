@@ -2,7 +2,12 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.EditDistance;
+import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
+import edu.uis.csc478b.team3.config.PlagiarismTest;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Test similarity
@@ -11,51 +16,91 @@ import java.util.ArrayList;
  */
 public class SentenceSimilarity extends Filter
 {
-    private float threshold;
-    EditDistance distance;
+    ConfigSentenceSimilarity config;
+    EditDistance editDistance;
 
-    public SentenceSimilarity(){}
-    
-    public SentenceSimilarity( ArrayList<ArrayList<String> > mWords, ArrayList<ArrayList<String> > sWords, ArrayList<String> mSentences , ArrayList<String> sSentences )
+    public SentenceSimilarity()
     {
-        super(mWords, sWords, mSentences , sSentences);
+        editDistance = new EditDistance();
+    }
+    
+    public SentenceSimilarity( PlagiarismTest testConfig)
+    {
+        super(testConfig);
         
-        distance = new EditDistance();
+        editDistance = new EditDistance();
+        
+        config = testConfig.getConfigSentenceSimilarity();
     }
     
-    public float getThreshold() 
-    {
-        return threshold;
-    }
-
-    public void setThreshold(float threshold) 
-    {
-        this.threshold = threshold;
-    }
-
+    
     @Override
     public String runPlagiarismTest() 
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    /*
-    
-    /////////////////////// Compute Sentence Similarity
-            SentenceSimilarity sentenceSim = new SentenceSimilarity();
+        String result = "";
+        float threshold = config.getSENTENCE_SIMILARITY_THRESHOLD(); 
+        int range = config.getSENTENCE_SIMILARITY_RANGE();
+        
+        editDistance.setINSERT_COST(config.getINSERT_COST());
+        editDistance.setDELETION_COST(config.getDELETION_COST());
+        editDistance.setSUBSTITUTION_COST(config.getSUBSTITUTION_COST());
+        
+        try 
+        {
+            String master = fileProcessor.fileAsAString(masterFile);
+            String suspect = fileProcessor.fileAsAString(suspectFile);
             
-            if( sentenceSim.similarity(sSentences, mSentences) == true )
+            int mTotalSentences = fileProcessor.getSentences(master, mSentences);
+            int sTotalSentences = fileProcessor.getSentences(suspect, sSentences);
+            
+            float total = 0;
+            
+            for(int index = 0; index < (mTotalSentences - range) && index < (sTotalSentences  - range); index++ )
             {
-                output = output + "ALERT PLAGIARISM (SENTENCE SIMILARITY): " + suspectFile + System.lineSeparator();
-                printOutput(output);
-                return;
-            }
-            output = output + "PASSED SENTENCE SIMILARITY" + System.lineSeparator();
-            ///////////////////////////////////////
-    */
+                boolean foundSimilar = false;
+                for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i < range) && (foundSimilar != true) ; i++)
+                {
+                   if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
+                   {
+                       foundSimilar = true;
+                   }
+                }
 
-    @Override
-    public void readData(String masterFile, String suspectFile) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                if(foundSimilar == false)
+                {
+                    for(int i = index; (i >= 0) && (i > (index - range)) && (foundSimilar != true); i--)
+                    {
+                        if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
+                        {
+                            foundSimilar = true;
+                        }
+                    }
+                }
+                
+                if(foundSimilar == true)
+                {
+                    total++;
+                }
+ 
+            }
+            
+            if( total >= threshold )
+            {
+                result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+            }
+            else
+            {
+                result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+            }
+            
+            result = result + config.getConfigSetup() + System.lineSeparator();
+          
+        } catch (IOException ex) 
+        {
+            Logger.getLogger(DocumentSimilarity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        return result;
     }
+
 }
