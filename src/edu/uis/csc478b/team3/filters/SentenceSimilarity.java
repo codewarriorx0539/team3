@@ -14,6 +14,8 @@ public class SentenceSimilarity extends Filter
     private float threshold;
     EditDistance distance;
 
+    public SentenceSimilarity(){}
+    
     public SentenceSimilarity( ArrayList<ArrayList<String> > mWords, ArrayList<ArrayList<String> > sWords, ArrayList<String> mSentences , ArrayList<String> sSentences )
     {
         super(mWords, sWords, mSentences , sSentences);

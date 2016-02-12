@@ -3,7 +3,9 @@ package edu.uis.csc478b.team3;
 
 
 import edu.uis.csc478b.team3.config.Configuration;
+import edu.uis.csc478b.team3.filters.DocumentSimilarity;
 import edu.uis.csc478b.team3.filters.Filter;
+import edu.uis.csc478b.team3.filters.SentenceSimilarity;
 import edu.uis.csc478b.team3.filters.WordFrequency;
 import java.io.File;
 import java.io.IOException;
@@ -90,7 +92,11 @@ public class Plagiarism implements Runnable
                 
                ArrayList<Filter> filters = new ArrayList<>();
                
-               executor.execute( new Plagiarism( config, filters) );/// This can kick off new threads to complete in parallel.
+               filters.add(new WordFrequency());
+               filters.add(new DocumentSimilarity());
+               filters.add(new SentenceSimilarity());
+               
+               executor.execute( new Plagiarism( config, filters) );
             }
             
             executor.shutdown();

@@ -17,6 +17,8 @@ public class WordFrequency extends Filter
    
     int DIFFERENCE_THRESHOLD;
     
+    public WordFrequency(){}
+    
     public WordFrequency( ArrayList<ArrayList<String> > mWords, ArrayList<ArrayList<String> > sWords, ArrayList<String> mSentences , ArrayList<String> sSentences )
     {
         super(mWords, sWords, mSentences , sSentences);

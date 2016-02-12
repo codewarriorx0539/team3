@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 public class DocumentSimilarity extends Filter
 {
+    public DocumentSimilarity(){}
+    
     public DocumentSimilarity( ArrayList<ArrayList<String> > mWords, ArrayList<ArrayList<String> > sWords, ArrayList<String> mSentences , ArrayList<String> sSentences )
     {
         super(mWords, sWords, mSentences, sSentences);
