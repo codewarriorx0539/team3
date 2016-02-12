@@ -3,7 +3,7 @@ package edu.uis.csc478b.team3;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class ConfigComparison 
+public class PlagiarismTest 
 {
     String suspectFile;         // Relative Path
     String masterFile;          // Relative Path
@@ -11,7 +11,13 @@ public class ConfigComparison
 
     boolean filterCommonWords;
     
+    ConfigDocumentSimilarity configDocumentSimilarity;
+    ConfigSentenceSimilarity configSentenceSimilarity;
+    ConfigWordFrequency configWordFrequency;
 
+    /// How many different words can the documents differ by
+    int DIFFERENCE_THRESHOLD;
+    
     /*
         TEST CLUMPS. PARTS OF DOCUEMNTS MIGHT BE CUT AND PASTES BUT WE WANT TO AVOID FALSE POSITVE CITATION
     
@@ -21,59 +27,48 @@ public class ConfigComparison
         ALSO LOOK FOR PEPPER PLAGIARIZERS trigger no trigger trigger no trigger
     
     */
-    
-    
-    
-    /// How many different words can the documents differ by
-    int DIFFERENCE_THRESHOLD;
-    
-    /// Are the frequencies of uncommon words similar
-    int FREQUENCY_DIFFERENCE_THRESHOLD;
-    
-    /// Whats is the threshold if we edit distance both documents
-    float DOCUMENT_SIMILARITY_THRESHOLD; 
-    
-    /// Test sentences N to the left and right.
-    int SENTENCE_SIMILARITY_RANGE;
-    float SENTENCE_SIMILARITY_THRESHOLD;
-            
-    float INSERT_COST;        
-    float DELETION_COST;      
-    float SUBSTITUTION_COST; 
 
-    
-    
-    public float getINSERT_COST() 
+    public ConfigDocumentSimilarity getConfigDocumentSimilarity() 
     {
-        return INSERT_COST;
+        return configDocumentSimilarity;
     }
 
     @XmlElement
-    public void setINSERT_COST(float INSERT_COST) 
+    public void setConfigDocumentSimilarity(ConfigDocumentSimilarity configDocumentSimilarity) 
     {
-        this.INSERT_COST = INSERT_COST;
+        this.configDocumentSimilarity = configDocumentSimilarity;
     }
 
-    public float getDELETION_COST() 
+    public ConfigSentenceSimilarity getConfigSentenceSimilarity() 
     {
-        return DELETION_COST;
-    }
-
-    @XmlElement
-    public void setDELETION_COST(float DELETION_COST) 
-    {
-        this.DELETION_COST = DELETION_COST;
-    }
-
-    public float getSUBSTITUTION_COST() 
-    {
-        return SUBSTITUTION_COST;
+        return configSentenceSimilarity;
     }
 
     @XmlElement
-    public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
+    public void setConfigSentenceSimilarity(ConfigSentenceSimilarity configSentenceSimilarity) {
+        this.configSentenceSimilarity = configSentenceSimilarity;
+    }
+
+    public ConfigWordFrequency getConfigWordFrequency() 
     {
-        this.SUBSTITUTION_COST = SUBSTITUTION_COST;
+        return configWordFrequency;
+    }
+
+    @XmlElement
+    public void setConfigWordFrequency(ConfigWordFrequency configWordFrequency) 
+    {
+        this.configWordFrequency = configWordFrequency;
+    }
+
+    public int getDIFFERENCE_THRESHOLD() 
+    {
+        return DIFFERENCE_THRESHOLD;
+    }
+
+    @XmlElement
+    public void setDIFFERENCE_THRESHOLD(int DIFFERENCE_THRESHOLD) 
+    {
+        this.DIFFERENCE_THRESHOLD = DIFFERENCE_THRESHOLD;
     }
     
     public String getCommonWordsFile()

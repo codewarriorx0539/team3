@@ -15,9 +15,9 @@ import javax.xml.bind.Unmarshaller;
 
 public class Plagiarism implements Runnable 
 {
-    ConfigComparison config;
+    PlagiarismTest config;
     
-    public Plagiarism( ConfigComparison config )
+    public Plagiarism( PlagiarismTest config )
     {
         this.config = config;
     }
@@ -168,10 +168,10 @@ public class Plagiarism implements Runnable
         try 
         {
             //plag.readXmlConfiguration( fileName );
-            ArrayList<ConfigComparison> configs = null;// = plag.getDocumentsToScan();
+            ArrayList<PlagiarismTest> configs = null;// = plag.getDocumentsToScan();
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             
-            for(ConfigComparison config : configs)
+            for(PlagiarismTest config : configs)
             {
                executor.execute( new Plagiarism(config));/// This can kick off new threads to complete in parallel.
             }

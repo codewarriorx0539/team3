@@ -13,19 +13,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Configuration 
 {
-    ArrayList<ConfigComparison> list;
+    ArrayList<PlagiarismTest> list;
     
-    public ArrayList<ConfigComparison> getConfigs()
+    public ArrayList<PlagiarismTest> getConfigs()
     {
         return list;
     }
-    
-    /**
-     * 
-     * @param list 
-     */
+
     @XmlElement
-    public void setListOfComparisons( ArrayList<ConfigComparison> list )
+    public void setListOfComparisons( ArrayList<PlagiarismTest> list )
     {
         this.list = list;
     }

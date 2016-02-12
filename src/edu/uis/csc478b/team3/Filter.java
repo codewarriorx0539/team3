@@ -18,6 +18,6 @@ public abstract class Filter
         this.sSentences = sSentences;
     }
     
-    abstract public boolean runPlagiarism();
+    abstract public boolean runPlagiarismTest();
  
 }
