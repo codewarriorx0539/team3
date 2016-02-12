@@ -1,6 +1,9 @@
 
 package edu.uis.csc478b.team3;
 
+import edu.uis.csc478b.team3.config.ConfigWordFrequency;
+import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
+import edu.uis.csc478b.team3.config.ConfigDocumentSimilarity;
 import javax.xml.bind.annotation.XmlElement;
 
 public class PlagiarismTest 

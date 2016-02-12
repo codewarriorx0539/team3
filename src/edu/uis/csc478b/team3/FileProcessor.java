@@ -19,8 +19,10 @@ public class FileProcessor
     final private String REGEX_NON_ALPHANUMERIC_SYNTAX = "[^a-zA-Z\\d\\s]";
     final private String REGEX_WHITESPACE = "\\s";
     
-    boolean commonFilter;
-    HashSet<String> commonWords;
+    final private String COMMA = ",";
+    
+    private boolean commonFilter;
+    private HashSet<String> commonWords;
     
     public FileProcessor()
     {
@@ -52,28 +54,23 @@ public class FileProcessor
         return text.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "" );
     }
     
-    public void readCommonWordsFile( String file ) throws IOException
+    public HashSet<String> readCsvFile( String file ) throws IOException
     {
-        commonWords.clear();
-        
-        final String COMMA = ",";
+        HashSet<String> set = new HashSet<>();
+
         String text = fileAsAString( file );
          
         String [] words = text.toLowerCase().split(COMMA);
         
         for(String word : words)
         {
-            commonWords.add( word.trim() );
-        }   
+            set.add( word.trim() );
+        }
+        
+        return set;
     }
     
-    /**
-     * 
-     * @param file
-     * @param listOfSentences
-     * @return
-     * @throws IOException 
-     */
+    
     public int getSentences( String text, ArrayList<String> listOfSentences) throws IOException
     {
         if(listOfSentences == null)
@@ -89,29 +86,35 @@ public class FileProcessor
         {
             String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim();
             String [] words = formatedSentence.split( REGEX_WHITESPACE );
+            String sentence = null;
             
             totalSentences = totalSentences++;
             
-            for(String word : words)
+            if(commonFilter)
             {
-                if(commonWords.contains(word) == false)
+                for(String word : words)
                 {
-                   formatedSentence = formatedSentence.replace(word, "");
+                    if(commonWords.contains(word) == false)
+                    {
+                       sentence = sentence + word + " ";
+                    }
                 }
             }
-            listOfSentences.add( formatedSentence );
+            else
+            {
+                for(String word : words)
+                {
+                    sentence = sentence + word + " ";
+                }
+            }
+            
+            listOfSentences.add( sentence );
         }
         
         return totalSentences;
     }
     
-    /**
-     * 
-     * @param file
-     * @param listOfWordsOfSentences
-     * @return
-     * @throws IOException 
-     */
+    
     public int getWordsOfSentences( String text, ArrayList< ArrayList<String> >  listOfWordsOfSentences) throws IOException
     {
         if(listOfWordsOfSentences == null)
@@ -129,9 +132,19 @@ public class FileProcessor
             ArrayList<String> wordsInSentence = new ArrayList<String>();
             totalWords = totalWords + words.length;
             
-            for(String word : words)
+            if(commonFilter)
             {
-                if(commonWords.contains(word) == false)
+                for(String word : words)
+                {
+                    if(commonWords.contains(word) == false)
+                    {
+                        wordsInSentence.add(word);
+                    }
+                }
+            }
+            else
+            {
+                for(String word : words)
                 {
                     wordsInSentence.add(word);
                 }

@@ -1,5 +1,5 @@
 
-package edu.uis.csc478b.team3;
+package edu.uis.csc478b.team3.config;
 
 import javax.xml.bind.annotation.XmlElement;
 

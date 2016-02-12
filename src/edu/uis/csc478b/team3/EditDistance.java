@@ -28,12 +28,7 @@ public class EditDistance
         this.SUBSTITUTION_COST = SUBSTITUTION_COST;     
     }
     
-    /**
-     * 
-     * @param compareString
-     * @param masterString
-     * @return 
-     */
+    
     public float getDistance( String compareString, String masterString )
     {
         int masterStringLen = masterString.length();
