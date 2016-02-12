@@ -58,8 +58,8 @@ public class WordFrequency extends Filter
             String master = fileProcessor.fileAsAString(masterFile);
             String suspect = fileProcessor.fileAsAString(suspectFile);
             
-            int mTotalSentences = fileProcessor.getSentences(master, mSentences);
-            int sTotalSentences = fileProcessor.getSentences(suspect, sSentences);
+            int mTotalWords = fileProcessor.getWordsOfSentences(master, mWords);
+            int sTotalWords = fileProcessor.getWordsOfSentences(suspect, sWords);
             
             
             
@@ -129,6 +129,9 @@ public class WordFrequency extends Filter
                 result = result + "WordFrequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
             }
             
+            result = result + "Master word count: " + masterTotal + System.lineSeparator();
+            result = result + "Suspect word count: " + suspectTotal + System.lineSeparator();
+            result = result + "Similar word count: " + similarWords + System.lineSeparator();
             result = result + config.getConfigSetup() + System.lineSeparator();
             
         } catch (IOException ex) 

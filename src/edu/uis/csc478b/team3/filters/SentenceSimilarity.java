@@ -92,7 +92,7 @@ public class SentenceSimilarity extends Filter
             {
                 result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
             }
-            
+            result = result + "Total similar sentences: " + total + System.lineSeparator();
             result = result + config.getConfigSetup() + System.lineSeparator();
           
         } catch (IOException ex) 

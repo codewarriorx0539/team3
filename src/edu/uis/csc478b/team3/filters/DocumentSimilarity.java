@@ -46,8 +46,8 @@ public class DocumentSimilarity extends Filter
             
             master = fileProcessor.removePuncuation(master);
             suspect = fileProcessor.removePuncuation(suspect);
-            
-            if( threshold >= editDistance.getDistance(suspect, master) )
+            float distance = editDistance.getDistance(suspect, master);
+            if( threshold >=  distance)
             {
                 result = result + "DocumentSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
             }
@@ -56,6 +56,7 @@ public class DocumentSimilarity extends Filter
                 result = result + "DocumentSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
             }
             
+            result = result + "Calculated distance: " + distance + System.lineSeparator();
             result = result + config.getConfigSetup() + System.lineSeparator();
             
         } catch (IOException ex) 
