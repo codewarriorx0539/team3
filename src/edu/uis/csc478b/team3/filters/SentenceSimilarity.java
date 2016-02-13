@@ -40,6 +40,7 @@ public class SentenceSimilarity extends Filter
         String result = "";
         float threshold = config.getSENTENCE_SIMILARITY_THRESHOLD(); 
         int range = config.getSENTENCE_SIMILARITY_RANGE();
+        int sentenceThreshold = config.getTOTAL_SIMILAR_SENTENCES();
         
         editDistance.setINSERT_COST(config.getINSERT_COST());
         editDistance.setDELETION_COST(config.getDELETION_COST());
@@ -53,12 +54,14 @@ public class SentenceSimilarity extends Filter
             int mTotalSentences = fileProcessor.getSentences(master, mSentences);
             int sTotalSentences = fileProcessor.getSentences(suspect, sSentences);
             
+            
+            
             float total = 0;
             
-            for(int index = 0; index < (mTotalSentences - range) && index < (sTotalSentences  - range); index++ )
+            for(int index = 0; index < mTotalSentences && index < sTotalSentences; index++ )
             {
                 boolean foundSimilar = false;
-                for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i < range) && (foundSimilar != true) ; i++)
+                for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i - index <= range) && (foundSimilar != true) ; i++)
                 {
                    if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
                    {
@@ -84,7 +87,7 @@ public class SentenceSimilarity extends Filter
  
             }
             
-            if( total >= threshold )
+            if( total >= sentenceThreshold )
             {
                 result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
             }

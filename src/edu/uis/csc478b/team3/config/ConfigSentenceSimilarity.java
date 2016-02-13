@@ -8,6 +8,7 @@ public class ConfigSentenceSimilarity extends Config
     /// Test sentences N to the left and right.
     int SENTENCE_SIMILARITY_RANGE;
     float SENTENCE_SIMILARITY_THRESHOLD;
+    int TOTAL_SIMILAR_SENTENCES;
     
     float INSERT_COST;        
     float DELETION_COST;      
@@ -16,11 +17,23 @@ public class ConfigSentenceSimilarity extends Config
     public ConfigSentenceSimilarity()
     {
         SENTENCE_SIMILARITY_RANGE = 3;
-        SENTENCE_SIMILARITY_THRESHOLD = 100;
+        SENTENCE_SIMILARITY_THRESHOLD = 10;
+        TOTAL_SIMILAR_SENTENCES = 3;
                 
         INSERT_COST = 1.0f;        
         DELETION_COST = 1.0f;    
         SUBSTITUTION_COST = 1.5f;
+    }
+
+    public int getTOTAL_SIMILAR_SENTENCES() 
+    {
+        return TOTAL_SIMILAR_SENTENCES;
+    }
+
+    @XmlElement
+    public void setTOTAL_SIMILAR_SENTENCES(int TOTAL_SIMILAR_SENTENCES) 
+    {
+        this.TOTAL_SIMILAR_SENTENCES = TOTAL_SIMILAR_SENTENCES;
     }
 
     public int getSENTENCE_SIMILARITY_RANGE() 

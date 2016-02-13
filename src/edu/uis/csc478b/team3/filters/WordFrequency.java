@@ -129,8 +129,8 @@ public class WordFrequency extends Filter
                 result = result + "WordFrequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
             }
             
-            result = result + "Master word count: " + masterTotal + System.lineSeparator();
-            result = result + "Suspect word count: " + suspectTotal + System.lineSeparator();
+            result = result + "Master word count: " + mTotalWords + System.lineSeparator();
+            result = result + "Suspect word count: " + sTotalWords + System.lineSeparator();
             result = result + "Similar word count: " + similarWords + System.lineSeparator();
             result = result + config.getConfigSetup() + System.lineSeparator();
             

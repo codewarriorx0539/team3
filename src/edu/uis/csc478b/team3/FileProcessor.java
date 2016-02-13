@@ -86,9 +86,9 @@ public class FileProcessor
         {
             String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim();
             String [] words = formatedSentence.split( REGEX_WHITESPACE );
-            String sentence = null;
+            String sentence = "";
             
-            totalSentences = totalSentences++;
+            totalSentences++;
             
             if(commonFilter)
             {
