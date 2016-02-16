@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.filters;
 
+import edu.uis.csc478b.team3.FileProcessor;
 import edu.uis.csc478b.team3.config.ConfigWordFrequency;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.io.IOException;
@@ -20,125 +21,100 @@ public class WordFrequency extends Filter
     Map<String, Integer> compareMap;
     Map<String, Integer> masterMap;
     
+    int DIFFERENCE_THRESHOLD;
+    float FREQUENCY_DIFFERENCE_THRESHOLD;
+    
     ConfigWordFrequency config;
     
-    public WordFrequency()
+    public WordFrequency( PlagiarismTest testConfig , FileProcessor master, FileProcessor suspect )
     {
-    
-    }
-    
-    public WordFrequency( PlagiarismTest testConfig )
-    {
-        super(testConfig);
+        super(testConfig.getConfigWordFrequency(), master,  suspect);
         
         compareMap = new TreeMap<>();
         masterMap = new TreeMap<>();
         
-        config = testConfig.getConfigWordFrequency();
+        DIFFERENCE_THRESHOLD = testConfig.getConfigWordFrequency().getDIFFERENCE_THRESHOLD();
+        FREQUENCY_DIFFERENCE_THRESHOLD = testConfig.getConfigWordFrequency().getFREQUENCY_DIFFERENCE_THRESHOLD();
     }
     
-    /**
-     * 
-     * @param compare
-     * @param master
-     * @return 
-     */
     @Override
     public String runPlagiarismTest()
     {
         String result = "";
-        try 
+        
+        int masterTotal = 0;
+        int suspectTotal = 0;
+
+        int mTotalWords = master.getNumWords();
+        int sTotalWords = suspect.getNumWords();
+
+        ArrayList<String> mWords = master.getWords();
+        ArrayList<String> sWords = suspect.getWords();
+
+        for( String word : sWords)
         {
-            
-            int DIFFERENCE_THRESHOLD = 0;
-            int SIMILAR_WORDS_THRESHOLD = 0;
-            int masterTotal = 0;
-            int suspectTotal = 0;
-            
-            String master = fileProcessor.fileAsAString(masterFile);
-            String suspect = fileProcessor.fileAsAString(suspectFile);
-            
-            int mTotalWords = fileProcessor.getWordsOfSentences(master, mWords);
-            int sTotalWords = fileProcessor.getWordsOfSentences(suspect, sWords);
-            
-            
-            
-            for( ArrayList<String> sentence : sWords)
+            if( compareMap.containsKey(word) == true)
             {
-                for( String word : sentence)
-                {
-                    if( compareMap.containsKey(word) == true)
-                    {
-                        int wordTotal = compareMap.get(word);
-                        wordTotal++;
-                        compareMap.put(word, wordTotal);
-                    }
-                    else
-                    {
-                        compareMap.put(word, 1);
-                    }
-                    
-                    suspectTotal++;
-                }
-            }
-            
-            for( ArrayList<String> sentence : mWords)
-            {
-                for( String word : sentence)
-                {
-                    if( masterMap.containsKey(word) == true)
-                    {
-                        int wordTotal = masterMap.get(word);
-                        wordTotal++;
-                        masterMap.put(word, wordTotal);
-                    }
-                    else
-                    {
-                        masterMap.put(word, 1);
-                    }
-                    
-                    masterTotal++;
-                }
-            }
-            
-            float similarWords = 0;
-            
-            for(Map.Entry<String,Integer> entry : compareMap.entrySet())
-            {
-                if( masterMap.containsKey(entry.getKey()) == true)
-                {
-                    similarWords = similarWords + entry.getValue();
-                }
-            }
-            
-            
-            if( DIFFERENCE_THRESHOLD > Math.abs( masterTotal - suspectTotal)  )
-            {
-                result = result + "WordDifference: PLAGIARISM NOT FOUND" + System.lineSeparator();
-            }
-            
-            
-            float percentageSimilar = ( similarWords / masterTotal );
-            
-            if( percentageSimilar >= SIMILAR_WORDS_THRESHOLD )
-            {
-                result = result + "WordFrequency: PLAGIARISM FOUND" + System.lineSeparator();
+                int wordTotal = compareMap.get(word);
+                wordTotal++;
+                compareMap.put(word, wordTotal);
             }
             else
             {
-                result = result + "WordFrequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
+                compareMap.put(word, 1);
             }
-            
-            result = result + "Master word count: " + mTotalWords + System.lineSeparator();
-            result = result + "Suspect word count: " + sTotalWords + System.lineSeparator();
-            result = result + "Similar word count: " + similarWords + System.lineSeparator();
-            result = result + config.getConfigSetup() + System.lineSeparator();
-            
-        } catch (IOException ex) 
-        {
-            Logger.getLogger(WordFrequency.class.getName()).log(Level.SEVERE, null, ex);
+
+            suspectTotal++;
         }
-        
+
+        for( String word : mWords)
+        {
+            if( masterMap.containsKey(word) == true)
+            {
+                int wordTotal = masterMap.get(word);
+                wordTotal++;
+                masterMap.put(word, wordTotal);
+            }
+            else
+            {
+                masterMap.put(word, 1);
+            }
+
+            masterTotal++;
+        }
+
+
+        float similarWords = 0;
+
+        for(Map.Entry<String,Integer> entry : compareMap.entrySet())
+        {
+            if( masterMap.containsKey(entry.getKey()) == true)
+            {
+                similarWords = similarWords + entry.getValue();
+            }
+        }
+
+        if( DIFFERENCE_THRESHOLD > Math.abs( masterTotal - suspectTotal)  )
+        {
+            result = result + "WordDifference: PLAGIARISM NOT FOUND" + System.lineSeparator();
+        }
+
+        float percentageSimilar = ( similarWords / masterTotal );
+
+        if( percentageSimilar >= FREQUENCY_DIFFERENCE_THRESHOLD )
+        {
+            result = result + "WordFrequency: PLAGIARISM FOUND" + System.lineSeparator();
+        }
+        else
+        {
+            result = result + "WordFrequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
+        }
+
+        result = result + "Master word count: " + mTotalWords + System.lineSeparator();
+        result = result + "Suspect word count: " + sTotalWords + System.lineSeparator();
+        result = result + "Similar word count: " + similarWords + System.lineSeparator();
+        result = result + config.getConfigSetup() + System.lineSeparator();
+            
         return result;
     }
     

@@ -2,97 +2,50 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.EditDistance;
+import edu.uis.csc478b.team3.FileProcessor;
 import edu.uis.csc478b.team3.config.ConfigDocumentSimilarity;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 public class DocumentSimilarity extends Filter
 {
-    ConfigDocumentSimilarity config;
+    
     EditDistance editDistance;
+    int threshold;
     
-    public DocumentSimilarity()
+    public DocumentSimilarity( PlagiarismTest testConfig , FileProcessor master, FileProcessor suspect )
     {
-        editDistance = new EditDistance();
-    }
-    
-    public DocumentSimilarity( PlagiarismTest testConfig )
-    {
-        super(testConfig);
-        editDistance = new EditDistance();
-        config = testConfig.getConfigDocumentSimilarity();
+        super( testConfig.getConfigDocumentSimilarity(), master,  suspect);
+        
+        editDistance = new EditDistance( testConfig.getConfigDocumentSimilarity().getConfigEditDistance() );
+        threshold = testConfig.getConfigDocumentSimilarity().getDOCUMENT_SIMILARITY_THRESHOLD();
+        
     }
 
     @Override
     public String runPlagiarismTest() 
     {
         String result = "";
-        
-        editDistance.setINSERT_COST(config.getINSERT_COST());
-        editDistance.setDELETION_COST(config.getDELETION_COST());
-        editDistance.setSUBSTITUTION_COST(config.getSUBSTITUTION_COST());
-        
-        float threshold = config.getDOCUMENT_SIMILARITY_THRESHOLD();
-        
-        
-        try 
+        String textMaster = master.getText();
+        String textSuspect = suspect.getText();
+
+        float distance = editDistance.getDistance(textMaster, textSuspect);
+
+        if( threshold >=  distance)
         {
-            String master = fileProcessor.fileAsAString(masterFile);
-            String suspect = fileProcessor.fileAsAString(suspectFile);
-            
-            master = fileProcessor.removePuncuation(master);
-            suspect = fileProcessor.removePuncuation(suspect);
-            float distance = editDistance.getDistance(suspect, master);
-            if( threshold >=  distance)
-            {
-                result = result + "DocumentSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
-            }
-            else
-            {
-                result = result + "DocumentSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
-            }
-            
-            result = result + "Calculated distance: " + distance + System.lineSeparator();
-            result = result + config.getConfigSetup() + System.lineSeparator();
-            
-        } catch (IOException ex) 
-        {
-            Logger.getLogger(DocumentSimilarity.class.getName()).log(Level.SEVERE, null, ex);
+            result = result + "DocumentSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
         }
-        
+        else
+        {
+            result = result + "DocumentSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+        }
+
+        result = result + "Calculated distance: " + distance + System.lineSeparator();
+        result = result + configSetup + System.lineSeparator();
+             
         return result;
     }
-    
-    /*
-    
-     int DIFFERENCE_THRESHOLD = 0;
-            int FREQUENCY_DIFFERENCE_THRESHOLD = 0;
-            
-            float SIMILAR_WORDS_THRESHOLD = 0;
-            float DOCUMENT_SIMILARITY_THRESHOLD = 0;
-    
-    
-    
-    
-    
-    /////////////////////// Compute Document Similarity
-            EditDistance dist = new EditDistance();
-            
-            String cleanMasterText = fileProcessor.removePuncuation(mText);
-            String cleanSuspectText = fileProcessor.removePuncuation(sText);
-            
-            if( DOCUMENT_SIMILARITY_THRESHOLD >= dist.getDistance(cleanMasterText, cleanSuspectText) )
-            {
-                output = output + "ALERT PLAGIARISM (DOCUMENT SIMILARITY THRESHOLD): " + suspectFile + System.lineSeparator();
-                printOutput(output);
-                return;
-            }
-            output = output + "PASSED DOCUMENT SIMILARITY THRESHOLD" + System.lineSeparator();
-            ///////////////////////
-    */
-    
 }

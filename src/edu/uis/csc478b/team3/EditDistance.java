@@ -1,6 +1,8 @@
 
 package edu.uis.csc478b.team3;
 
+import edu.uis.csc478b.team3.config.ConfigEditDistance;
+
 /**
  * Calculate the edit dance of words
  * 
@@ -11,8 +13,6 @@ public class EditDistance
     private float INSERT_COST;      
     private float DELETION_COST; 
     private float SUBSTITUTION_COST;
-    
-    float table[][];
     
     public EditDistance()
     {
@@ -29,12 +29,21 @@ public class EditDistance
     }
     
     
+            
+     public EditDistance( ConfigEditDistance config )
+    {
+        this.INSERT_COST = config.getINSERT_COST();                 
+        this.DELETION_COST = config.getDELETION_COST();             
+        this.SUBSTITUTION_COST = config.getSUBSTITUTION_COST();     
+    }
+    
+    
     public float getDistance( String compareString, String masterString )
     {
         int masterStringLen = masterString.length();
         int compareStringLen = compareString.length();
         
-        table = new float[ masterStringLen + 1 ][ compareStringLen + 1];
+        float table[][] = new float[ masterStringLen + 1 ][ compareStringLen + 1];
         
         for(int i =0; i < masterStringLen + 1; i++)
         {

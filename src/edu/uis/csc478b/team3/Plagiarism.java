@@ -105,9 +105,12 @@ public class Plagiarism implements Runnable
                 
                ArrayList<Filter> filters = new ArrayList<>();
                
-               filters.add(new WordFrequency( config ));
-               filters.add(new DocumentSimilarity( config ));
-               filters.add(new SentenceSimilarity( config ));
+               FileProcessor master = new FileProcessor( config.getMasterFile() );
+               FileProcessor suspect = new FileProcessor( config.getSuspectFile() );
+               
+               filters.add(new WordFrequency( config, master, suspect));
+               filters.add(new DocumentSimilarity( config, master, suspect ));
+               filters.add(new SentenceSimilarity( config, master, suspect ));
                
                executor.execute( new Plagiarism( config, filters) );
             }

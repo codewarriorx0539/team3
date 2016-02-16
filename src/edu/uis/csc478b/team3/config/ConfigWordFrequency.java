@@ -44,7 +44,8 @@ public class ConfigWordFrequency extends Config
     {
         String setup;
         
-        setup = "DIFFERENCE_THRESHOLD: " + DIFFERENCE_THRESHOLD + System.lineSeparator();
+        setup = "Word Frequencies" + System.lineSeparator();
+        setup = setup +  "DIFFERENCE_THRESHOLD: " + DIFFERENCE_THRESHOLD + System.lineSeparator();
         setup = setup + "FREQUENCY_DIFFERENCE_THRESHOLD: " + FREQUENCY_DIFFERENCE_THRESHOLD + System.lineSeparator();
         
         return setup;

@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.EditDistance;
+import edu.uis.csc478b.team3.FileProcessor;
 import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.io.IOException;
@@ -16,21 +17,21 @@ import java.util.logging.Logger;
  */
 public class SentenceSimilarity extends Filter
 {
-    ConfigSentenceSimilarity config;
-    EditDistance editDistance;
-
-    public SentenceSimilarity()
-    {
-        editDistance = new EditDistance();
-    }
     
-    public SentenceSimilarity( PlagiarismTest testConfig)
+    EditDistance editDistance;
+    float threshold;
+    int range;
+    int sentenceThreshold;
+
+    public SentenceSimilarity( PlagiarismTest testConfig, FileProcessor master, FileProcessor suspect )
     {
-        super(testConfig);
+        super( testConfig.getConfigSentenceSimilarity() , master,  suspect);
         
-        editDistance = new EditDistance();
+        editDistance = new EditDistance(testConfig.getConfigSentenceSimilarity().getConfigEditDistance());
+        threshold =  testConfig.getConfigSentenceSimilarity().getSENTENCE_SIMILARITY_THRESHOLD();
+        range = testConfig.getConfigSentenceSimilarity().getSENTENCE_SIMILARITY_RANGE();
+        sentenceThreshold = testConfig.getConfigSentenceSimilarity().getTOTAL_SIMILAR_SENTENCES();
         
-        config = testConfig.getConfigSentenceSimilarity();
     }
     
     
@@ -38,71 +39,61 @@ public class SentenceSimilarity extends Filter
     public String runPlagiarismTest() 
     {
         String result = "";
-        float threshold = config.getSENTENCE_SIMILARITY_THRESHOLD(); 
-        int range = config.getSENTENCE_SIMILARITY_RANGE();
-        int sentenceThreshold = config.getTOTAL_SIMILAR_SENTENCES();
         
-        editDistance.setINSERT_COST(config.getINSERT_COST());
-        editDistance.setDELETION_COST(config.getDELETION_COST());
-        editDistance.setSUBSTITUTION_COST(config.getSUBSTITUTION_COST());
-        
-        try 
-        {
-            String master = fileProcessor.fileAsAString(masterFile);
-            String suspect = fileProcessor.fileAsAString(suspectFile);
-            
-            int mTotalSentences = fileProcessor.getSentences(master, mSentences);
-            int sTotalSentences = fileProcessor.getSentences(suspect, sSentences);
-            
-            
-            
-            float total = 0;
-            
-            for(int index = 0; index < mTotalSentences && index < sTotalSentences; index++ )
-            {
-                boolean foundSimilar = false;
-                for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i - index <= range) && (foundSimilar != true) ; i++)
-                {
-                   if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
-                   {
-                       foundSimilar = true;
-                   }
-                }
+        int mTotalWords = master.getNumWords();
+        int sTotalWords = suspect.getNumWords();
 
-                if(foundSimilar == false)
+        int mTotalSentences = master.getNumSentences();
+        int sTotalSentences = suspect.getNumSentences();
+
+        ArrayList<String> mSentences = master.getSentences();
+        ArrayList<String> sSentences = suspect.getSentences();
+
+        ArrayList<String> mWords = master.getWords();
+        ArrayList<String> sWords = suspect.getWords();
+
+        float total = 0;
+
+        for(int index = 0; index < mTotalSentences && index < sTotalSentences; index++ )
+        {
+            boolean foundSimilar = false;
+            for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i - index <= range) && (foundSimilar != true) ; i++)
+            {
+               if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
+               {
+                   foundSimilar = true;
+               }
+            }
+
+            if(foundSimilar == false)
+            {
+                for(int i = index; (i >= 0) && (i > (index - range)) && (foundSimilar != true); i--)
                 {
-                    for(int i = index; (i >= 0) && (i > (index - range)) && (foundSimilar != true); i--)
+                    if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
                     {
-                        if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
-                        {
-                            foundSimilar = true;
-                        }
+                        foundSimilar = true;
                     }
                 }
-                
-                if(foundSimilar == true)
-                {
-                    total++;
-                }
- 
             }
-            
-            if( total >= sentenceThreshold )
+
+            if(foundSimilar == true)
             {
-                result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+                total++;
             }
-            else
-            {
-                result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
-            }
-            result = result + "Total similar sentences: " + total + System.lineSeparator();
-            result = result + config.getConfigSetup() + System.lineSeparator();
-          
-        } catch (IOException ex) 
-        {
-            Logger.getLogger(DocumentSimilarity.class.getName()).log(Level.SEVERE, null, ex);
+
         }
-         
+
+        if( total >= sentenceThreshold )
+        {
+            result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+        }
+        else
+        {
+            result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+        }
+        result = result + "Total similar sentences: " + total + System.lineSeparator();
+        result = result + configSetup + System.lineSeparator();
+          
         return result;
     }
 
