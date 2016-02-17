@@ -3,22 +3,28 @@
     <configs>
         <commonWordsFile></commonWordsFile>
         <configDocumentSimilarity>
-            <DELETION_COST>1.0</DELETION_COST>
-            <DOCUMENT_SIMILARITY_THRESHOLD>250.0</DOCUMENT_SIMILARITY_THRESHOLD>
-            <INSERT_COST>1.0</INSERT_COST>
-            <SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
+            <configEditDistance>
+                <DELETION_COST>1.0</DELETION_COST>
+                <INSERT_COST>1.0</INSERT_COST>
+                <SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
+            </configEditDistance>
+            <DOCUMENT_SIMILARITY_THRESHOLD>100</DOCUMENT_SIMILARITY_THRESHOLD>
         </configDocumentSimilarity>
         <configSentenceSimilarity>
-            <DELETION_COST>1.0</DELETION_COST>
-            <INSERT_COST>1.0</INSERT_COST>
+            <CONSECUTIVE_SENTENCES>-1</CONSECUTIVE_SENTENCES>
+            <configEditDistance>
+                <DELETION_COST>1.0</DELETION_COST>
+                <INSERT_COST>1.0</INSERT_COST>
+                <SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
+            </configEditDistance>
             <SENTENCE_SIMILARITY_RANGE>3</SENTENCE_SIMILARITY_RANGE>
-            <SENTENCE_SIMILARITY_THRESHOLD>10.0</SENTENCE_SIMILARITY_THRESHOLD>
-            <SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
-            <TOTAL_SIMILAR_SENTENCES>3</TOTAL_SIMILAR_SENTENCES>
+            <SENTENCE_SIMILARITY_THRESHOLD>0.70</SENTENCE_SIMILARITY_THRESHOLD>
+            <TOTAL_SENTENCE_THRESHOLD>0.3</TOTAL_SENTENCE_THRESHOLD>
         </configSentenceSimilarity>
         <configWordFrequency>
-            <DIFFERENCE_THRESHOLD>1000</DIFFERENCE_THRESHOLD>
             <FREQUENCY_DIFFERENCE_THRESHOLD>0.7</FREQUENCY_DIFFERENCE_THRESHOLD>
+            <FREQUENCY_LOWER_BOUND>0.3</FREQUENCY_LOWER_BOUND>
+            <FREQUENCY_UPPER_BOUND>3.0</FREQUENCY_UPPER_BOUND>
         </configWordFrequency>
         <filterCommonWords>false</filterCommonWords>
         <masterFile>master.txt</masterFile>

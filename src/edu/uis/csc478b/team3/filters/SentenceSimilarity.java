@@ -97,6 +97,7 @@ public class SentenceSimilarity extends Filter
 
         }
 
+        float sentenceSimilarityRatio = 0.0f;
         // if block triggered
         if(consecutiveSentences != -1 && done == true)
         {
@@ -104,7 +105,8 @@ public class SentenceSimilarity extends Filter
         }
         else
         {
-            if( (total/mTotalSentences) >= totalSentenceThreshold )
+            sentenceSimilarityRatio = (float)total/(float)mTotalSentences;
+            if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {
                 result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
             }
@@ -113,7 +115,10 @@ public class SentenceSimilarity extends Filter
                 result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
             }
         }
+        result = result + "Total master sentences: " + mTotalSentences + System.lineSeparator();
         result = result + "Total similar sentences: " + total + System.lineSeparator();
+        result = result + "Sentence Similarity Ratio: " + sentenceSimilarityRatio + System.lineSeparator();
+        
         result = result + configSetup + System.lineSeparator();
           
         return result;

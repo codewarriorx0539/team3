@@ -30,12 +30,14 @@ public class FileProcessor
     ArrayList< String > sentences;
     ArrayList< String > words;
   
-    public FileProcessor(String fileName)
+    public FileProcessor(String fileName) throws IOException
     {
        this.fileName = fileName;
        
        sentences = new ArrayList< >();
        words = new ArrayList< >();
+       
+       readFile();
     }
 
     public String getFileName() 

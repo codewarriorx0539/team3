@@ -16,9 +16,11 @@ public class ConfigSentenceSimilarity extends Config
     public ConfigSentenceSimilarity()
     {
         SENTENCE_SIMILARITY_RANGE = 3;  // 3 behind 3 ahead
-        SENTENCE_SIMILARITY_THRESHOLD = .85f; // if sentece is 85% 
-        TOTAL_SENTENCE_THRESHOLD = .8f; // If 80% of sentences in document are similar
+        SENTENCE_SIMILARITY_THRESHOLD = .70f; // if sentece is 85% 
+        TOTAL_SENTENCE_THRESHOLD = .30f; // If 80% of sentences in document are similar
         CONSECUTIVE_SENTENCES = -1;     // (-1 ignore blocks as a trigger) or (num consecutive or total sentence that are similar)
+        
+        configEditDistance = new ConfigEditDistance();
     }
 
     public ConfigEditDistance getConfigEditDistance() {
@@ -77,9 +79,11 @@ public class ConfigSentenceSimilarity extends Config
     {
         String setup;
 
-        setup = "Sentence Similarity";
-        setup = setup + "SENTENCE_SIMILARITY_RANGE: " + SENTENCE_SIMILARITY_RANGE + System.lineSeparator();
+        setup = "SENTENCE_SIMILARITY_RANGE: " + SENTENCE_SIMILARITY_RANGE + System.lineSeparator();
         setup = setup + "SENTENCE_SIMILARITY_THRESHOLD: " + SENTENCE_SIMILARITY_THRESHOLD + System.lineSeparator();
+        setup = setup + "TOTAL_SENTENCE_THRESHOLD: " + TOTAL_SENTENCE_THRESHOLD + System.lineSeparator();
+        setup = setup + "CONSECUTIVE_SENTENCES: " + CONSECUTIVE_SENTENCES + System.lineSeparator();
+
         setup = setup + configEditDistance.getConfigSetup();
         
         return setup;

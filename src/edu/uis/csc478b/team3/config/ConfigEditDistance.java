@@ -5,6 +5,8 @@
  */
 package edu.uis.csc478b.team3.config;
 
+import javax.xml.bind.annotation.XmlElement;
+
 /**
  *
  * @author Jake
@@ -15,11 +17,19 @@ public class ConfigEditDistance extends Config
     float INSERT_COST;        
     float DELETION_COST;      
     float SUBSTITUTION_COST; 
+    
+    public ConfigEditDistance()
+    {
+        INSERT_COST = 1.0f;        
+        DELETION_COST = 1.0f;      
+        SUBSTITUTION_COST = 1.5f; 
+    }
 
     public float getINSERT_COST() {
         return INSERT_COST;
     }
 
+    @XmlElement
     public void setINSERT_COST(float INSERT_COST) {
         this.INSERT_COST = INSERT_COST;
     }
@@ -28,6 +38,7 @@ public class ConfigEditDistance extends Config
         return DELETION_COST;
     }
 
+    @XmlElement
     public void setDELETION_COST(float DELETION_COST) {
         this.DELETION_COST = DELETION_COST;
     }
@@ -36,6 +47,7 @@ public class ConfigEditDistance extends Config
         return SUBSTITUTION_COST;
     }
 
+    @XmlElement
     public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) {
         this.SUBSTITUTION_COST = SUBSTITUTION_COST;
     }
@@ -45,8 +57,7 @@ public class ConfigEditDistance extends Config
     {
         String setup;
         
-        setup = "Edit Distance Configuration" + System.lineSeparator();
-        setup = setup + "INSERT_COST: " + INSERT_COST + System.lineSeparator();
+        setup = "INSERT_COST: " + INSERT_COST + System.lineSeparator();
         setup = setup + "DELETION_COST: " + DELETION_COST + System.lineSeparator();
         setup = setup + "SUBSTITUTION_COST: " + SUBSTITUTION_COST + System.lineSeparator();
     

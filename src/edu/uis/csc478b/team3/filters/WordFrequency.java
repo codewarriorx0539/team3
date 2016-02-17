@@ -23,8 +23,6 @@ public class WordFrequency extends Filter
     float FREQUENCY_UPPER_BOUND;
     float FREQUENCY_DIFFERENCE_THRESHOLD;
     
-    ConfigWordFrequency config;
-    
     public WordFrequency( PlagiarismTest testConfig , FileProcessor master, FileProcessor suspect )
     {
         super(testConfig.getConfigWordFrequency(), master,  suspect);
@@ -33,7 +31,7 @@ public class WordFrequency extends Filter
         masterMap = new TreeMap<>();
         
         FREQUENCY_LOWER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_LOWER_BOUND();
-        FREQUENCY_LOWER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_UPPER_BOUND();
+        FREQUENCY_UPPER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_UPPER_BOUND();
         FREQUENCY_DIFFERENCE_THRESHOLD = testConfig.getConfigWordFrequency().getFREQUENCY_DIFFERENCE_THRESHOLD();
     }
     
@@ -94,29 +92,35 @@ public class WordFrequency extends Filter
             }
         }
 
-        float ratioWords = suspectTotal / masterTotal;
+        float ratioWords = (float) suspectTotal / (float) masterTotal;
         
         // Means the ratio of words is absurdly differently like one document as 1000 words and the other 2 words. Tested as a percentages/ratio
         if( (FREQUENCY_UPPER_BOUND < ratioWords)  || (FREQUENCY_LOWER_BOUND > ratioWords) )
         {
-            result = result + "WordDifference: PLAGIARISM NOT FOUND" + System.lineSeparator();
+            result = result + "Word Difference: PLAGIARISM NOT FOUND" + System.lineSeparator();
+        }
+        else
+        {
+            result = result + "Word Difference: PLAGIARISM FOUND" + System.lineSeparator();
         }
 
         float percentageSimilar = ( similarWords / masterTotal );
 
         if( percentageSimilar >= FREQUENCY_DIFFERENCE_THRESHOLD )
         {
-            result = result + "WordFrequency: PLAGIARISM FOUND" + System.lineSeparator();
+            result = result + "Word Frequency: PLAGIARISM FOUND" + System.lineSeparator();
         }
         else
         {
-            result = result + "WordFrequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
+            result = result + "Word Frequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
         }
 
         result = result + "Master word count: " + mTotalWords + System.lineSeparator();
         result = result + "Suspect word count: " + sTotalWords + System.lineSeparator();
         result = result + "Similar word count: " + similarWords + System.lineSeparator();
-        result = result + config.getConfigSetup() + System.lineSeparator();
+        result = result + "Ratio of Suspect to Master words: " + ratioWords + System.lineSeparator();
+        result = result + "Frequency of Similar Words: " + percentageSimilar + System.lineSeparator();
+        result = result + configSetup + System.lineSeparator();
             
         return result;
     }

@@ -11,6 +11,13 @@ public class ConfigWordFrequency extends Config
     float FREQUENCY_LOWER_BOUND;
     float FREQUENCY_UPPER_BOUND;
     
+    public ConfigWordFrequency()
+    {
+        FREQUENCY_DIFFERENCE_THRESHOLD  = .7f;
+        
+        FREQUENCY_UPPER_BOUND  = 3.0f;
+        FREQUENCY_LOWER_BOUND  = .3f;
+    }
 
     public float getFREQUENCY_LOWER_BOUND() 
     {
@@ -33,16 +40,6 @@ public class ConfigWordFrequency extends Config
     {
         this.FREQUENCY_UPPER_BOUND = FREQUENCY_UPPER_BOUND;
     }
-    
-    
-    
-    public ConfigWordFrequency()
-    {
-        FREQUENCY_DIFFERENCE_THRESHOLD  = .7f;
-        
-        FREQUENCY_UPPER_BOUND  = 3.0f;
-        FREQUENCY_LOWER_BOUND  = .3f;
-    }
 
     public float getFREQUENCY_DIFFERENCE_THRESHOLD() 
     {
@@ -60,8 +57,7 @@ public class ConfigWordFrequency extends Config
     {
         String setup;
         
-        setup = "Word Frequencies" + System.lineSeparator();
-        setup = setup +  "FREQUENCY_UPPER_BOUND: " + FREQUENCY_UPPER_BOUND + System.lineSeparator();
+        setup = "FREQUENCY_UPPER_BOUND: " + FREQUENCY_UPPER_BOUND + System.lineSeparator();
         setup = setup +  "FREQUENCY_LOWER_BOUND: " + FREQUENCY_LOWER_BOUND + System.lineSeparator();
         setup = setup + "FREQUENCY_DIFFERENCE_THRESHOLD: " + FREQUENCY_DIFFERENCE_THRESHOLD + System.lineSeparator();
         

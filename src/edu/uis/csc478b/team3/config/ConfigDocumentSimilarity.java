@@ -10,7 +10,8 @@ public class ConfigDocumentSimilarity extends Config
     
     public ConfigDocumentSimilarity()
     {
-        DOCUMENT_SIMILARITY_THRESHOLD = 100;
+        DOCUMENT_SIMILARITY_THRESHOLD = 200;
+        configEditDistance = new ConfigEditDistance();
     }
 
     public ConfigEditDistance getConfigEditDistance() 
@@ -40,8 +41,7 @@ public class ConfigDocumentSimilarity extends Config
     {
         String setup;
         
-        setup = "Document Similarity Setup" + System.lineSeparator(); 
-        setup = setup + "DOCUMENT_SIMILARITY_THRESHOLD: " + DOCUMENT_SIMILARITY_THRESHOLD + System.lineSeparator(); 
+        setup = "DOCUMENT_SIMILARITY_THRESHOLD: " + DOCUMENT_SIMILARITY_THRESHOLD + System.lineSeparator(); 
         setup = setup + configEditDistance.getConfigSetup();
         
         return setup;
