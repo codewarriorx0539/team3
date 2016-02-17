@@ -3,11 +3,7 @@ package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.EditDistance;
 import edu.uis.csc478b.team3.FileProcessor;
-import edu.uis.csc478b.team3.config.ConfigDocumentSimilarity;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class DocumentSimilarity extends Filter

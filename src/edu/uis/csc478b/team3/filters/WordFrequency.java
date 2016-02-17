@@ -4,12 +4,9 @@ package edu.uis.csc478b.team3.filters;
 import edu.uis.csc478b.team3.FileProcessor;
 import edu.uis.csc478b.team3.config.ConfigWordFrequency;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Compare word frequencies and return the percentage of exact matching words
@@ -21,7 +18,9 @@ public class WordFrequency extends Filter
     Map<String, Integer> compareMap;
     Map<String, Integer> masterMap;
     
-    int DIFFERENCE_THRESHOLD;
+    // As percentages
+    float FREQUENCY_LOWER_BOUND;
+    float FREQUENCY_UPPER_BOUND;
     float FREQUENCY_DIFFERENCE_THRESHOLD;
     
     ConfigWordFrequency config;
@@ -33,7 +32,8 @@ public class WordFrequency extends Filter
         compareMap = new TreeMap<>();
         masterMap = new TreeMap<>();
         
-        DIFFERENCE_THRESHOLD = testConfig.getConfigWordFrequency().getDIFFERENCE_THRESHOLD();
+        FREQUENCY_LOWER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_LOWER_BOUND();
+        FREQUENCY_LOWER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_UPPER_BOUND();
         FREQUENCY_DIFFERENCE_THRESHOLD = testConfig.getConfigWordFrequency().getFREQUENCY_DIFFERENCE_THRESHOLD();
     }
     
@@ -94,7 +94,10 @@ public class WordFrequency extends Filter
             }
         }
 
-        if( DIFFERENCE_THRESHOLD > Math.abs( masterTotal - suspectTotal)  )
+        float ratioWords = suspectTotal / masterTotal;
+        
+        // Means the ratio of words is absurdly differently like one document as 1000 words and the other 2 words. Tested as a percentages/ratio
+        if( (FREQUENCY_UPPER_BOUND < ratioWords)  || (FREQUENCY_LOWER_BOUND > ratioWords) )
         {
             result = result + "WordDifference: PLAGIARISM NOT FOUND" + System.lineSeparator();
         }

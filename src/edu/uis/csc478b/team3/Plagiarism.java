@@ -9,7 +9,6 @@ import edu.uis.csc478b.team3.filters.Filter;
 import edu.uis.csc478b.team3.filters.SentenceSimilarity;
 import edu.uis.csc478b.team3.filters.WordFrequency;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -22,12 +21,10 @@ import javax.xml.bind.Unmarshaller;
 
 public class Plagiarism implements Runnable 
 {
-    PlagiarismTest config;
     ArrayList<Filter> filters;
     
-    public Plagiarism( PlagiarismTest config, ArrayList<Filter> filters )
+    public Plagiarism( ArrayList<Filter> filters )
     {
-        this.config = config;
         this.filters = filters;
     }
     
@@ -102,17 +99,16 @@ public class Plagiarism implements Runnable
             
             for(PlagiarismTest config : configs)
             {
-                
-               ArrayList<Filter> filters = new ArrayList<>();
+               ArrayList<Filter> testSet = new ArrayList<>();
                
                FileProcessor master = new FileProcessor( config.getMasterFile() );
                FileProcessor suspect = new FileProcessor( config.getSuspectFile() );
                
-               filters.add(new WordFrequency( config, master, suspect));
-               filters.add(new DocumentSimilarity( config, master, suspect ));
-               filters.add(new SentenceSimilarity( config, master, suspect ));
+               testSet.add(new WordFrequency( config, master, suspect));
+               testSet.add(new DocumentSimilarity( config, master, suspect ));
+               testSet.add(new SentenceSimilarity( config, master, suspect ));
                
-               executor.execute( new Plagiarism( config, filters) );
+               executor.execute( new Plagiarism( testSet ) );
             }
             
             executor.shutdown();

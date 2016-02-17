@@ -124,9 +124,7 @@ public class FileProcessor
                     {
                        sentence = sentence + word + " ";  
                        words.add(word);
-                    }
-                    
-                    
+                    }  
                 }
             }
             else

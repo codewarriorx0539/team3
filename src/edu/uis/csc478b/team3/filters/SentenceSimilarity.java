@@ -3,12 +3,8 @@ package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.EditDistance;
 import edu.uis.csc478b.team3.FileProcessor;
-import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Test similarity
@@ -21,7 +17,8 @@ public class SentenceSimilarity extends Filter
     EditDistance editDistance;
     float threshold;
     int range;
-    int sentenceThreshold;
+    float totalSentenceThreshold;
+    int consecutiveSentences;
 
     public SentenceSimilarity( PlagiarismTest testConfig, FileProcessor master, FileProcessor suspect )
     {
@@ -30,8 +27,8 @@ public class SentenceSimilarity extends Filter
         editDistance = new EditDistance(testConfig.getConfigSentenceSimilarity().getConfigEditDistance());
         threshold =  testConfig.getConfigSentenceSimilarity().getSENTENCE_SIMILARITY_THRESHOLD();
         range = testConfig.getConfigSentenceSimilarity().getSENTENCE_SIMILARITY_RANGE();
-        sentenceThreshold = testConfig.getConfigSentenceSimilarity().getTOTAL_SIMILAR_SENTENCES();
-        
+        totalSentenceThreshold = testConfig.getConfigSentenceSimilarity().getTOTAL_SENTENCE_THRESHOLD();
+        consecutiveSentences = testConfig.getConfigSentenceSimilarity().getCONSECUTIVE_SENTENCES();
     }
     
     
@@ -40,23 +37,22 @@ public class SentenceSimilarity extends Filter
     {
         String result = "";
         
-        int mTotalWords = master.getNumWords();
-        int sTotalWords = suspect.getNumWords();
-
         int mTotalSentences = master.getNumSentences();
         int sTotalSentences = suspect.getNumSentences();
 
         ArrayList<String> mSentences = master.getSentences();
         ArrayList<String> sSentences = suspect.getSentences();
 
-        ArrayList<String> mWords = master.getWords();
-        ArrayList<String> sWords = suspect.getWords();
+        int total = 0;
+        int totalConsecutiveSentences = 0;
+        int indexLastTrigger = 0;
+        boolean done = false;
 
-        float total = 0;
-
-        for(int index = 0; index < mTotalSentences && index < sTotalSentences; index++ )
+        for(int index = 0; index < mTotalSentences && index < sTotalSentences && done == false; index++ )
         {
             boolean foundSimilar = false;
+            
+            // Sweep a few sentences behind and ahead to see if the senetence is slighlty aligned differently
             for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i - index <= range) && (foundSimilar != true) ; i++)
             {
                if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
@@ -79,17 +75,43 @@ public class SentenceSimilarity extends Filter
             if(foundSimilar == true)
             {
                 total++;
+                
+                if(indexLastTrigger == (index - 1) )
+                {
+                    totalConsecutiveSentences++;
+                    indexLastTrigger = index;
+                    if(consecutiveSentences != -1 && totalConsecutiveSentences >= consecutiveSentences)
+                    {
+                        done = true;
+                    }
+      
+                    
+                }
+                else
+                {
+                    indexLastTrigger = index;
+                    totalConsecutiveSentences = 1;
+                }
+                
             }
 
         }
 
-        if( total >= sentenceThreshold )
+        // if block triggered
+        if(consecutiveSentences != -1 && done == true)
         {
             result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
         }
         else
         {
-            result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+            if( (total/mTotalSentences) >= totalSentenceThreshold )
+            {
+                result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+            }
+            else
+            {
+                result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+            }
         }
         result = result + "Total similar sentences: " + total + System.lineSeparator();
         result = result + configSetup + System.lineSeparator();

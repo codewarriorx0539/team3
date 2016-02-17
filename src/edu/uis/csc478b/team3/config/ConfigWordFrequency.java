@@ -8,24 +8,40 @@ public class ConfigWordFrequency extends Config
     /// Are the frequencies of uncommon words similar
     float FREQUENCY_DIFFERENCE_THRESHOLD;
     
-    int DIFFERENCE_THRESHOLD;
+    float FREQUENCY_LOWER_BOUND;
+    float FREQUENCY_UPPER_BOUND;
+    
+
+    public float getFREQUENCY_LOWER_BOUND() 
+    {
+        return FREQUENCY_LOWER_BOUND;
+    }
+
+    @XmlElement
+    public void setFREQUENCY_LOWER_BOUND(float FREQUENCY_LOWER_BOUND) 
+    {
+        this.FREQUENCY_LOWER_BOUND = FREQUENCY_LOWER_BOUND;
+    }
+
+    public float getFREQUENCY_UPPER_BOUND() 
+    {
+        return FREQUENCY_UPPER_BOUND;
+    }
+
+    @XmlElement
+    public void setFREQUENCY_UPPER_BOUND(float FREQUENCY_UPPER_BOUND)
+    {
+        this.FREQUENCY_UPPER_BOUND = FREQUENCY_UPPER_BOUND;
+    }
+    
+    
     
     public ConfigWordFrequency()
     {
         FREQUENCY_DIFFERENCE_THRESHOLD  = .7f;
         
-        DIFFERENCE_THRESHOLD  = 1000;
-    }
-
-    public int getDIFFERENCE_THRESHOLD() 
-    {
-        return DIFFERENCE_THRESHOLD;
-    }
-
-    @XmlElement
-    public void setDIFFERENCE_THRESHOLD(int DIFFERENCE_THRESHOLD) 
-    {
-        this.DIFFERENCE_THRESHOLD = DIFFERENCE_THRESHOLD;
+        FREQUENCY_UPPER_BOUND  = 3.0f;
+        FREQUENCY_LOWER_BOUND  = .3f;
     }
 
     public float getFREQUENCY_DIFFERENCE_THRESHOLD() 
@@ -45,7 +61,8 @@ public class ConfigWordFrequency extends Config
         String setup;
         
         setup = "Word Frequencies" + System.lineSeparator();
-        setup = setup +  "DIFFERENCE_THRESHOLD: " + DIFFERENCE_THRESHOLD + System.lineSeparator();
+        setup = setup +  "FREQUENCY_UPPER_BOUND: " + FREQUENCY_UPPER_BOUND + System.lineSeparator();
+        setup = setup +  "FREQUENCY_LOWER_BOUND: " + FREQUENCY_LOWER_BOUND + System.lineSeparator();
         setup = setup + "FREQUENCY_DIFFERENCE_THRESHOLD: " + FREQUENCY_DIFFERENCE_THRESHOLD + System.lineSeparator();
         
         return setup;

@@ -8,34 +8,46 @@ public class ConfigSentenceSimilarity extends Config
     /// Test sentences N to the left and right.
     int SENTENCE_SIMILARITY_RANGE;
     float SENTENCE_SIMILARITY_THRESHOLD;
-    int TOTAL_SIMILAR_SENTENCES;
+    float TOTAL_SENTENCE_THRESHOLD;
+    int CONSECUTIVE_SENTENCES;
     
     ConfigEditDistance configEditDistance; 
     
     public ConfigSentenceSimilarity()
     {
-        SENTENCE_SIMILARITY_RANGE = 3;
-        SENTENCE_SIMILARITY_THRESHOLD = 10;
-        TOTAL_SIMILAR_SENTENCES = 3;       
+        SENTENCE_SIMILARITY_RANGE = 3;  // 3 behind 3 ahead
+        SENTENCE_SIMILARITY_THRESHOLD = .85f; // if sentece is 85% 
+        TOTAL_SENTENCE_THRESHOLD = .8f; // If 80% of sentences in document are similar
+        CONSECUTIVE_SENTENCES = -1;     // (-1 ignore blocks as a trigger) or (num consecutive or total sentence that are similar)
     }
 
     public ConfigEditDistance getConfigEditDistance() {
         return configEditDistance;
     }
 
+    @XmlElement
     public void setConfigEditDistance(ConfigEditDistance configEditDistance) {
         this.configEditDistance = configEditDistance;
     }
 
-    public int getTOTAL_SIMILAR_SENTENCES() 
-    {
-        return TOTAL_SIMILAR_SENTENCES;
+    public float getTOTAL_SENTENCE_THRESHOLD() {
+        return TOTAL_SENTENCE_THRESHOLD;
     }
 
     @XmlElement
-    public void setTOTAL_SIMILAR_SENTENCES(int TOTAL_SIMILAR_SENTENCES) 
+    public void setTOTAL_SENTENCE_THRESHOLD(float TOTAL_SENTENCE_THRESHOLD) {
+        this.TOTAL_SENTENCE_THRESHOLD = TOTAL_SENTENCE_THRESHOLD;
+    }
+
+    public int getCONSECUTIVE_SENTENCES() 
     {
-        this.TOTAL_SIMILAR_SENTENCES = TOTAL_SIMILAR_SENTENCES;
+        return CONSECUTIVE_SENTENCES;
+    }
+
+    @XmlElement
+    public void setCONSECUTIVE_SENTENCES(int CONSECUTIVE_SENTENCES) 
+    {
+        this.CONSECUTIVE_SENTENCES = CONSECUTIVE_SENTENCES;
     }
 
     public int getSENTENCE_SIMILARITY_RANGE() 
