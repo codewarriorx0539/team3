@@ -22,10 +22,15 @@ import javax.xml.bind.Unmarshaller;
 public class Plagiarism implements Runnable 
 {
     ArrayList<Filter> filters;
+    String masterFile;
+    String suspectFile;
+    PlagiarismTest config;
     
-    public Plagiarism( ArrayList<Filter> filters )
+    public Plagiarism( PlagiarismTest config )
     {
-        this.filters = filters;
+        this.config = config;
+        this.masterFile = config.getMasterFile();
+        this.suspectFile = config.getSuspectFile();
     }
     
     @Override
@@ -33,15 +38,31 @@ public class Plagiarism implements Runnable
     {
         try 
         {
+            
+            filters = new ArrayList<>();
+               
+            FileProcessor master = new FileProcessor( masterFile );
+            FileProcessor suspect = new FileProcessor( suspectFile );
+
+            filters.add(new WordFrequency( config, master, suspect));
+            //testSet.add(new DocumentSimilarity( config, master, suspect ));
+            filters.add(new SentenceSimilarity( config, master, suspect ));
+               
             String output = "";
 
+            output = "MASTER FILE: " + masterFile + System.lineSeparator();
+            output = output + "SUSPECT FILE: " + suspectFile + System.lineSeparator();
+            
             for(Filter filter : filters)
             {
                 output = output + filter.runPlagiarismTest();
             }
            
+            output = output + System.lineSeparator();
+            
             synchronized(System.out)
             {
+                
                 System.out.println(output);
             }
    
@@ -63,6 +84,8 @@ public class Plagiarism implements Runnable
                 Configuration configuration = new Configuration();
                 PlagiarismTest plag = new PlagiarismTest();
                 ArrayList<PlagiarismTest> list = new ArrayList<PlagiarismTest>();
+                list.add(plag);
+                list.add(plag);
                 list.add(plag);
                 configuration.setConfigs(list);
                 
@@ -99,16 +122,7 @@ public class Plagiarism implements Runnable
             
             for(PlagiarismTest config : configs)
             {
-               ArrayList<Filter> testSet = new ArrayList<>();
-               
-               FileProcessor master = new FileProcessor( config.getMasterFile() );
-               FileProcessor suspect = new FileProcessor( config.getSuspectFile() );
-               
-               testSet.add(new WordFrequency( config, master, suspect));
-               testSet.add(new DocumentSimilarity( config, master, suspect ));
-               testSet.add(new SentenceSimilarity( config, master, suspect ));
-               
-               executor.execute( new Plagiarism( testSet ) );
+               executor.execute( new Plagiarism( config) );
             }
             
             executor.shutdown();
