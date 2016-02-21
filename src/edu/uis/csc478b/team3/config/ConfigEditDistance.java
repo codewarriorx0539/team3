@@ -1,55 +1,69 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package edu.uis.csc478b.team3.config;
 
 import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * 
+ * <p>
+ * <h3>Class:</h3> ConfigEditDistance
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ * Configuration for any classifier using edit distance algorithm
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Jake
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
  */
 public class ConfigEditDistance extends Config
 {
 
-    float INSERT_COST;        
-    float DELETION_COST;      
-    float SUBSTITUTION_COST; 
+    float insertCost;        
+    float deletionCost;      
+    float substitutionCost; 
     
     public ConfigEditDistance()
     {
-        INSERT_COST = 1.0f;        
-        DELETION_COST = 1.0f;      
-        SUBSTITUTION_COST = 1.5f; 
+        insertCost = 1.0f;        
+        deletionCost = 1.0f;      
+        substitutionCost = 1.5f; 
     }
 
-    public float getINSERT_COST() {
-        return INSERT_COST;
-    }
-
-    @XmlElement
-    public void setINSERT_COST(float INSERT_COST) {
-        this.INSERT_COST = INSERT_COST;
-    }
-
-    public float getDELETION_COST() {
-        return DELETION_COST;
+    public float getInsertCost() 
+    {
+        return insertCost;
     }
 
     @XmlElement
-    public void setDELETION_COST(float DELETION_COST) {
-        this.DELETION_COST = DELETION_COST;
+    public void setInsertCost(float insertCost) 
+    {
+        this.insertCost = insertCost;
     }
 
-    public float getSUBSTITUTION_COST() {
-        return SUBSTITUTION_COST;
+    public float getDeletionCost() 
+    {
+        return deletionCost;
     }
 
     @XmlElement
-    public void setSUBSTITUTION_COST(float SUBSTITUTION_COST) {
-        this.SUBSTITUTION_COST = SUBSTITUTION_COST;
+    public void setDeletionCost(float deletionCost) 
+    {
+        this.deletionCost = deletionCost;
+    }
+
+    public float getSubstitutionCost() 
+    {
+        return substitutionCost;
+    }
+
+    @XmlElement
+    public void setSubstitutionCost(float substitutionCost) 
+    {
+        this.substitutionCost = substitutionCost;
     }
     
     @Override
@@ -57,9 +71,9 @@ public class ConfigEditDistance extends Config
     {
         String setup;
         
-        setup = "INSERT_COST: " + INSERT_COST + System.lineSeparator();
-        setup = setup + "DELETION_COST: " + DELETION_COST + System.lineSeparator();
-        setup = setup + "SUBSTITUTION_COST: " + SUBSTITUTION_COST + System.lineSeparator();
+        setup = "insertCost: " + insertCost + System.lineSeparator();
+        setup = setup + "deletionCost: " + deletionCost + System.lineSeparator();
+        setup = setup + "substitutionCost: " + substitutionCost + System.lineSeparator();
     
         return setup;
     }

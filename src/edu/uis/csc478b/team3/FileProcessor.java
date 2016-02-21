@@ -9,103 +9,74 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * Parse a file and return the data as a list of sentences which are a list of words
  * 
- * @author Jake
+ * <p>
+ * <h3>Class:</h3> FileProcessor
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ * FileProcessor opens master, suspect, or common words files and transfers the data from disk to memory. </br>
+ * The data from master and suspect files go through an initial pre filter.</br>
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ *
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
  */
+
 public class FileProcessor 
 {
     final private String REGEX_PERIOD = "\\.";
     final private String REGEX_NON_ALPHANUMERIC_SYNTAX = "[^a-zA-Z\\d\\s]";
     final private String REGEX_WHITESPACE = "\\s";
+    final private String REGEX_NEWLINE = "\\r\\n";
     
     final private String COMMA = ",";
     
-    private boolean commonFilter;
-    private HashSet<String> commonWords;
+    private final boolean commonFilter;
+    private final HashSet<String> commonWords;
     
-    String fileName;
-    String text;
+    private final String fileName;
+    private final String commonFile;
+    private String text;
     
-    ArrayList< String > sentences;
-    ArrayList< String > words;
+    private final ArrayList< String > sentences;
+    private final ArrayList< String > words;
   
-    public FileProcessor(String fileName) throws IOException
+    /**
+     * The only constructor. Once allocated all processing transpires and we have the raw data (words and sentences) in memory.
+     * 
+     * @param fileName
+     * @param commonFile
+     * @param commonFilter
+     * @throws IOException 
+     */
+    public FileProcessor(String fileName, String commonFile, boolean commonFilter) throws IOException
     {
-       this.fileName = fileName;
-       
-       sentences = new ArrayList< >();
-       words = new ArrayList< >();
-       
-       readFile();
-    }
+        sentences = new ArrayList<>();
+        words = new ArrayList<>();
+        commonWords = new HashSet<>();
 
-    public String getFileName() 
-    {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) 
-    {
         this.fileName = fileName;
-    }
-
-    public String getText() 
-    {
-        return text;
-    }
-
-    public void setText(String text) 
-    {
-        this.text = text;
-    }
-
-    public ArrayList<String> getSentences() 
-    {
-        return sentences;
-    }
-
-    public void setSentences(ArrayList<String> sentences) 
-    {
-        this.sentences = sentences;
-    }
-
-    public ArrayList<String> getWords() 
-    {
-        return words;
-    }
-
-    public void setWords(ArrayList<String> words) 
-    {
-        this.words = words;
-    }
-    
-    public boolean getCommonFilter() 
-    {
-        return commonFilter;
-    }
-
-    public void setCommonFilter(boolean commonFilter) 
-    {
         this.commonFilter = commonFilter;
+        this.commonFile = commonFile;
+
+        if(this.commonFilter == true)
+        {
+            readCommonWordFile( this.commonFile );
+        }
+
+        readFile();
     }
-    
-    public void setCommonWords( HashSet<String> commonWords)
-    {
-        this.commonWords = commonWords;
-    }
-    
-    public int getNumWords()
-    {
-        return words.size();
-    }
-    
-    public int getNumSentences()
-    {
-        return sentences.size();
-    }
-    
-    public void readFile() throws IOException
+
+    /**
+     * Processes the data and filters non essential punctuation and makes all letters lower case to simplify filtering.
+     * Optionally a common words file to provide an additional filter on input.
+     * @throws IOException 
+     */
+    private void readFile() throws IOException
     {
         text = new String( Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
         
@@ -143,35 +114,77 @@ public class FileProcessor
         
     }
     
-    public ArrayList<String> readCsvFile( String fileName ) throws IOException
+    /**
+     * Reads in the common words file in CSV format
+     * 
+     * @param file
+     * @throws IOException 
+     */
+    private void readCommonWordCsvFile( String file ) throws IOException
     {
-        ArrayList<String> list = new ArrayList<>();
 
-        String csvText = new String( Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+        String csvText = new String( Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
          
         String [] csvWords = csvText.toLowerCase().split(COMMA);
         
         for(String word : csvWords)
         {
-            list.add( word.trim() );
+            commonWords.add( word.trim() );
         }
         
-        return list;
     }
     
-    public HashSet<String> readUniqueCsvFile( String file ) throws IOException
+    /**
+     * Reads in the common words file. Values separated by a newline.
+     * 
+     * @param file
+     * @throws IOException 
+     */
+    private void readCommonWordFile( String file ) throws IOException
     {
-        HashSet<String> set = new HashSet<>();
-
-        String csvText = new String( Files.readAllBytes(Paths.get(fileName)), StandardCharsets.UTF_8);
+        String commonText = new String( Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
          
-        String [] csvWords = csvText.toLowerCase().split(COMMA);
+        String [] formattedWords = commonText.split( REGEX_NEWLINE );
         
-        for(String word : csvWords)
+        for(String word : formattedWords)
         {
-            set.add( word.trim() );
+            commonWords.add( word.trim() );
         }
         
-        return set;
+    }
+    
+    public String getFileName() 
+    {
+        return fileName;
+    }
+
+    public String getText() 
+    {
+        return text;
+    }
+
+    public ArrayList<String> getSentences() 
+    {
+        return sentences;
+    }
+
+    public ArrayList<String> getWords() 
+    {
+        return words;
+    }
+
+    public boolean getCommonFilter() 
+    {
+        return commonFilter;
+    }
+    
+    public int getNumWords()
+    {
+        return words.size();
+    }
+    
+    public int getNumSentences()
+    {
+        return sentences.size();
     }
 }

@@ -4,40 +4,78 @@ package edu.uis.csc478b.team3;
 import edu.uis.csc478b.team3.config.ConfigEditDistance;
 
 /**
- * Calculate the edit dance of words
  * 
- * @author Jake
+ * <p>
+ * <h3>Class:</h3> EditDistance
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ *
+ * Edit distance is a way of quantifying how dissimilar two strings are to one another by counting </br>
+ * the minimum number of operations required to transform one string into the other.</br>
+ * Operations: </br>
+ * <ul>
+ *  <li>Insertion</li>
+ *  <li>Deletion</li>
+ *  <li>Substitution</li>
+ * </ul>
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ *
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
  */
+
 public class EditDistance 
 {
-    private float INSERT_COST;      
-    private float DELETION_COST; 
-    private float SUBSTITUTION_COST;
+    private float insertCost;      
+    private float deletionCost; 
+    private float substitutionCost;
     
+    /**
+     * Default constructor sets initial costs
+     */
     public EditDistance()
     {
-        setINSERT_COST(1.0f);           // Move Right 1.0
-        setDELETION_COST(1.0f);         // Move Down 1.0
-        setSUBSTITUTION_COST(1.5f);     // Move Diagonal 1.5  
+        setInsertCost(1.0f);           // Move Right 1.0
+        setDeletionCost(1.0f);         // Move Down 1.0
+        setSubstitutionCost(1.5f);     // Move Diagonal 1.5  
     }
     
-    public EditDistance( float INSERT_COST, float DELETION_COST, float SUBSTITUTION_COST)
+    /**
+     * Define all operation costs
+     * 
+     * @param insertCost
+     * @param deletionCost
+     * @param substitutionCost 
+     */
+    public EditDistance( float insertCost, float deletionCost, float substitutionCost)
     {
-        this.INSERT_COST = INSERT_COST;                 
-        this.DELETION_COST = DELETION_COST;             
-        this.SUBSTITUTION_COST = SUBSTITUTION_COST;     
+        this.insertCost = insertCost;                 
+        this.deletionCost = deletionCost;             
+        this.substitutionCost = substitutionCost;     
     }
     
-    
-            
-     public EditDistance( ConfigEditDistance config )
+    /**
+     * Edit distance operation costs set by de-serialized XML configuration  
+     * @param config 
+     */       
+    public EditDistance( ConfigEditDistance config )
     {
-        this.INSERT_COST = config.getINSERT_COST();                 
-        this.DELETION_COST = config.getDELETION_COST();             
-        this.SUBSTITUTION_COST = config.getSUBSTITUTION_COST();     
+        this.insertCost = config.getInsertCost();                 
+        this.deletionCost = config.getDeletionCost();             
+        this.substitutionCost = config.getSubstitutionCost();     
     }
     
-    
+    /**
+     * Calculate the distance between two strings. A perfect match returns zero
+     * 
+     * @param compareString
+     * @param masterString
+     * @return 
+     */
     public float getDistance( String compareString, String masterString )
     {
         int masterStringLen = masterString.length();
@@ -47,12 +85,12 @@ public class EditDistance
         
         for(int i =0; i < masterStringLen + 1; i++)
         {
-            table[i][0] = INSERT_COST * i;
+            table[i][0] = insertCost * i;
         }
         
         for(int j =0; j < compareStringLen + 1; j++)
         {
-            table[0][j] = DELETION_COST * j;
+            table[0][j] = deletionCost * j;
         }
 
         for(int i = 1; i < masterStringLen + 1; i++)
@@ -61,11 +99,11 @@ public class EditDistance
             {
                 if(masterString.charAt(i - 1) == compareString.charAt(j - 1))
                 {
-                    table[i][j] = Math.min(table[i -1 ][j -1], Math.min( table[i ][j -1] + DELETION_COST , table[i -1 ][j] + INSERT_COST));
+                    table[i][j] = Math.min(table[i -1 ][j -1], Math.min( table[i ][j -1] + deletionCost , table[i -1 ][j] + insertCost));
                 }
                 else
                 {
-                    table[i][j] = Math.min(table[i -1 ][j -1] + SUBSTITUTION_COST, Math.min( table[i ][j -1] + DELETION_COST  , table[i -1 ][j] + INSERT_COST));        
+                    table[i][j] = Math.min(table[i -1 ][j -1] + substitutionCost, Math.min( table[i ][j -1] + deletionCost  , table[i -1 ][j] + insertCost));        
                 }
             }
         }
@@ -73,33 +111,33 @@ public class EditDistance
         return table[masterStringLen][compareStringLen];
     }
     
-    public float getINSERT_COST() 
+    public float getInsertCost() 
     {
-        return INSERT_COST;
+        return insertCost;
     }
 
-    public final void setINSERT_COST(float INSERT_COST) 
+    public final void setInsertCost(float insertCost) 
     {
-        this.INSERT_COST = INSERT_COST;
+        this.insertCost = insertCost;
     }
 
-    public float getDELETION_COST() 
+    public float getDeletionCost() 
     {
-        return DELETION_COST;
+        return deletionCost;
     }
 
-    public final void setDELETION_COST(float DELETION_COST) 
+    public final void setDeletionCost(float deletionCost) 
     {
-        this.DELETION_COST = DELETION_COST;
+        this.deletionCost = deletionCost;
     }
 
-    public float getSUBSTITUTION_COST() 
+    public float getSubstitutionCost() 
     {
-        return SUBSTITUTION_COST;
+        return substitutionCost;
     }
 
-    public final void setSUBSTITUTION_COST(float SUBSTITUTION_COST) 
+    public final void setSubstitutionCost(float substitutionCost) 
     {
-        this.SUBSTITUTION_COST = SUBSTITUTION_COST;
+        this.substitutionCost = substitutionCost;
     }
 }

@@ -6,9 +6,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Use JAXB to Serialize/Deserialize a configuration file
  * 
- * @author Jake
+ * <p>
+ * <h3>Class:</h3> Configuration
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ * Configuration is the top level XML node. This contains system wide information. A child node is a list of all the </br>
+ * Plagiarism tests to preform.
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ *
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
  */
 @XmlRootElement
 public class Configuration 
@@ -18,7 +30,7 @@ public class Configuration
     
     public Configuration()
     {
-        notes = "hello";
+        notes = "Hello Roger, thanks for allowing us to put a great project together.";
     }
 
     public String getNotes() 

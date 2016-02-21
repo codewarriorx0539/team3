@@ -2,16 +2,26 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.FileProcessor;
-import edu.uis.csc478b.team3.config.ConfigWordFrequency;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * Compare word frequencies and return the percentage of exact matching words
  * 
- * @author Jake
+ * <p>
+ * <h3>Class:</h3> WordFrequency
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ * WordFrequency compares the ratio of similar words in the master and suspect to classify plagiarism.
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ *
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
  */
 public class WordFrequency extends Filter
 {
@@ -19,9 +29,9 @@ public class WordFrequency extends Filter
     Map<String, Integer> masterMap;
     
     // As percentages
-    float FREQUENCY_LOWER_BOUND;
-    float FREQUENCY_UPPER_BOUND;
-    float FREQUENCY_DIFFERENCE_THRESHOLD;
+    float frequencyLowerBound;
+    float frequencyUpperBound;
+    float frequencyDifferenceThreshold;
     
     public WordFrequency( PlagiarismTest testConfig , FileProcessor master, FileProcessor suspect )
     {
@@ -30,15 +40,20 @@ public class WordFrequency extends Filter
         compareMap = new TreeMap<>();
         masterMap = new TreeMap<>();
         
-        FREQUENCY_LOWER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_LOWER_BOUND();
-        FREQUENCY_UPPER_BOUND = testConfig.getConfigWordFrequency().getFREQUENCY_UPPER_BOUND();
-        FREQUENCY_DIFFERENCE_THRESHOLD = testConfig.getConfigWordFrequency().getFREQUENCY_DIFFERENCE_THRESHOLD();
+        frequencyLowerBound = testConfig.getConfigWordFrequency().getFrequencyLowerBound();
+        frequencyUpperBound = testConfig.getConfigWordFrequency().getFrequencyUpperBound();
+        frequencyDifferenceThreshold = testConfig.getConfigWordFrequency().getFrequencyDifferenceThreshold();
     }
     
+    /**
+     * Add words to HashMaps and then compare against each other. Frequency threshold is represented as a ratio
+     * 
+     * @return 
+     */
     @Override
     public String runPlagiarismTest()
     {
-        String result = "";
+        String result;
         
         int masterTotal = 0;
         int suspectTotal = 0;
@@ -93,20 +108,11 @@ public class WordFrequency extends Filter
         }
 
         float ratioWords = (float) suspectTotal / (float) masterTotal;
-        
-        // Means the ratio of words is absurdly differently like one document as 1000 words and the other 2 words. Tested as a percentages/ratio
-        if( (FREQUENCY_UPPER_BOUND < ratioWords)  || (FREQUENCY_LOWER_BOUND > ratioWords) )
-        {
-            result = result + "Word Difference: PLAGIARISM NOT FOUND" + System.lineSeparator();
-        }
-        else
-        {
-            result = result + "Word Difference: PLAGIARISM FOUND" + System.lineSeparator();
-        }
-
         float percentageSimilar = ( similarWords / masterTotal );
-
-        if( percentageSimilar >= FREQUENCY_DIFFERENCE_THRESHOLD )
+        
+        result = "CLASSIFIER: WORD FREQUENCY" + System.lineSeparator();
+       
+         if( percentageSimilar >= frequencyDifferenceThreshold )
         {
             result = result + "Word Frequency: PLAGIARISM FOUND" + System.lineSeparator();
         }
@@ -114,7 +120,18 @@ public class WordFrequency extends Filter
         {
             result = result + "Word Frequency: PLAGIARISM NOT FOUND" + System.lineSeparator();
         }
+         
+        // Means the ratio of words is absurdly differently like one document as 1000 words and the other 2 words. Tested as a percentages/ratio
+        if( (frequencyUpperBound < ratioWords)  || (frequencyLowerBound > ratioWords) )
+        {
+            result = result + "Word Difference: OUTSIDE BOUND" + System.lineSeparator();
+        }
+        else
+        {
+            result = result + "Word Difference: INSIDE BOUND" + System.lineSeparator();
+        }
 
+        result = result + "CONFIGURATION:" + System.lineSeparator();
         result = result + "Master word count: " + mTotalWords + System.lineSeparator();
         result = result + "Suspect word count: " + sTotalWords + System.lineSeparator();
         result = result + "Similar word count: " + similarWords + System.lineSeparator();

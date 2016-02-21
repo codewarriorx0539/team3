@@ -3,49 +3,42 @@ package edu.uis.csc478b.team3.config;
 
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * 
+ * <p>
+ * <h3>Class:</h3> PlagiarismTest
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ * PlagiarismTest contains all the information to test a suspect document against a master document
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ *
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
+ */
 public class PlagiarismTest 
 {
-    String suspectFile;         // Relative Path
-    String masterFile;          // Relative Path
+    String suspectFile;         
+    String masterFile;          
     
-    String commonWordsFile;     // Relative Path
+    String commonWordsFile; 
     boolean filterCommonWords;
     
-    ConfigDocumentSimilarity configDocumentSimilarity;
     ConfigSentenceSimilarity configSentenceSimilarity;
     ConfigWordFrequency configWordFrequency;
     
     public PlagiarismTest()
     {
-        suspectFile = "";         // Relative Path
-        masterFile = "";          // Relative Path
-        commonWordsFile = "";     // Relative Path
+        suspectFile = "";         
+        masterFile = "";         
+        commonWordsFile = "";
         filterCommonWords = false;
         
-        configDocumentSimilarity = new ConfigDocumentSimilarity();
         configSentenceSimilarity = new ConfigSentenceSimilarity();
         configWordFrequency = new ConfigWordFrequency();
-    }
-
-    /*
-        TEST CLUMPS. PARTS OF DOCUEMNTS MIGHT BE CUT AND PASTES BUT WE WANT TO AVOID FALSE POSITVE CITATION
-    
-        CLUMPS CONSIST OF % OF DOCUMENT. IF THESE BLOCKS ARE PREDOMINANT IN CLUMPS WE HAVE A CUT AND PASTER.
-        POSITIONALLY ALIGN CLUMPS SINCE PLAGIARSM TRYS TO FOLLOW SAME FLOW
-    
-        ALSO LOOK FOR PEPPER PLAGIARIZERS trigger no trigger trigger no trigger
-    
-    */
-
-    public ConfigDocumentSimilarity getConfigDocumentSimilarity() 
-    {
-        return configDocumentSimilarity;
-    }
-
-    @XmlElement
-    public void setConfigDocumentSimilarity(ConfigDocumentSimilarity configDocumentSimilarity) 
-    {
-        this.configDocumentSimilarity = configDocumentSimilarity;
     }
 
     public ConfigSentenceSimilarity getConfigSentenceSimilarity() 

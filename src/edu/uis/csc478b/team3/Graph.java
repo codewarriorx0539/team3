@@ -11,7 +11,19 @@ import java.util.Queue;
 
 /**
  * 
- * @author Jake
+ * <p>
+ * <h3>Class:</h3> Graph
+ * <h3>Project:</h3> Plagiarism
+ * <h3>Description:</h3>
+ * Potentially used to swap similar adjectives or verbs.
+ * </p>
+ * 
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ *
+ * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *
+ * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *
  */
 public class Graph 
 {
