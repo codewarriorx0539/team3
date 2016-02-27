@@ -93,7 +93,7 @@ public class WordFrequency implements PlagiarismFilter
 
         float angle = cosineSimilarity.calcCosineSimilarity(map1, map2);
         
-        String result = "" + angle;
+        String result = "\tAngle: " + angle;
         
         
         

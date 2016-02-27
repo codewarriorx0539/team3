@@ -55,7 +55,7 @@ public class CosineSimilarity
              sum2 += (value * value);
          }
 
-         return dot/(float)(Math.sqrt(sum1) + Math.sqrt(sum2) );
+         return (float) Math.acos( dot/(float)(Math.sqrt(sum1) * Math.sqrt(sum2) ) );
     }
     
 }

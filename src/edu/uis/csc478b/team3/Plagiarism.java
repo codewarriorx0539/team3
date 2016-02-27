@@ -3,11 +3,9 @@ package edu.uis.csc478b.team3;
 
 
 import edu.uis.csc478b.team3.config.PlagiarismTest;
-import edu.uis.csc478b.team3.config.Configuration;
 import edu.uis.csc478b.team3.filters.PlagiarismFilter;
 import edu.uis.csc478b.team3.filters.SentenceSimilarity;
 import edu.uis.csc478b.team3.filters.WordFrequency;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,10 +16,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 /**
  * 
@@ -130,8 +124,8 @@ public class Plagiarism implements Runnable
             synchronized(System.out)
             {
                 System.out.println( "Test Results" );
-                System.out.println( "   File Name: " + fileName1);
-                System.out.println( "   File Name: " + fileName2);
+                System.out.println( "\tFile Name: " + fileName1);
+                System.out.println( "\tFile Name: " + fileName2 + System.lineSeparator());
                 
                 System.out.println( "Word Filters:" );
                 

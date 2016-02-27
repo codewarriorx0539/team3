@@ -97,31 +97,32 @@ public class SentenceSimilarity implements PlagiarismFilter
 
         }
 
+
         float sentenceSimilarityRatio = 0.0f;
         String result;
         
-        result = "CLASSIFIER: SENTENCE SIMILARITY" + System.lineSeparator();
+        result = "\tCLASSIFIER: SENTENCE SIMILARITY" + System.lineSeparator();
         
         if(consecutiveSentences != -1 && done == true)
         {
-            result = result + "Sentence Similarity: PLAGIARISM FOUND" + System.lineSeparator();
+            result = result + "\tSentence Similarity: PLAGIARISM FOUND" + System.lineSeparator();
         }
         else
         {
             sentenceSimilarityRatio = (float)total/(float)total1;
             if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {
-                result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+                result = result + "\tSentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
             }
             else
             {
-                result = result + "SentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+                result = result + "\tSentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
             }
         }
-        result = result + "CONFIGURATION:" + System.lineSeparator();
-        result = result + "Total master sentences: " + total1 + System.lineSeparator();
-        result = result + "Total similar sentences: " + total + System.lineSeparator();
-        result = result + "Sentence Similarity Ratio: " + sentenceSimilarityRatio + System.lineSeparator();
+        result = result + "\tCONFIGURATION:" + System.lineSeparator();
+        result = result + "\tTotal master sentences: " + total1 + System.lineSeparator();
+        result = result + "\tTotal similar sentences: " + total + System.lineSeparator();
+        result = result + "\tSentence Similarity Ratio: " + sentenceSimilarityRatio + System.lineSeparator();
         
         result = result + System.lineSeparator();
           
