@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.config;
 
+import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -21,8 +22,7 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class PlagiarismTest 
 {
-    String suspectFile;         
-    String masterFile;          
+    ArrayList< String > files;
     
     String commonWordsFile; 
     boolean filterCommonWords;
@@ -31,9 +31,7 @@ public class PlagiarismTest
     ConfigWordFrequency configWordFrequency;
     
     public PlagiarismTest()
-    {
-        suspectFile = "";         
-        masterFile = "";         
+    {        
         commonWordsFile = "";
         filterCommonWords = false;
         
@@ -41,6 +39,17 @@ public class PlagiarismTest
         configWordFrequency = new ConfigWordFrequency();
     }
 
+    public ArrayList<String> getFiles() 
+    {
+        return files;
+    }
+
+    @XmlElement
+    public void setFiles(ArrayList<String> files) 
+    {
+        this.files = files;
+    }
+    
     public ConfigSentenceSimilarity getConfigSentenceSimilarity() 
     {
         return configSentenceSimilarity;
@@ -71,28 +80,6 @@ public class PlagiarismTest
     public void setCommonWordsFile(String commonWordsFile) 
     {
         this.commonWordsFile = commonWordsFile;
-    }
-
-    public String getSuspectFile() 
-    {
-        return suspectFile;
-    }
-
-    @XmlElement
-    public void setSuspectFile(String suspectFile) 
-    {
-        this.suspectFile = suspectFile;
-    }
-
-    public String getMasterFile() 
-    {
-        return masterFile;
-    }
-
-    @XmlElement
-    public void setMasterFile(String masterFile) 
-    {
-        this.masterFile = masterFile;
     }
 
     public boolean getFilterCommonWords() 

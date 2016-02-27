@@ -2,7 +2,6 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.EditDistance;
-import edu.uis.csc478b.team3.FileProcessor;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 
@@ -24,19 +23,16 @@ import java.util.ArrayList;
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
  */
-public class SentenceSimilarity extends Filter
+public class SentenceSimilarity implements PlagiarismFilter 
 {
-    
-    private EditDistance editDistance;
-    private float threshold;
-    private int range;
-    private float totalSentenceThreshold;
-    private int consecutiveSentences;
+    final private EditDistance editDistance;
+    final private float threshold;
+    final private int range;
+    final private float totalSentenceThreshold;
+    final private int consecutiveSentences;
 
-    public SentenceSimilarity( PlagiarismTest testConfig, FileProcessor master, FileProcessor suspect )
+    public SentenceSimilarity( PlagiarismTest testConfig )
     {
-        super( testConfig.getConfigSentenceSimilarity() , master,  suspect);
-        
         editDistance = new EditDistance(testConfig.getConfigSentenceSimilarity().getConfigEditDistance());
         threshold =  testConfig.getConfigSentenceSimilarity().getSentenceSimilarityThreshold();
         range = testConfig.getConfigSentenceSimilarity().getSentenceSimilarityRange();
@@ -44,34 +40,24 @@ public class SentenceSimilarity extends Filter
         consecutiveSentences = testConfig.getConfigSentenceSimilarity().getConsecutiveSentences();
     }
     
-    /**
-     * Sweep a few sentences behind and ahead to see if the sentences are aligned. Use edit distance to confirm similarity
-     * 
-     * @return 
-     */
     @Override
-    public String runPlagiarismTest() 
+    public String exec( ArrayList< String > list1, ArrayList< String > list2) 
     {
-        String result;
-        
-        int mTotalSentences = master.getNumSentences();
-        int sTotalSentences = suspect.getNumSentences();
-
-        ArrayList<String> mSentences = master.getSentences();
-        ArrayList<String> sSentences = suspect.getSentences();
-
         int total = 0;
         int totalConsecutiveSentences = 0;
         int indexLastTrigger = 0;
         boolean done = false;
+        
+        int total1 = list1.size();
+        int total2 = list2.size();
 
-        for(int index = 0; index < mTotalSentences && index < sTotalSentences && done == false; index++ )
+        for(int index = 0; index < total1 && index < total2 && done == false; index++ )
         {
             boolean foundSimilar = false;
             
-            for(int i = index; (i < mTotalSentences) && (i < sTotalSentences) && (i - index <= range) && (foundSimilar != true) ; i++)
+            for(int i = index; (i < total1) && (i < total2) && (i - index <= range) && (foundSimilar != true) ; i++)
             {
-               if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
+               if( threshold >= editDistance.getDistance( list1.get(i), list2.get(index)) )
                {
                    foundSimilar = true;
                }
@@ -81,7 +67,7 @@ public class SentenceSimilarity extends Filter
             {
                 for(int i = index; (i >= 0) && (i > (index - range)) && (foundSimilar != true); i--)
                 {
-                    if( threshold >= editDistance.getDistance(sSentences.get(i), mSentences.get(index)) )
+                    if( threshold >= editDistance.getDistance( list1.get(i), list2.get(index)) )
                     {
                         foundSimilar = true;
                     }
@@ -100,8 +86,6 @@ public class SentenceSimilarity extends Filter
                     {
                         done = true;
                     }
-      
-                    
                 }
                 else
                 {
@@ -114,6 +98,7 @@ public class SentenceSimilarity extends Filter
         }
 
         float sentenceSimilarityRatio = 0.0f;
+        String result;
         
         result = "CLASSIFIER: SENTENCE SIMILARITY" + System.lineSeparator();
         
@@ -123,7 +108,7 @@ public class SentenceSimilarity extends Filter
         }
         else
         {
-            sentenceSimilarityRatio = (float)total/(float)mTotalSentences;
+            sentenceSimilarityRatio = (float)total/(float)total1;
             if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {
                 result = result + "SentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
@@ -134,11 +119,11 @@ public class SentenceSimilarity extends Filter
             }
         }
         result = result + "CONFIGURATION:" + System.lineSeparator();
-        result = result + "Total master sentences: " + mTotalSentences + System.lineSeparator();
+        result = result + "Total master sentences: " + total1 + System.lineSeparator();
         result = result + "Total similar sentences: " + total + System.lineSeparator();
         result = result + "Sentence Similarity Ratio: " + sentenceSimilarityRatio + System.lineSeparator();
         
-        result = result + configSetup + System.lineSeparator();
+        result = result + System.lineSeparator();
           
         return result;
     }

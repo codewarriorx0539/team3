@@ -4,11 +4,16 @@ package edu.uis.csc478b.team3;
 
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import edu.uis.csc478b.team3.config.Configuration;
-import edu.uis.csc478b.team3.filters.Filter;
+import edu.uis.csc478b.team3.filters.PlagiarismFilter;
 import edu.uis.csc478b.team3.filters.SentenceSimilarity;
 import edu.uis.csc478b.team3.filters.WordFrequency;
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Level;
@@ -36,20 +41,66 @@ import javax.xml.bind.Unmarshaller;
  */
 public class Plagiarism implements Runnable 
 {
-    ArrayList<Filter> filters;
-    String masterFile;
-    String suspectFile;
+    final private String COMMA = ",";
+    final private String REGEX_NEWLINE = "\\r\\n";
+    
+    final HashSet<String> commonWords = new HashSet<>();        
+    
+    
     PlagiarismTest config;
     
-    /**
-     * De-serialized XML configuration sent as input.
-     * @param config 
-     */
-    public Plagiarism( PlagiarismTest config )
+    final String fileName1;
+    final String fileName2;
+    
+    ArrayList< PlagiarismFilter > sentenceFilters;
+    ArrayList< PlagiarismFilter > wordFilters;
+    
+    public Plagiarism( String fileName1, String fileName2, ArrayList< PlagiarismFilter > sentenceFilters, ArrayList< PlagiarismFilter > wordFilters  )
     {
-        this.config = config;
-        this.masterFile = config.getMasterFile();
-        this.suspectFile = config.getSuspectFile();
+        this.fileName1 = fileName1;
+        this.fileName2 = fileName2;
+        
+        this.sentenceFilters = sentenceFilters;
+        this.wordFilters = wordFilters;
+    }
+    
+    /**
+     * Reads in the common words file in CSV format
+     * 
+     * @param file
+     * @throws IOException 
+     */
+    private void readCommonWordCsvFile( String file ) throws IOException
+    {
+
+        String csvText = new String( Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
+         
+        String [] csvWords = csvText.toLowerCase().split(COMMA);
+        
+        for(String word : csvWords)
+        {
+            commonWords.add( word.trim() );
+        }
+        
+    }
+    
+    /**
+     * Reads in the common words file. Values separated by a newline.
+     * 
+     * @param file
+     * @throws IOException 
+     */
+    private void readCommonWordFile( String file ) throws IOException
+    {
+        String commonText = new String( Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
+         
+        String [] formattedWords = commonText.split( REGEX_NEWLINE );
+        
+        for(String word : formattedWords)
+        {
+            commonWords.add( word.trim() );
+        }
+        
     }
     
     /**
@@ -61,33 +112,42 @@ public class Plagiarism implements Runnable
     {
         try 
         {
+            FileData dataSet1 = new FileData( fileName1, commonWords );
+            FileData dataSet2 = new FileData( fileName2, commonWords );
             
-            filters = new ArrayList<>();
-               
-            FileProcessor master = new FileProcessor( masterFile, config.getCommonWordsFile(), config.getFilterCommonWords() );
-            FileProcessor suspect = new FileProcessor( suspectFile, config.getCommonWordsFile(), config.getFilterCommonWords());
-
-            filters.add(new WordFrequency( config, master, suspect));
-            filters.add(new SentenceSimilarity( config, master, suspect ));
-               
-            String output;
+            Results results = new Results();
             
-            output = "PLAGIARISM TEST:" + System.lineSeparator();
-            output = output + "MASTER FILE: " + masterFile + System.lineSeparator();
-            output = output + "SUSPECT FILE: " + suspectFile + System.lineSeparator();
-            output = output + "COMMON WORDS FILE: " + config.getCommonWordsFile() + System.lineSeparator() + System.lineSeparator();
-            
-            for(Filter filter : filters)
+            for( PlagiarismFilter filter : wordFilters)
             {
-                output = output + filter.runPlagiarismTest();
+                results.wordResults.add( filter.exec( dataSet1.getWords() , dataSet2.getWords() )  );
             }
-           
-            output = output + System.lineSeparator();
+            
+            for( PlagiarismFilter filter : sentenceFilters)
+            {
+                results.sentenceResults.add( filter.exec( dataSet1.getSentences() , dataSet2.getSentences() )  );
+            }
             
             synchronized(System.out)
             {
+                System.out.println( "Test Results" );
+                System.out.println( "   File Name: " + fileName1);
+                System.out.println( "   File Name: " + fileName2);
                 
-                System.out.println(output);
+                System.out.println( "Word Filters:" );
+                
+                for(String output : results.wordResults)
+                {
+                    System.out.println(output + System.lineSeparator());
+                }
+                
+                System.out.println( "Sentence Filters:" );
+                
+                for(String output : results.sentenceResults)
+                {
+                    System.out.println(output + System.lineSeparator());
+                } 
+                
+                System.out.println();
             }
    
         } catch (Exception ex) 
@@ -103,54 +163,23 @@ public class Plagiarism implements Runnable
      */
     public static void main(String[] args) 
     {
-        if( args.length == 0)
-        {
-            try 
-            {
-                File file = new File("configuration.xml");
-                
-                Configuration configuration = new Configuration();
-                PlagiarismTest plag = new PlagiarismTest();
-                ArrayList<PlagiarismTest> list = new ArrayList<>();
-                list.add(plag);
-                configuration.setConfigs(list);
-                
-                JAXBContext jaxbContext = JAXBContext.newInstance(Configuration.class);
-                Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-                
-                jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-                
-                jaxbMarshaller.marshal(configuration, file);
-                jaxbMarshaller.marshal(configuration, System.out);
-            
-            } catch (JAXBException ex) 
-            {
-                Logger.getLogger(Plagiarism.class.getName()).log(Level.SEVERE, null, ex);
-            }
- 
-            return;  
-        }
-            
         try
         {
+            ArrayList< String > files = new ArrayList<>();
+            PlagiarismTest config = new PlagiarismTest();
             
-            String fileName = args[0];
-            File file = new File(fileName);
+            files.add("master.txt");
+            files.add("suspect.txt");
             
-            JAXBContext jaxbContext = JAXBContext.newInstance( Configuration.class );
-
-            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            Configuration configuration = (Configuration) jaxbUnmarshaller.unmarshal(file);
-
-            ArrayList<PlagiarismTest> configs = configuration.getConfigs();
-
+            ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList<  > ();
+            ArrayList< PlagiarismFilter > wordFilters = new ArrayList<  > ();
+            
+            sentenceFilters.add( new SentenceSimilarity(config) );
+            wordFilters.add( new WordFrequency(config) );
+                    
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-            
-            // Each configuration is a test and pushed onto the threadpool
-            for(PlagiarismTest config : configs)
-            {
-               executor.execute( new Plagiarism( config ) );
-            }
+
+            executor.execute( new Plagiarism( files.get(0), files.get(1), sentenceFilters, wordFilters  ) );
             
             executor.shutdown();
         }

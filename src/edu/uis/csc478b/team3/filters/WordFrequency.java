@@ -1,7 +1,7 @@
 
 package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.FileProcessor;
+import edu.uis.csc478b.team3.CosineSimilarity;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,92 +23,83 @@ import java.util.TreeMap;
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
  */
-public class WordFrequency extends Filter
+public class WordFrequency implements PlagiarismFilter
 {
-    Map<String, Integer> compareMap;
-    Map<String, Integer> masterMap;
+    final private float frequencyLowerBound;
+    final private float frequencyUpperBound;
+    final private float frequencyDifferenceThreshold;
+    final private CosineSimilarity cosineSimilarity;
     
-    // As percentages
-    float frequencyLowerBound;
-    float frequencyUpperBound;
-    float frequencyDifferenceThreshold;
-    
-    public WordFrequency( PlagiarismTest testConfig , FileProcessor master, FileProcessor suspect )
+    public WordFrequency( PlagiarismTest testConfig )
     {
-        super(testConfig.getConfigWordFrequency(), master,  suspect);
-        
-        compareMap = new TreeMap<>();
-        masterMap = new TreeMap<>();
-        
         frequencyLowerBound = testConfig.getConfigWordFrequency().getFrequencyLowerBound();
         frequencyUpperBound = testConfig.getConfigWordFrequency().getFrequencyUpperBound();
         frequencyDifferenceThreshold = testConfig.getConfigWordFrequency().getFrequencyDifferenceThreshold();
-    }
-    
-    /**
-     * Add words to HashMaps and then compare against each other. Frequency threshold is represented as a ratio
-     * 
-     * @return 
-     */
-    @Override
-    public String runPlagiarismTest()
-    {
-        String result;
         
-        int masterTotal = 0;
-        int suspectTotal = 0;
+        cosineSimilarity = new CosineSimilarity();
+    }
 
-        int mTotalWords = master.getNumWords();
-        int sTotalWords = suspect.getNumWords();
-
-        ArrayList<String> mWords = master.getWords();
-        ArrayList<String> sWords = suspect.getWords();
-
-        for( String word : sWords)
+    @Override
+    public String exec( ArrayList< String > list1, ArrayList< String > list2)
+    {
+        int total1 = 0;
+        int total2 = 0;
+        
+        Map<String, Integer> map1 = new TreeMap<>();
+        Map<String, Integer> map2 = new TreeMap<>();
+        
+        for( String word : list1)
         {
-            if( compareMap.containsKey(word) == true)
+            if( map1.containsKey(word) == true)
             {
-                int wordTotal = compareMap.get(word);
+                int wordTotal = map1.get(word);
                 wordTotal++;
-                compareMap.put(word, wordTotal);
+                map1.put(word, wordTotal);
             }
             else
             {
-                compareMap.put(word, 1);
+                map1.put(word, 1);
             }
 
-            suspectTotal++;
+            total1++;
         }
 
-        for( String word : mWords)
+        for( String word : list2)
         {
-            if( masterMap.containsKey(word) == true)
+            if( map2.containsKey(word) == true)
             {
-                int wordTotal = masterMap.get(word);
+                int wordTotal = map2.get(word);
                 wordTotal++;
-                masterMap.put(word, wordTotal);
+                map2.put(word, wordTotal);
             }
             else
             {
-                masterMap.put(word, 1);
+                map2.put(word, 1);
             }
 
-            masterTotal++;
+            total2++;
         }
 
 
         float similarWords = 0;
 
-        for(Map.Entry<String,Integer> entry : compareMap.entrySet())
+        for(Map.Entry<String,Integer> entry : map1.entrySet())
         {
-            if( masterMap.containsKey(entry.getKey()) == true)
+            if( map2.containsKey(entry.getKey()) == true)
             {
                 similarWords = similarWords + entry.getValue();
             }
         }
 
-        float ratioWords = (float) suspectTotal / (float) masterTotal;
-        float percentageSimilar = ( similarWords / masterTotal );
+        float angle = cosineSimilarity.calcCosineSimilarity(map1, map2);
+        
+        String result = "" + angle;
+        
+        
+        
+        /*
+        float ratioWords = (float) total1 / (float) total2;
+        float percentageSimilar = ( similarWords / total2 );
         
         result = "CLASSIFIER: WORD FREQUENCY" + System.lineSeparator();
        
@@ -138,6 +129,7 @@ public class WordFrequency extends Filter
         result = result + "Ratio of Suspect to Master words: " + ratioWords + System.lineSeparator();
         result = result + "Frequency of Similar Words: " + percentageSimilar + System.lineSeparator();
         result = result + configSetup + System.lineSeparator();
+        */
             
         return result;
     }

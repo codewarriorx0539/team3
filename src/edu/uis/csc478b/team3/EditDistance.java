@@ -11,7 +11,7 @@ import edu.uis.csc478b.team3.config.ConfigEditDistance;
  * <h3>Description:</h3>
  *
  * Edit distance is a way of quantifying how dissimilar two strings are to one another by counting </br>
- * the minimum number of operations required to transform one string into the other.</br>
+ * the minimum number of operations required to transform one string into the other. https://en.wikipedia.org/wiki/Edit_distance </br>
  * Operations: </br>
  * <ul>
  *  <li>Insertion</li>
@@ -27,46 +27,17 @@ import edu.uis.csc478b.team3.config.ConfigEditDistance;
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
  */
-
 public class EditDistance 
 {
-    private float insertCost;      
-    private float deletionCost; 
-    private float substitutionCost;
-    
-    /**
-     * Default constructor sets initial costs
-     */
-    public EditDistance()
+    final private float insertCost; 
+    final private float deletionCost;
+    final private float substitutionCost;
+        
+    public EditDistance(ConfigEditDistance config)
     {
-        setInsertCost(1.0f);           // Move Right 1.0
-        setDeletionCost(1.0f);         // Move Down 1.0
-        setSubstitutionCost(1.5f);     // Move Diagonal 1.5  
-    }
-    
-    /**
-     * Define all operation costs
-     * 
-     * @param insertCost
-     * @param deletionCost
-     * @param substitutionCost 
-     */
-    public EditDistance( float insertCost, float deletionCost, float substitutionCost)
-    {
-        this.insertCost = insertCost;                 
-        this.deletionCost = deletionCost;             
-        this.substitutionCost = substitutionCost;     
-    }
-    
-    /**
-     * Edit distance operation costs set by de-serialized XML configuration  
-     * @param config 
-     */       
-    public EditDistance( ConfigEditDistance config )
-    {
-        this.insertCost = config.getInsertCost();                 
-        this.deletionCost = config.getDeletionCost();             
-        this.substitutionCost = config.getSubstitutionCost();     
+        insertCost = config.getInsertCost(); 
+        deletionCost = config.getDeletionCost();
+        substitutionCost = config.getSubstitutionCost();
     }
     
     /**
@@ -78,6 +49,7 @@ public class EditDistance
      */
     public float getDistance( String compareString, String masterString )
     {
+
         int masterStringLen = masterString.length();
         int compareStringLen = compareString.length();
         
@@ -109,35 +81,5 @@ public class EditDistance
         }
 
         return table[masterStringLen][compareStringLen];
-    }
-    
-    public float getInsertCost() 
-    {
-        return insertCost;
-    }
-
-    public final void setInsertCost(float insertCost) 
-    {
-        this.insertCost = insertCost;
-    }
-
-    public float getDeletionCost() 
-    {
-        return deletionCost;
-    }
-
-    public final void setDeletionCost(float deletionCost) 
-    {
-        this.deletionCost = deletionCost;
-    }
-
-    public float getSubstitutionCost() 
-    {
-        return substitutionCost;
-    }
-
-    public final void setSubstitutionCost(float substitutionCost) 
-    {
-        this.substitutionCost = substitutionCost;
     }
 }
