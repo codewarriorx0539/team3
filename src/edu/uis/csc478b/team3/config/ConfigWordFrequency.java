@@ -21,14 +21,14 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class ConfigWordFrequency extends Config
 {
-    float frequencyDifferenceThreshold;
+    float cosineSimilarityThreshold;
     
     float frequencyLowerBound;
     float frequencyUpperBound;
     
     public ConfigWordFrequency()
     {
-        frequencyDifferenceThreshold  = .7f;
+        cosineSimilarityThreshold  = .3f;
         
         frequencyUpperBound  = 3.0f;
         frequencyLowerBound  = .3f;
@@ -56,15 +56,15 @@ public class ConfigWordFrequency extends Config
         this.frequencyUpperBound = frequencyUpperBound;
     }
 
-    public float getFrequencyDifferenceThreshold() 
+    public float getCosineSimilarityThreshold() 
     {
-        return frequencyDifferenceThreshold;
+        return cosineSimilarityThreshold;
     }
 
     @XmlElement
-    public void setFrequencyDifferenceThreshold(float frequencyDifferenceThreshold) 
+    public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) 
     {
-        this.frequencyDifferenceThreshold = frequencyDifferenceThreshold;
+        this.cosineSimilarityThreshold = cosineSimilarityThreshold;
     }
     
     @Override
@@ -74,7 +74,7 @@ public class ConfigWordFrequency extends Config
         
         setup = "frequencyUpperBound: " + frequencyUpperBound + System.lineSeparator();
         setup = setup +  "frequencyLowerBound: " + frequencyLowerBound + System.lineSeparator();
-        setup = setup + "frequencyDifferenceThreshold: " + frequencyDifferenceThreshold + System.lineSeparator();
+        setup = setup + "cosineSimilarityThreshold: " + cosineSimilarityThreshold + System.lineSeparator();
         
         return setup;
     }

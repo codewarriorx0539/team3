@@ -38,6 +38,11 @@ public class ConfigSentenceSimilarity extends Config
         
         configEditDistance = new ConfigEditDistance();
     }
+    
+    public ConfigSentenceSimilarity(ConfigSentenceSimilarity config)
+    {
+        
+    }
 
     public ConfigEditDistance getConfigEditDistance() 
     {

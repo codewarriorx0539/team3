@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.config;
 
+import edu.uis.csc478b.team3.filters.PlagiarismFilter;
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -24,19 +25,18 @@ public class PlagiarismTest
 {
     ArrayList< String > files;
     
-    String commonWordsFile; 
-    boolean filterCommonWords;
+    String commonWordsFile;
     
-    ConfigSentenceSimilarity configSentenceSimilarity;
-    ConfigWordFrequency configWordFrequency;
+    ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList<  > ();
+    ArrayList< PlagiarismFilter > wordFilters = new ArrayList<  > ();
+    
     
     public PlagiarismTest()
     {        
         commonWordsFile = "";
-        filterCommonWords = false;
         
-        configSentenceSimilarity = new ConfigSentenceSimilarity();
-        configWordFrequency = new ConfigWordFrequency();
+        sentenceFilters = new ArrayList<  > ();
+        wordFilters = new ArrayList<  > ();
     }
 
     public ArrayList<String> getFiles() 
@@ -50,27 +50,6 @@ public class PlagiarismTest
         this.files = files;
     }
     
-    public ConfigSentenceSimilarity getConfigSentenceSimilarity() 
-    {
-        return configSentenceSimilarity;
-    }
-
-    @XmlElement
-    public void setConfigSentenceSimilarity(ConfigSentenceSimilarity configSentenceSimilarity) {
-        this.configSentenceSimilarity = configSentenceSimilarity;
-    }
-
-    public ConfigWordFrequency getConfigWordFrequency() 
-    {
-        return configWordFrequency;
-    }
-
-    @XmlElement
-    public void setConfigWordFrequency(ConfigWordFrequency configWordFrequency) 
-    {
-        this.configWordFrequency = configWordFrequency;
-    }
-    
     public String getCommonWordsFile()
     {
         return commonWordsFile;
@@ -82,15 +61,22 @@ public class PlagiarismTest
         this.commonWordsFile = commonWordsFile;
     }
 
-    public boolean getFilterCommonWords() 
-    {
-        return filterCommonWords;
+    public ArrayList<PlagiarismFilter> getSentenceFilters() {
+        return sentenceFilters;
     }
 
-    @XmlElement
-    public void setFilterCommonWords(boolean filterCommonWords) 
-    {
-        this.filterCommonWords = filterCommonWords;
+    public void setSentenceFilters(ArrayList<PlagiarismFilter> sentenceFilters) {
+        this.sentenceFilters = sentenceFilters;
     }
+
+    public ArrayList<PlagiarismFilter> getWordFilters() {
+        return wordFilters;
+    }
+
+    public void setWordFilters(ArrayList<PlagiarismFilter> wordFilters) {
+        this.wordFilters = wordFilters;
+    }
+    
+    
     
 }

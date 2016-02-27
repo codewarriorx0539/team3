@@ -1,7 +1,7 @@
 
 package edu.uis.csc478b.team3;
 
-
+import edu.uis.csc478b.team3.config.Configuration;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import edu.uis.csc478b.team3.filters.PlagiarismFilter;
 import edu.uis.csc478b.team3.filters.SentenceSimilarity;
@@ -49,13 +49,13 @@ public class Plagiarism implements Runnable
     ArrayList< PlagiarismFilter > sentenceFilters;
     ArrayList< PlagiarismFilter > wordFilters;
     
-    public Plagiarism( String fileName1, String fileName2, ArrayList< PlagiarismFilter > sentenceFilters, ArrayList< PlagiarismFilter > wordFilters  )
+    public Plagiarism( String fileName1, String fileName2, PlagiarismTest testCase )
     {
         this.fileName1 = fileName1;
         this.fileName2 = fileName2;
-        
-        this.sentenceFilters = sentenceFilters;
-        this.wordFilters = wordFilters;
+             
+        this.sentenceFilters = testCase.getSentenceFilters();
+        this.wordFilters = testCase.getWordFilters();
     }
     
     /**
@@ -151,7 +151,7 @@ public class Plagiarism implements Runnable
     }
    
     /**
-     * Main entry for program. If zero arguments then a sample configuration file is create if not then processing continues assuming an XML
+     * Main entry for program.
      * configuration file
      * @param args 
      */
@@ -159,21 +159,22 @@ public class Plagiarism implements Runnable
     {
         try
         {
-            ArrayList< String > files = new ArrayList<>();
-            PlagiarismTest config = new PlagiarismTest();
+            Configuration config = new Configuration();
             
-            files.add("master.txt");
-            files.add("suspect.txt");
+            ArrayList< PlagiarismTest > tests = config.getTests();
             
-            ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList<  > ();
-            ArrayList< PlagiarismFilter > wordFilters = new ArrayList<  > ();
-            
-            sentenceFilters.add( new SentenceSimilarity(config) );
-            wordFilters.add( new WordFrequency(config) );
-                    
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-
-            executor.execute( new Plagiarism( files.get(0), files.get(1), sentenceFilters, wordFilters  ) );
+            
+            for(PlagiarismTest testCase : tests)
+            {
+                ArrayList< String > files = testCase.getFiles();
+                
+                    /// Create all combinations
+                    ///
+                    String file1 =null;
+                    String file2=null;
+                    executor.execute( new Plagiarism( file1, file2, testCase  ) );
+            }
             
             executor.shutdown();
         }

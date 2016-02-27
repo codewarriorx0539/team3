@@ -39,6 +39,7 @@ public class FileData
     
     
     /**
+     * All input is normalized
      * Once allocated all processing transpires and we have the raw data (words and sentences) in memory.
      * Processes the data and filters non essential punctuation and makes all letters lower case to simplify filtering.
      * Optionally a common words file to provide an additional filter on input.

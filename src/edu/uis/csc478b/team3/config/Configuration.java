@@ -45,13 +45,13 @@ public class Configuration
     }
     
     
-    public ArrayList<PlagiarismTest> getConfigs()
+    public ArrayList<PlagiarismTest> getTests()
     {
         return list;
     }
 
     @XmlElement
-    public void setConfigs( ArrayList<PlagiarismTest> list )
+    public void setTests( ArrayList<PlagiarismTest> list )
     {
         this.list = list;
     }

@@ -1,7 +1,8 @@
 
 package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.EditDistance;
+import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
+import edu.uis.csc478b.team3.filters.algorithms.EditDistance;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 
@@ -30,16 +31,19 @@ public class SentenceSimilarity implements PlagiarismFilter
     final private int range;
     final private float totalSentenceThreshold;
     final private int consecutiveSentences;
+    ConfigSentenceSimilarity configSentenceSimilarity;
 
-    public SentenceSimilarity( PlagiarismTest testConfig )
+    public SentenceSimilarity( ConfigSentenceSimilarity configSentenceSimilarity )
     {
-        editDistance = new EditDistance(testConfig.getConfigSentenceSimilarity().getConfigEditDistance());
-        threshold =  testConfig.getConfigSentenceSimilarity().getSentenceSimilarityThreshold();
-        range = testConfig.getConfigSentenceSimilarity().getSentenceSimilarityRange();
-        totalSentenceThreshold = testConfig.getConfigSentenceSimilarity().getTotalSentenceThreshold();
-        consecutiveSentences = testConfig.getConfigSentenceSimilarity().getConsecutiveSentences();
+        this.configSentenceSimilarity = new ConfigSentenceSimilarity(configSentenceSimilarity);
+        
+        editDistance = new EditDistance(configSentenceSimilarity.getConfigEditDistance());
+        threshold =  configSentenceSimilarity.getSentenceSimilarityThreshold();
+        range = configSentenceSimilarity.getSentenceSimilarityRange();
+        totalSentenceThreshold = configSentenceSimilarity.getTotalSentenceThreshold();
+        consecutiveSentences = configSentenceSimilarity.getConsecutiveSentences();
     }
-    
+   
     @Override
     public String exec( ArrayList< String > list1, ArrayList< String > list2) 
     {

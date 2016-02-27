@@ -1,7 +1,8 @@
 
 package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.CosineSimilarity;
+import edu.uis.csc478b.team3.filters.algorithms.CosineSimilarity;
+import edu.uis.csc478b.team3.config.ConfigWordFrequency;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 import java.util.Map;
@@ -27,17 +28,19 @@ public class WordFrequency implements PlagiarismFilter
 {
     final private float frequencyLowerBound;
     final private float frequencyUpperBound;
-    final private float frequencyDifferenceThreshold;
+    final private float cosineSimilarityThreshold;
     final private CosineSimilarity cosineSimilarity;
+    ConfigWordFrequency config;
     
-    public WordFrequency( PlagiarismTest testConfig )
+    public WordFrequency( ConfigWordFrequency configWordFrequency )
     {
-        frequencyLowerBound = testConfig.getConfigWordFrequency().getFrequencyLowerBound();
-        frequencyUpperBound = testConfig.getConfigWordFrequency().getFrequencyUpperBound();
-        frequencyDifferenceThreshold = testConfig.getConfigWordFrequency().getFrequencyDifferenceThreshold();
+        frequencyLowerBound = configWordFrequency.getFrequencyLowerBound();
+        frequencyUpperBound = configWordFrequency.getFrequencyUpperBound();
+        cosineSimilarityThreshold = configWordFrequency.getCosineSimilarityThreshold();
         
         cosineSimilarity = new CosineSimilarity();
     }
+    
 
     @Override
     public String exec( ArrayList< String > list1, ArrayList< String > list2)

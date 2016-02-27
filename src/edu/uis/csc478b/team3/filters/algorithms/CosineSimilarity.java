@@ -1,5 +1,5 @@
 
-package edu.uis.csc478b.team3;
+package edu.uis.csc478b.team3.filters.algorithms;
 
 import java.util.Map;
 
