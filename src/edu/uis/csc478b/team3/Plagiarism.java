@@ -125,7 +125,7 @@ public class Plagiarism implements Runnable
             
             synchronized(System.out)
             {
-                System.out.println( "Test Results" );
+                System.out.println( "Test Results:" );
                 System.out.println( "\tFile Name: " + fileName1);
                 System.out.println( "\tFile Name: " + fileName2);
                 
