@@ -172,6 +172,7 @@ public class Plagiarism implements Runnable
             
             files.add("master.txt");
             files.add("suspect.txt");
+            files.add("other.txt");
             
             SentenceSimilarity sent = new SentenceSimilarity(new ConfigSentenceSimilarity());
             ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList< >();
