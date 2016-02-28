@@ -61,22 +61,24 @@ public class PlagiarismTest
         this.commonWordsFile = commonWordsFile;
     }
 
-    public ArrayList<PlagiarismFilter> getSentenceFilters() {
+    public ArrayList<PlagiarismFilter> getSentenceFilters() 
+    {
         return sentenceFilters;
     }
 
-    public void setSentenceFilters(ArrayList<PlagiarismFilter> sentenceFilters) {
+    public void setSentenceFilters(ArrayList<PlagiarismFilter> sentenceFilters) 
+    {
         this.sentenceFilters = sentenceFilters;
     }
 
-    public ArrayList<PlagiarismFilter> getWordFilters() {
+    public ArrayList<PlagiarismFilter> getWordFilters() 
+    {
         return wordFilters;
     }
 
-    public void setWordFilters(ArrayList<PlagiarismFilter> wordFilters) {
+    public void setWordFilters(ArrayList<PlagiarismFilter> wordFilters) 
+    {
         this.wordFilters = wordFilters;
     }
-    
-    
-    
+ 
 }

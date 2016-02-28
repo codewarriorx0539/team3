@@ -29,6 +29,11 @@ public class ConfigSentenceSimilarity extends Config
     
     ConfigEditDistance configEditDistance; 
     
+    final protected String RANGE = "sentenceSimilarityRange: ";
+    final protected String SENTENCE_THRESHOLD = "sentenceSimilarityThreshold: ";
+    final protected String TOTAL_THRESHOLD =  "totalSentenceThreshold: ";
+    final protected String CONSECUTIVE = "consecutiveSentences: ";
+    
     public ConfigSentenceSimilarity()
     {
         sentenceSimilarityRange = 3;        // 3 behind 3 ahead
@@ -39,11 +44,30 @@ public class ConfigSentenceSimilarity extends Config
         configEditDistance = new ConfigEditDistance();
     }
     
-    public ConfigSentenceSimilarity(ConfigSentenceSimilarity config)
+    public ConfigSentenceSimilarity( ConfigSentenceSimilarity config)
     {
+        this.sentenceSimilarityRange = config.getSentenceSimilarityRange();            
+        this.sentenceSimilarityThreshold = config.getSentenceSimilarityThreshold();     
+        this.totalSentenceThreshold = config.getSentenceSimilarityThreshold();               
+        this.consecutiveSentences = config.getConsecutiveSentences();                  
         
+        this.configEditDistance = new ConfigEditDistance(config.getConfigEditDistance());
     }
-
+    
+    public ConfigSentenceSimilarity(    int sentenceSimilarityRange, 
+                                        float sentenceSimilarityThreshold, 
+                                        float totalSentenceThreshold, 
+                                        int consecutiveSentences, 
+                                        ConfigEditDistance configEditDistance)
+    {
+        this.sentenceSimilarityRange = sentenceSimilarityRange;             
+        this.sentenceSimilarityThreshold = sentenceSimilarityThreshold;      
+        this.totalSentenceThreshold = totalSentenceThreshold;               
+        this.consecutiveSentences = consecutiveSentences;                   
+        
+        this.configEditDistance = new ConfigEditDistance(configEditDistance);
+    }
+    
     public ConfigEditDistance getConfigEditDistance() 
     {
         return configEditDistance;
@@ -102,12 +126,10 @@ public class ConfigSentenceSimilarity extends Config
     @Override
     public String getConfigSetup() 
     {
-        String setup;
-
-        setup = "sentenceSimilarityRange: " + sentenceSimilarityRange + System.lineSeparator();
-        setup = setup + "sentenceSimilarityThreshold: " + sentenceSimilarityThreshold + System.lineSeparator();
-        setup = setup + "totalSentenceThreshold: " + totalSentenceThreshold + System.lineSeparator();
-        setup = setup + "consecutiveSentences: " + consecutiveSentences + System.lineSeparator();
+        String setup = TAB + RANGE + sentenceSimilarityRange + System.lineSeparator();
+        setup = setup + TAB + SENTENCE_THRESHOLD + sentenceSimilarityThreshold + System.lineSeparator();
+        setup = setup + TAB + TOTAL_THRESHOLD + totalSentenceThreshold + System.lineSeparator();
+        setup = setup + TAB +  CONSECUTIVE + consecutiveSentences + System.lineSeparator();
 
         setup = setup + configEditDistance.getConfigSetup();
         

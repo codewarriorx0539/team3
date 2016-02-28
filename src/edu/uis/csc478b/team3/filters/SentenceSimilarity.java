@@ -3,7 +3,6 @@ package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
 import edu.uis.csc478b.team3.filters.algorithms.EditDistance;
-import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 
 /**
@@ -31,7 +30,19 @@ public class SentenceSimilarity implements PlagiarismFilter
     final private int range;
     final private float totalSentenceThreshold;
     final private int consecutiveSentences;
+    
     ConfigSentenceSimilarity configSentenceSimilarity;
+    
+    final protected String TAB = "\t";
+    
+    final protected String CLASSIFIER = "CLASSIFIER: SENTENCE SIMILARITY";
+    final protected String FOUND = "Sentence Similarity: PLAGIARISM FOUND";
+    final protected String NOT_FOUND = "SentenceSimilarity: PLAGIARISM NOT FOUND";
+    final protected String CONFIGURATION = "CONFIGURATION: ";
+    final protected String TOTAL1 = "Total sentences file1: ";
+    final protected String TOTAL2 = "Total sentences file2: ";
+    final protected String SIMILAR = "Total similar sentences: ";
+    final protected String SIMILAR_RATIO = "Sentence Similarity Ratio: ";
 
     public SentenceSimilarity( ConfigSentenceSimilarity configSentenceSimilarity )
     {
@@ -103,32 +114,32 @@ public class SentenceSimilarity implements PlagiarismFilter
 
 
         float sentenceSimilarityRatio = 0.0f;
-        String result;
         
-        result = "\tCLASSIFIER: SENTENCE SIMILARITY" + System.lineSeparator();
+        String result = TAB + CLASSIFIER + System.lineSeparator();
         
         if(consecutiveSentences != -1 && done == true)
         {
-            result = result + "\tSentence Similarity: PLAGIARISM FOUND" + System.lineSeparator();
+            result = result + TAB + FOUND + System.lineSeparator();
         }
         else
         {
             sentenceSimilarityRatio = (float)total/(float)total1;
             if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {
-                result = result + "\tSentenceSimilarity: PLAGIARISM FOUND" + System.lineSeparator();
+                result = result + TAB + FOUND + System.lineSeparator();
             }
             else
             {
-                result = result + "\tSentenceSimilarity: PLAGIARISM NOT FOUND" + System.lineSeparator();
+                result = result + TAB + NOT_FOUND + System.lineSeparator();
             }
         }
-        result = result + "\tCONFIGURATION:" + System.lineSeparator();
-        result = result + "\tTotal master sentences: " + total1 + System.lineSeparator();
-        result = result + "\tTotal similar sentences: " + total + System.lineSeparator();
-        result = result + "\tSentence Similarity Ratio: " + sentenceSimilarityRatio + System.lineSeparator();
         
-        result = result + System.lineSeparator();
+        result = result + TAB + TOTAL1 + total1 + System.lineSeparator();
+        result = result + TAB + TOTAL2 + total2 + System.lineSeparator();
+        result = result + TAB + SIMILAR + total + System.lineSeparator();
+        result = result + TAB + SIMILAR_RATIO + sentenceSimilarityRatio + System.lineSeparator();
+        result = result + TAB + CONFIGURATION + System.lineSeparator();
+        result = result + configSentenceSimilarity.getConfigSetup();
           
         return result;
     }

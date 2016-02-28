@@ -22,16 +22,25 @@ import javax.xml.bind.annotation.XmlElement;
 public class ConfigWordFrequency extends Config
 {
     float cosineSimilarityThreshold;
-    
     float frequencyLowerBound;
     float frequencyUpperBound;
     
+    final protected String UPPER = "frequencyUpperBound: ";
+    final protected String LOWER = "frequencyLowerBound: ";
+    final protected String THRESHOLD = "cosineSimilarityThreshold: ";
+   
     public ConfigWordFrequency()
     {
         cosineSimilarityThreshold  = .3f;
-        
         frequencyUpperBound  = 3.0f;
         frequencyLowerBound  = .3f;
+    }
+    
+    public ConfigWordFrequency(ConfigWordFrequency config)
+    {
+        cosineSimilarityThreshold = config.getCosineSimilarityThreshold();   
+        frequencyLowerBound = config.getFrequencyLowerBound();
+        frequencyUpperBound = config.getFrequencyUpperBound();
     }
 
     public float getFrequencyLowerBound() 
@@ -66,15 +75,13 @@ public class ConfigWordFrequency extends Config
     {
         this.cosineSimilarityThreshold = cosineSimilarityThreshold;
     }
-    
+   
     @Override
     public String getConfigSetup() 
     {
-        String setup;
-        
-        setup = "frequencyUpperBound: " + frequencyUpperBound + System.lineSeparator();
-        setup = setup +  "frequencyLowerBound: " + frequencyLowerBound + System.lineSeparator();
-        setup = setup + "cosineSimilarityThreshold: " + cosineSimilarityThreshold + System.lineSeparator();
+        String setup = TAB + UPPER + frequencyUpperBound + System.lineSeparator();
+        setup = setup + TAB + LOWER + frequencyLowerBound + System.lineSeparator();
+        setup = setup + TAB + THRESHOLD + cosineSimilarityThreshold + System.lineSeparator();
         
         return setup;
     }

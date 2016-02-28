@@ -19,6 +19,7 @@ package edu.uis.csc478b.team3.config;
  */
 public abstract class Config 
 {
+    final protected String TAB = "\t";
     /**
      * Returns the textual configuration of the classifier
      * @return 

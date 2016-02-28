@@ -26,11 +26,29 @@ public class ConfigEditDistance extends Config
     float deletionCost;      
     float substitutionCost; 
     
+    final protected String INSERT = "insertCost: ";
+    final protected String DELETION = "deletionCost: ";
+    final protected String SUBSTITUTION = "substitutionCost: ";
+    
     public ConfigEditDistance()
     {
         insertCost = 1.0f;        
         deletionCost = 1.0f;      
         substitutionCost = 1.5f; 
+    }
+    
+    public ConfigEditDistance(ConfigEditDistance config)
+    {
+        this.insertCost = config.getInsertCost();        
+        this.deletionCost = config.getDeletionCost();      
+        this.substitutionCost = config.getSubstitutionCost();
+    }
+    
+    public ConfigEditDistance(float insertCost, float deletionCost, float substitutionCost)
+    {
+        this.insertCost = insertCost;        
+        this.deletionCost = deletionCost;      
+        this.substitutionCost = substitutionCost; 
     }
 
     public float getInsertCost() 
@@ -69,11 +87,9 @@ public class ConfigEditDistance extends Config
     @Override
     public String getConfigSetup() 
     {
-        String setup;
-        
-        setup = "insertCost: " + insertCost + System.lineSeparator();
-        setup = setup + "deletionCost: " + deletionCost + System.lineSeparator();
-        setup = setup + "substitutionCost: " + substitutionCost + System.lineSeparator();
+        String setup = TAB + INSERT + insertCost + System.lineSeparator();
+        setup = setup + TAB + DELETION + deletionCost + System.lineSeparator();
+        setup = setup + TAB + SUBSTITUTION + substitutionCost + System.lineSeparator();
     
         return setup;
     }

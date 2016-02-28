@@ -1,8 +1,6 @@
 
 package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.config.Config;
-import edu.uis.csc478b.team3.config.PlagiarismTest;
 import java.util.ArrayList;
 
 /**

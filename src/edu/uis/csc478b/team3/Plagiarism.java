@@ -1,6 +1,8 @@
 
 package edu.uis.csc478b.team3;
 
+import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
+import edu.uis.csc478b.team3.config.ConfigWordFrequency;
 import edu.uis.csc478b.team3.config.Configuration;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import edu.uis.csc478b.team3.filters.PlagiarismFilter;
@@ -84,7 +86,7 @@ public class Plagiarism implements Runnable
      * @param file
      * @throws IOException 
      */
-    private void readCommonWordFile( String file ) throws IOException
+    public  void readCommonWordFile( String file ) throws IOException
     {
         String commonText = new String( Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
          
@@ -125,20 +127,20 @@ public class Plagiarism implements Runnable
             {
                 System.out.println( "Test Results" );
                 System.out.println( "\tFile Name: " + fileName1);
-                System.out.println( "\tFile Name: " + fileName2 + System.lineSeparator());
+                System.out.println( "\tFile Name: " + fileName2);
                 
                 System.out.println( "Word Filters:" );
                 
                 for(String output : results.wordResults)
                 {
-                    System.out.println(output + System.lineSeparator());
+                    System.out.print(output);
                 }
                 
                 System.out.println( "Sentence Filters:" );
                 
                 for(String output : results.sentenceResults)
                 {
-                    System.out.println(output + System.lineSeparator());
+                    System.out.print(output);
                 } 
                 
                 System.out.println();
@@ -159,21 +161,47 @@ public class Plagiarism implements Runnable
     {
         try
         {
+            TestPairs testPairs = new TestPairs();
+            
+            
+            ///////////////////////
             Configuration config = new Configuration();
+            ArrayList< PlagiarismTest > list = new ArrayList<>();
+            PlagiarismTest pt = new PlagiarismTest();
+            ArrayList< String > files = new ArrayList<>();
             
-            ArrayList< PlagiarismTest > tests = config.getTests();
+            files.add("master.txt");
+            files.add("suspect.txt");
             
+            SentenceSimilarity sent = new SentenceSimilarity(new ConfigSentenceSimilarity());
+            ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList< >();
+            sentenceFilters.add(sent);
+            
+            WordFrequency wfreq = new WordFrequency( new ConfigWordFrequency());
+            ArrayList< PlagiarismFilter > wordFilters = new ArrayList< >();
+            wordFilters.add(wfreq);
+            
+            pt.setFiles(files);
+            pt.setSentenceFilters(sentenceFilters);
+            pt.setWordFilters(wordFilters);
+            
+            list.add(pt);
+            config.setTests(list);
+            
+            ArrayList< PlagiarismTest > tests = config.getTests();         
+            ///////////////////////
+
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             
             for(PlagiarismTest testCase : tests)
             {
-                ArrayList< String > files = testCase.getFiles();
-                
-                    /// Create all combinations
-                    ///
-                    String file1 =null;
-                    String file2=null;
-                    executor.execute( new Plagiarism( file1, file2, testCase  ) );
+                files = testCase.getFiles();
+                ArrayList<TestPair> pairs = testPairs.createPairs(files);
+                    
+                for(TestPair tp : pairs)
+                {
+                    executor.execute( new Plagiarism( tp.file1 , tp.file2, testCase  ) );
+                }
             }
             
             executor.shutdown();
