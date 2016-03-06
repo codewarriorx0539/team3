@@ -21,16 +21,17 @@ import java.util.logging.Logger;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> Plagiarism
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * Main point of entry into the program. Implements Runnable so it cab be used in Java threading.
- * </p>
+ * 
+ * <h3>Class:</h3> Plagiarism <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * Main point of entry into the program. Implements Runnable so it cab be used in <br> 
+ * Java's cached thread pool. <br>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -42,7 +43,6 @@ public class Plagiarism implements Runnable
     
     final HashSet<String> commonWords = new HashSet<>();        
     
-    
     PlagiarismTest config;
     
     final String fileName1;
@@ -51,6 +51,13 @@ public class Plagiarism implements Runnable
     ArrayList< PlagiarismFilter > sentenceFilters;
     ArrayList< PlagiarismFilter > wordFilters;
     
+    /**
+     * Set the files to test and set the filters to run against those files. 
+     * 
+     * @param fileName1
+     * @param fileName2
+     * @param testCase 
+     */
     public Plagiarism( String fileName1, String fileName2, PlagiarismTest testCase )
     {
         this.fileName1 = fileName1;
@@ -100,8 +107,8 @@ public class Plagiarism implements Runnable
     }
     
     /**
-     * Main entry point for a thread. The files will be opened in the thread and all filters will be run.
-     * Output is synchronized.
+     * Main entry point for a thread. The files will be opened and processed in the 
+     * thread. All filters are run on the sentences or words. Output is synchronized.
      */
     @Override
     public void run()
@@ -113,16 +120,19 @@ public class Plagiarism implements Runnable
             
             Results results = new Results();
             
+            // Word filters
             for( PlagiarismFilter filter : wordFilters)
             {
                 results.wordResults.add( filter.exec( dataSet1.getWords() , dataSet2.getWords() )  );
             }
             
+            // Sentence filters
             for( PlagiarismFilter filter : sentenceFilters)
             {
                 results.sentenceResults.add( filter.exec( dataSet1.getSentences() , dataSet2.getSentences() )  );
             }
             
+            // Print output
             synchronized(System.out)
             {
                 System.out.println( "Test Results:" );
@@ -154,7 +164,7 @@ public class Plagiarism implements Runnable
    
     /**
      * Main entry for program.
-     * configuration file
+     * 
      * @param args 
      */
     public static void main(String[] args) 
@@ -163,8 +173,8 @@ public class Plagiarism implements Runnable
         {
             TestPairs testPairs = new TestPairs();
             
-            
             ///////////////////////
+            // Programmically set configuration
             Configuration config = new Configuration();
             ArrayList< PlagiarismTest > list = new ArrayList<>();
             PlagiarismTest pt = new PlagiarismTest();
@@ -192,19 +202,25 @@ public class Plagiarism implements Runnable
             ArrayList< PlagiarismTest > tests = config.getTests();         
             ///////////////////////
 
+            // Create a thread pool
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             
+            // Iterate over a test set
             for(PlagiarismTest testCase : tests)
             {
+                // Get the files to test against
                 files = testCase.getFiles();
+                // Create all combinations of files to test for plagairism
                 ArrayList<TestPair> pairs = testPairs.createPairs(files);
-                    
+                
+                // Push each test onto the queue which will be run as a thread 
                 for(TestPair tp : pairs)
                 {
                     executor.execute( new Plagiarism( tp.file1 , tp.file2, testCase  ) );
                 }
             }
             
+            // Close threadpool after all test suites are complete
             executor.shutdown();
         }
         catch(Exception ex)

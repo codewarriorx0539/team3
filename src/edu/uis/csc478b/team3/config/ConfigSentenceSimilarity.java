@@ -5,17 +5,16 @@ import javax.xml.bind.annotation.XmlElement;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> ConfigSentenceSimilarity
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * Configuration for sentence similarity classifier
- * </p>
+ * 
+ * <h3>Class:</h3> ConfigSentenceSimilarity <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * Configuration for sentence similarity classifier. <br>
  * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -29,11 +28,29 @@ public class ConfigSentenceSimilarity extends Config
     
     ConfigEditDistance configEditDistance; 
     
+    /**
+     *
+     */
     final protected String RANGE = "sentenceSimilarityRange: ";
+
+    /**
+     *
+     */
     final protected String SENTENCE_THRESHOLD = "sentenceSimilarityThreshold: ";
+
+    /**
+     *
+     */
     final protected String TOTAL_THRESHOLD =  "totalSentenceThreshold: ";
+
+    /**
+     *
+     */
     final protected String CONSECUTIVE = "consecutiveSentences: ";
     
+    /**
+     * Default values
+     */
     public ConfigSentenceSimilarity()
     {
         sentenceSimilarityRange = 3;        // 3 behind 3 ahead
@@ -44,6 +61,11 @@ public class ConfigSentenceSimilarity extends Config
         configEditDistance = new ConfigEditDistance();
     }
     
+    /**
+     * Copy constructor
+     * 
+     * @param config 
+     */
     public ConfigSentenceSimilarity( ConfigSentenceSimilarity config)
     {
         this.sentenceSimilarityRange = config.getSentenceSimilarityRange();            
@@ -54,6 +76,15 @@ public class ConfigSentenceSimilarity extends Config
         this.configEditDistance = new ConfigEditDistance(config.getConfigEditDistance());
     }
     
+    /**
+     * Set individual values for sentence similarity.
+     * 
+     * @param sentenceSimilarityRange
+     * @param sentenceSimilarityThreshold
+     * @param totalSentenceThreshold
+     * @param consecutiveSentences
+     * @param configEditDistance 
+     */
     public ConfigSentenceSimilarity(    int sentenceSimilarityRange, 
                                         float sentenceSimilarityThreshold, 
                                         float totalSentenceThreshold, 
@@ -68,55 +99,95 @@ public class ConfigSentenceSimilarity extends Config
         this.configEditDistance = new ConfigEditDistance(configEditDistance);
     }
     
+    /**
+     *
+     * @return
+     */
     public ConfigEditDistance getConfigEditDistance() 
     {
         return configEditDistance;
     }
 
+    /**
+     *
+     * @param configEditDistance
+     */
     @XmlElement
     public void setConfigEditDistance(ConfigEditDistance configEditDistance) 
     {
         this.configEditDistance = configEditDistance;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getTotalSentenceThreshold() 
     {
         return totalSentenceThreshold;
     }
 
+    /**
+     *
+     * @param totalSentenceThreshold
+     */
     @XmlElement
     public void setTotalSentenceThreshold(float totalSentenceThreshold) 
     {
         this.totalSentenceThreshold = totalSentenceThreshold;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getConsecutiveSentences() 
     {
         return consecutiveSentences;
     }
 
+    /**
+     *
+     * @param consecutiveSentences
+     */
     @XmlElement
     public void setConsecutiveSentences(int consecutiveSentences) 
     {
         this.consecutiveSentences = consecutiveSentences;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getSentenceSimilarityRange() 
     {
         return sentenceSimilarityRange;
     }
 
+    /**
+     *
+     * @param sentenceSimilarityRange
+     */
     @XmlElement
     public void setSentenceSimilarityRange(int sentenceSimilarityRange) 
     {
         this.sentenceSimilarityRange = sentenceSimilarityRange;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getSentenceSimilarityThreshold() 
     {
         return sentenceSimilarityThreshold;
     }
 
+    /**
+     *
+     * @param sentenceSimilarityThreshold
+     */
     @XmlElement
     public void setSentenceSimilarityThreshold(float sentenceSimilarityThreshold) 
     {

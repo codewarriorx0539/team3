@@ -5,16 +5,16 @@ import javax.xml.bind.annotation.XmlElement;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> ConfigEditDistance
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * Configuration for any classifier using edit distance algorithm
- * </p>
+ * 
+ * <h3>Class:</h3> ConfigEditDistance <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * Configuration for any classifier using the edit distance algorithm <br>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -26,10 +26,24 @@ public class ConfigEditDistance extends Config
     float deletionCost;      
     float substitutionCost; 
     
+    /**
+     *
+     */
     final protected String INSERT = "insertCost: ";
+
+    /**
+     *
+     */
     final protected String DELETION = "deletionCost: ";
+
+    /**
+     *
+     */
     final protected String SUBSTITUTION = "substitutionCost: ";
     
+    /**
+     * Default values for edit distance
+     */
     public ConfigEditDistance()
     {
         insertCost = 1.0f;        
@@ -37,6 +51,10 @@ public class ConfigEditDistance extends Config
         substitutionCost = 1.5f; 
     }
     
+    /**
+     * Copy constructor
+     * @param config 
+     */
     public ConfigEditDistance(ConfigEditDistance config)
     {
         this.insertCost = config.getInsertCost();        
@@ -44,6 +62,13 @@ public class ConfigEditDistance extends Config
         this.substitutionCost = config.getSubstitutionCost();
     }
     
+    /**
+     * Set values of edit distance.
+     * 
+     * @param insertCost
+     * @param deletionCost
+     * @param substitutionCost 
+     */
     public ConfigEditDistance(float insertCost, float deletionCost, float substitutionCost)
     {
         this.insertCost = insertCost;        
@@ -51,33 +76,57 @@ public class ConfigEditDistance extends Config
         this.substitutionCost = substitutionCost; 
     }
 
+    /**
+     *
+     * @return
+     */
     public float getInsertCost() 
     {
         return insertCost;
     }
 
+    /**
+     *
+     * @param insertCost
+     */
     @XmlElement
     public void setInsertCost(float insertCost) 
     {
         this.insertCost = insertCost;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getDeletionCost() 
     {
         return deletionCost;
     }
 
+    /**
+     *
+     * @param deletionCost
+     */
     @XmlElement
     public void setDeletionCost(float deletionCost) 
     {
         this.deletionCost = deletionCost;
     }
 
+    /**
+     *
+     * @return
+     */
     public float getSubstitutionCost() 
     {
         return substitutionCost;
     }
 
+    /**
+     *
+     * @param substitutionCost
+     */
     @XmlElement
     public void setSubstitutionCost(float substitutionCost) 
     {

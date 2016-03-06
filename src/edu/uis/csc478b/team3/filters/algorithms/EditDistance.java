@@ -5,24 +5,25 @@ import edu.uis.csc478b.team3.config.ConfigEditDistance;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> EditDistance
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- *
- * Edit distance is a way of quantifying how dissimilar two strings are to one another by counting </br>
- * the minimum number of operations required to transform one string into the other. https://en.wikipedia.org/wiki/Edit_distance </br>
- * Operations: </br>
+ * 
+ * <h3>Class:</h3> EditDistance <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * Edit distance is a way of quantifying how similar two strings are to one another by counting <br>
+ * the minimum number of operations required to transform one string into the other. <br>
+ * https://en.wikipedia.org/wiki/Edit_distance <br>
+ * 
+ * The solution is a classical dynamic programming problem. Below are the operations: <br>
  * <ul>
  *  <li>Insertion</li>
  *  <li>Deletion</li>
  *  <li>Substitution</li>
  * </ul>
- * </p>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -32,7 +33,11 @@ public class EditDistance
     final private float insertCost; 
     final private float deletionCost;
     final private float substitutionCost;
-        
+    
+    /**
+     * Set configuration from config class
+     * @param config 
+     */
     public EditDistance(ConfigEditDistance config)
     {
         insertCost = config.getInsertCost(); 

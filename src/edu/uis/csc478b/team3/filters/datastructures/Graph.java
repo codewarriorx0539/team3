@@ -11,16 +11,16 @@ import java.util.Queue;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> Graph
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * Potentially used to swap similar adjectives or verbs.
- * </p>
+ * 
+ * <h3>Class:</h3> Graph <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * Potentially used to swap similar adjectives or verbs. <br>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *

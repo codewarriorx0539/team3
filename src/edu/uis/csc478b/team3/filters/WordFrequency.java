@@ -9,16 +9,17 @@ import java.util.TreeMap;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> WordFrequency
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * WordFrequency compares the ratio of similar words in the master and suspect to classify plagiarism.
- * </p>
+ * <h3>Class:</h3> WordFrequency <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * WordFrequency vectorizes the words of two documents and computes the cosine similarity. <br>
+ * https://en.wikipedia.org/wiki/Cosine_similarity <br>
+ * 
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -33,7 +34,6 @@ public class WordFrequency implements PlagiarismFilter
     ConfigWordFrequency config;
     
     final protected String TAB = "\t";
-    
     final protected String CLASSIFIER =  "CLASSIFIER: WORD FREQUENCY";
     final protected String FOUND = "Word Frequency: PLAGIARISM FOUND";
     final protected String NOT_FOUND = "Word Frequency: PLAGIARISM NOT FOUND";
@@ -45,6 +45,10 @@ public class WordFrequency implements PlagiarismFilter
     final protected String SIMILAR_COUNT = "Similar word count: ";
     final protected String COSINE = "Cosine Similarity: ";
    
+    /**
+     * 
+     * @param configWordFrequency 
+     */
     public WordFrequency( ConfigWordFrequency configWordFrequency )
     {
         frequencyLowerBound = configWordFrequency.getFrequencyLowerBound();
@@ -55,8 +59,14 @@ public class WordFrequency implements PlagiarismFilter
         
         config = new ConfigWordFrequency( configWordFrequency );
     }
-    
 
+    /**
+     * Compute the cosine similarity
+     * 
+     * @param list1
+     * @param list2
+     * @return
+     */
     @Override
     public String exec( ArrayList< String > list1, ArrayList< String > list2)
     {

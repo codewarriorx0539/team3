@@ -10,17 +10,17 @@ import java.util.HashSet;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> FileProcessor
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * FileProcessor opens master, suspect, or common words files and transfers the data from disk to memory. </br>
- * The data from master and suspect files go through an initial pre filter.</br>
- * </p>
+ * <h3>Class:</h3> FileProcessor <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * FileProcessor opens a file pre-filters the data cleaning syntax and creates two <br>
+ * arrays. One array contains the words of the file and the other array is the sentences of the file. <br>
+ * The data from master and suspect files go through an initial pre filter.<br>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -39,42 +39,50 @@ public class FileData
     
     
     /**
-     * All input is normalized
-     * Once allocated all processing transpires and we have the raw data (words and sentences) in memory.
-     * Processes the data and filters non essential punctuation and makes all letters lower case to simplify filtering.
-     * Optionally a common words file to provide an additional filter on input.
+     * The constructor that opens the file preprocesses the data and fills it into a set of arrays.
+     * All input is normalized to remove trivial noise from the file. This noise can be capitalization,
+     * punctuation, and extra whitespace. Once allocated all processing transpires 
+     * and we have the raw data (words and sentences) in memory. Optionally a common 
+     * words file can be given to filter out common words to provide additional uniqueness.
      * 
-     * @param fileName
-     * @param commonWords
+     * @param fileName File name of the file to open.
+     * @param commonWords optional can be null skip if null
      * @throws IOException 
      */
     public FileData( String fileName, HashSet<String> commonWords) throws IOException
     {
+        if(fileName == null)
+        {
+            throw new NullPointerException("FileData::FileData fileName is null");
+        }
+        
         this.fileName = fileName;
         this.commonWords = commonWords;
         
         sentences = new ArrayList<>();
         words = new ArrayList<>();
         
-        boolean commonFilter = false;
-        
-        if(this.commonWords != null)
-        {
-            commonFilter = true;
-        }
-        
+        // Read entire file in as a single String
         String text = new String( Files.readAllBytes( Paths.get(this.fileName) ), StandardCharsets.UTF_8);
         
+        // Make the String lowercase
         String firstPass = text.toLowerCase();
+        
+        // Split the string into sentences. This can be an issue with acronymns but acceptable per customer
         String [] textSentences = firstPass.split( REGEX_PERIOD );
         
+        // Parse each sentence
         for(String s : textSentences)
         {
+            // Remove syntax
             String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim();
+            
+            // Split up document up into words
             String [] textWords = formatedSentence.split( REGEX_WHITESPACE );
             String sentence = "";
             
-            if(commonFilter)
+            // If a dictionary of common words was given
+            if(this.commonWords != null)
             {
                 for(String word : textWords)
                 {
@@ -99,11 +107,19 @@ public class FileData
         
     }
     
+    /**
+     *
+     * @return
+     */
     public ArrayList< String > getSentences()
     {
         return sentences;
     }
       
+    /**
+     *
+     * @return
+     */
     public ArrayList< String > getWords()
     {
         return words;

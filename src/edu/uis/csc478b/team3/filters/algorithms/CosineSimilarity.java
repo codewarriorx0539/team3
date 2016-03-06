@@ -5,18 +5,17 @@ import java.util.Map;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> CosineSimilarity
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * Characterize the words as vector components and compute the angle between the </br> 
- * two vectors (word frequency in each file). The smaller the angle the more similar </br>
- * the vector. https://en.wikipedia.org/wiki/Cosine_similarity </br>
- * </p>
+ * <h3>Class:</h3> CosineSimilarity <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * Characterize the words as vector components and compute the angle between the <br> 
+ * two vectors. The smaller the angle the more similar the vector. <br>
+ * https://en.wikipedia.org/wiki/Cosine_similarity <br>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *

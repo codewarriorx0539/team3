@@ -7,18 +7,19 @@ import java.util.ArrayList;
 
 /**
  * 
- * <p>
- * <h3>Class:</h3> SentenceSimilarity
- * <h3>Project:</h3> Plagiarism
- * <h3>Description:</h3>
- * SentenceSimilarity classifier compares a sentence in the master against the suspect N number of sentences ahead, behind, and exact.</br>
- * A short circuit option is available that tests the number of consecutive sentences. If a block of sentences are the same one after the other </br>
- * An early detection can trigger.
- * </p>
+ * 
+ * <h3>Class:</h3> SentenceSimilarity <br>
+ * <h3>Project:</h3> Plagiarism <br>
+ * <h3>Description:</h3> <br>
+ * SentenceSimilarity classifier compares a sentence in one file against the other <br>
+ * file N number of sentences ahead, behind, and exact. A short circuit option <br>
+ * is available that tests the number of consecutive sentences. If a block of <br>
+ * sentences are the same one after the other An early detection can trigger. <br>
+ * 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Programmer: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
  *
  * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
  *
@@ -34,7 +35,6 @@ public class SentenceSimilarity implements PlagiarismFilter
     ConfigSentenceSimilarity configSentenceSimilarity;
     
     final protected String TAB = "\t";
-    
     final protected String CLASSIFIER = "CLASSIFIER: SENTENCE SIMILARITY";
     final protected String FOUND = "Sentence Similarity: PLAGIARISM FOUND";
     final protected String NOT_FOUND = "SentenceSimilarity: PLAGIARISM NOT FOUND";
@@ -44,6 +44,10 @@ public class SentenceSimilarity implements PlagiarismFilter
     final protected String SIMILAR = "Total similar sentences: ";
     final protected String SIMILAR_RATIO = "Sentence Similarity Ratio: ";
 
+    /**
+     * 
+     * @param configSentenceSimilarity 
+     */
     public SentenceSimilarity( ConfigSentenceSimilarity configSentenceSimilarity )
     {
         this.configSentenceSimilarity = new ConfigSentenceSimilarity(configSentenceSimilarity);
@@ -55,7 +59,13 @@ public class SentenceSimilarity implements PlagiarismFilter
         consecutiveSentences = configSentenceSimilarity.getConsecutiveSentences();
     }
    
-    @Override
+    /**
+     * Run similarity
+     * @param list1
+     * @param list2
+     * @return
+     */
+        @Override
     public String exec( ArrayList< String > list1, ArrayList< String > list2) 
     {
         int total = 0;
@@ -66,6 +76,7 @@ public class SentenceSimilarity implements PlagiarismFilter
         int total1 = list1.size();
         int total2 = list2.size();
 
+        // Check behind and ahead
         for(int index = 0; index < total1 && index < total2 && done == false; index++ )
         {
             boolean foundSimilar = false;
@@ -111,7 +122,6 @@ public class SentenceSimilarity implements PlagiarismFilter
             }
 
         }
-
 
         float sentenceSimilarityRatio = 0.0f;
         
