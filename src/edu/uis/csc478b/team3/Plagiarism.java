@@ -199,6 +199,12 @@ public class Plagiarism implements Runnable
             // Create a thread pool
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             
+            Runtime runtime = Runtime.getRuntime();
+            final float MEGABYTE = 1024*1024;
+            final int SLEEP_MILLISECONDS = 10;
+            final float REMAINING_HEAP_MB = 200;
+            float heapMax = (runtime.maxMemory()/MEGABYTE);
+            
             // Iterate over a test set
             for(PlagiarismTest testCase : tests)
             {
@@ -210,6 +216,20 @@ public class Plagiarism implements Runnable
                 // Push each test onto the queue which will be run as a thread 
                 for(TestPair tp : pairs)
                 {
+                    float heapFree = (runtime.freeMemory()/MEGABYTE);
+                    float heapTotal = (runtime.totalMemory()/MEGABYTE);
+                    int count = 0;
+                    while( (heapMax - (heapTotal - heapFree))  < REMAINING_HEAP_MB)
+                    {
+                        count++;
+                        // If we've paused for 1 second
+                        if(count > 100)
+                        {
+                            runtime.gc();
+                        }
+                        
+                        Thread.sleep(SLEEP_MILLISECONDS);
+                    }
                     executor.execute( new Plagiarism( tp.file1 , tp.file2, testCase  ) );
                 }
             }
