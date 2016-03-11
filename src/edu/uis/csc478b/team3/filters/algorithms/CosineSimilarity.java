@@ -26,33 +26,33 @@ public class CosineSimilarity
      */
     public float calcCosineSimilarity( Map<String, Integer> wordFrequency1, Map<String, Integer> wordFrequency2 ) throws Exception
     {
-         float sum1 = 0;
-         float sum2 = 0;
-         float dot = 0;
+         double sum1 = 0;
+         double sum2 = 0;
+         double dot = 0;
          
          if( wordFrequency1 == null || wordFrequency2 == null )
          {
-            throw new NullPointerException("calcCosineSimilarity::calcCosineSimilarity");
+            throw new NullPointerException("CosineSimilarity::calcCosineSimilarity");
          }
 
          for (Map.Entry<String, Integer> entry : wordFrequency1.entrySet()) 
          {
-             String key = entry.getKey();
-             int value = entry.getValue();
+            String key = entry.getKey();
+            int value = entry.getValue();
 
-             if(wordFrequency2.containsKey(key))
-             {              
-                 dot += (value * wordFrequency2.get(key));
-             }
+            if(wordFrequency2.containsKey(key))
+            { 
+                dot += (value * wordFrequency2.get(key));
+            }
 
-             sum1 += (value * value);
+            sum1 += (value * value);
          }
 
          for (Map.Entry<String, Integer> entry : wordFrequency2.entrySet()) 
          {
-             int value = entry.getValue();
+            int value = entry.getValue();
 
-             sum2 += (value * value);
+            sum2 += (value * value);
          }
          
          if(sum1 == 0 || sum2 == 0)
@@ -60,7 +60,21 @@ public class CosineSimilarity
              throw new Exception("CosineSimilarity::calcCosineSimilarity divide by zero");
          }
 
-         return (float) Math.toDegrees(Math.acos( dot/(float)(Math.sqrt(sum1) * Math.sqrt(sum2) ) ) );
+        double size1 = sum1;
+        double size2 = sum2;
+        double skew = 0;
+        
+        if(sum1 > sum2)
+        {
+            skew = size2/size1;
+        }
+        else
+        {
+            skew = size1/size2;
+        }
+        
+        double skewedAngle = (dot/(Math.sqrt(sum1) * Math.sqrt(sum2) )) * ( skew );
+        return (float) skewedAngle;     
     }
     
 }

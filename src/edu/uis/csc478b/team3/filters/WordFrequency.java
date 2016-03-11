@@ -130,7 +130,7 @@ public class WordFrequency implements PlagiarismFilter
         
         float ratioWords = (float) total1 / (float) total2;
         
-        if( angle <= cosineSimilarityThreshold )
+        if( cosineSimilarityThreshold < angle )
         {
             result = result + TAB + FOUND + System.lineSeparator();
         }

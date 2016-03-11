@@ -28,7 +28,7 @@ public class ConfigWordFrequency extends Config
      */
     public ConfigWordFrequency()
     {
-        cosineSimilarityThreshold  = .3f;
+        cosineSimilarityThreshold  = .7f;
         frequencyUpperBound  = 3.0f;
         frequencyLowerBound  = .3f;
     }
