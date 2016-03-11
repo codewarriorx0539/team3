@@ -4,24 +4,20 @@ package edu.uis.csc478b.team3;
 import java.util.ArrayList;
 
 /**
+ * The results class holds all the results for all the tests.
  * 
- * <h3>Class:</h3> Results <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * The results class holds all the results for all the tests. <br>
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class Results 
 {
 
     /**
-     *
+     * Holds the results from all filters run on files.
      */
     public Results()
     {
@@ -29,13 +25,6 @@ public class Results
        wordResults = new ArrayList<>();
     }
 
-    /**
-     *
-     */
     public ArrayList< String > sentenceResults;
-
-    /**
-     *
-     */
     public ArrayList< String > wordResults;
 }

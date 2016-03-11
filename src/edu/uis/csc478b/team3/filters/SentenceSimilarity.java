@@ -6,22 +6,16 @@ import edu.uis.csc478b.team3.filters.algorithms.EditDistance;
 import java.util.ArrayList;
 
 /**
+ * SentenceSimilarity classifier compares a sentence in one file against the other 
+ * file N number of sentences ahead, behind, and exact. A short circuit option 
+ * is available that tests the number of consecutive sentences. If a block of 
+ * sentences are the same one after the other An early detection can trigger.
  * 
- * 
- * <h3>Class:</h3> SentenceSimilarity <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * SentenceSimilarity classifier compares a sentence in one file against the other <br>
- * file N number of sentences ahead, behind, and exact. A short circuit option <br>
- * is available that tests the number of consecutive sentences. If a block of <br>
- * sentences are the same one after the other An early detection can trigger. <br>
- * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class SentenceSimilarity implements PlagiarismFilter 
@@ -45,10 +39,12 @@ public class SentenceSimilarity implements PlagiarismFilter
     final protected String SIMILAR_RATIO = "Sentence Similarity Ratio: ";
 
     /**
+     * Initialize the values
      * 
      * @param configSentenceSimilarity 
+     * @throws java.lang.Exception 
      */
-    public SentenceSimilarity( ConfigSentenceSimilarity configSentenceSimilarity )
+    public SentenceSimilarity( ConfigSentenceSimilarity configSentenceSimilarity ) throws Exception
     {
         this.configSentenceSimilarity = new ConfigSentenceSimilarity(configSentenceSimilarity);
         
@@ -61,11 +57,12 @@ public class SentenceSimilarity implements PlagiarismFilter
    
     /**
      * Run similarity
+     * 
      * @param list1
      * @param list2
      * @return
      */
-        @Override
+    @Override
     public String exec( ArrayList< String > list1, ArrayList< String > list2) 
     {
         int total = 0;

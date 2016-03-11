@@ -20,20 +20,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Main point of entry into the program. Implements Runnable so it cab be used in 
+ * Java's cached thread pool.
  * 
- * 
- * <h3>Class:</h3> Plagiarism <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * Main point of entry into the program. Implements Runnable so it cab be used in <br> 
- * Java's cached thread pool. <br>
- * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class Plagiarism implements Runnable 

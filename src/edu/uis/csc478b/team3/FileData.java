@@ -9,20 +9,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
+ * FileData opens a file pre-filters the data cleaning syntax and creates two
+ * arrays. One array contains the words of the file and the other array is the sentences of the file.
+ * The data from master and suspect files go through an initial pre filter.  
  * 
- * <h3>Class:</h3> FileProcessor <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * FileProcessor opens a file pre-filters the data cleaning syntax and creates two <br>
- * arrays. One array contains the words of the file and the other array is the sentences of the file. <br>
- * The data from master and suspect files go through an initial pre filter.<br>
- * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ *  Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ *  Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class FileData 
@@ -108,8 +103,9 @@ public class FileData
     }
     
     /**
-     *
-     * @return
+     * The sentences of the file pre-processed.
+     * 
+     * @return List of sentences
      */
     public ArrayList< String > getSentences()
     {
@@ -117,8 +113,9 @@ public class FileData
     }
       
     /**
+     * The words of the file pre-processed.
      *
-     * @return
+     * @return List of words
      */
     public ArrayList< String > getWords()
     {

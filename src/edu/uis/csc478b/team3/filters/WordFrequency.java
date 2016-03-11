@@ -8,20 +8,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
+ * WordFrequency vectorizes the words of two documents and computes the cosine similarity. 
+ * https://en.wikipedia.org/wiki/Cosine_similarity 
  * 
- * <h3>Class:</h3> WordFrequency <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * WordFrequency vectorizes the words of two documents and computes the cosine similarity. <br>
- * https://en.wikipedia.org/wiki/Cosine_similarity <br>
- * 
- * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class WordFrequency implements PlagiarismFilter
@@ -46,10 +40,12 @@ public class WordFrequency implements PlagiarismFilter
     final protected String COSINE = "Cosine Similarity: ";
    
     /**
+     * Setup initial values
      * 
      * @param configWordFrequency 
+     * @throws java.lang.Exception 
      */
-    public WordFrequency( ConfigWordFrequency configWordFrequency )
+    public WordFrequency( ConfigWordFrequency configWordFrequency ) throws Exception
     {
         frequencyLowerBound = configWordFrequency.getFrequencyLowerBound();
         frequencyUpperBound = configWordFrequency.getFrequencyUpperBound();
@@ -68,7 +64,7 @@ public class WordFrequency implements PlagiarismFilter
      * @return
      */
     @Override
-    public String exec( ArrayList< String > list1, ArrayList< String > list2)
+    public String exec( ArrayList< String > list1, ArrayList< String > list2) throws Exception
     {
         int total1 = 0;
         int total2 = 0;
@@ -108,14 +104,23 @@ public class WordFrequency implements PlagiarismFilter
             total2++;
         }
 
-
         float similarWords = 0;
 
         for(Map.Entry<String,Integer> entry : map1.entrySet())
         {
             if( map2.containsKey(entry.getKey()) == true)
             {
-                similarWords = similarWords + entry.getValue();
+                int value = map2.get(entry.getKey());
+                
+                if( value > entry.getValue())
+                {
+                    similarWords = similarWords + entry.getValue();
+                }
+                else
+                {
+                    similarWords = similarWords + value;
+                }
+                
             }
         }
 
@@ -134,7 +139,8 @@ public class WordFrequency implements PlagiarismFilter
             result = result + TAB + NOT_FOUND + System.lineSeparator();
         }
          
-        // Means the ratio of words is absurdly differently like one document as 1000 words and the other 2 words. Tested as a percentages/ratio
+        // Means the ratio of words is absurdly differently like one document as 
+        // 1000 words and the other 2 words. Tested as a percentages/ratio
         if( (frequencyUpperBound < ratioWords)  || (frequencyLowerBound > ratioWords) )
         {
             result = result + TAB + OUTSIDE + System.lineSeparator();
@@ -144,7 +150,6 @@ public class WordFrequency implements PlagiarismFilter
             result = result + TAB + INSIDE + System.lineSeparator();
         }
 
-        
         result = result + TAB + COUNT1 + total1 + System.lineSeparator();
         result = result + TAB + COUNT2 + total2 + System.lineSeparator();
         result = result + TAB + SIMILAR_COUNT + similarWords + System.lineSeparator();

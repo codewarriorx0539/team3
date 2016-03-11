@@ -4,19 +4,13 @@ package edu.uis.csc478b.team3.config;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * Configuration for sentence similarity classifier.
  * 
- * 
- * <h3>Class:</h3> ConfigSentenceSimilarity <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * Configuration for sentence similarity classifier. <br>
- * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class ConfigSentenceSimilarity extends Config
@@ -28,24 +22,9 @@ public class ConfigSentenceSimilarity extends Config
     
     ConfigEditDistance configEditDistance; 
     
-    /**
-     *
-     */
     final protected String RANGE = "sentenceSimilarityRange: ";
-
-    /**
-     *
-     */
     final protected String SENTENCE_THRESHOLD = "sentenceSimilarityThreshold: ";
-
-    /**
-     *
-     */
     final protected String TOTAL_THRESHOLD =  "totalSentenceThreshold: ";
-
-    /**
-     *
-     */
     final protected String CONSECUTIVE = "consecutiveSentences: ";
     
     /**
@@ -65,8 +44,9 @@ public class ConfigSentenceSimilarity extends Config
      * Copy constructor
      * 
      * @param config 
+     * @throws java.lang.Exception 
      */
-    public ConfigSentenceSimilarity( ConfigSentenceSimilarity config)
+    public ConfigSentenceSimilarity( ConfigSentenceSimilarity config) throws Exception
     {
         this.sentenceSimilarityRange = config.getSentenceSimilarityRange();            
         this.sentenceSimilarityThreshold = config.getSentenceSimilarityThreshold();     
@@ -74,6 +54,18 @@ public class ConfigSentenceSimilarity extends Config
         this.consecutiveSentences = config.getConsecutiveSentences();                  
         
         this.configEditDistance = new ConfigEditDistance(config.getConfigEditDistance());
+        
+        // BOUNDS CHECK
+        if( sentenceSimilarityRange == 0        ||
+            sentenceSimilarityThreshold < 0     || 
+            sentenceSimilarityThreshold > 1.0   || 
+            totalSentenceThreshold < 0          || 
+            totalSentenceThreshold > 1.0        ||
+            consecutiveSentences < -1           ||
+            consecutiveSentences == 0)
+        {
+            throw new Exception("ConfigSentenceSimilarity::ConfigSentenceSimilarity value out of bounds");
+        }
     }
     
     /**
@@ -84,12 +76,13 @@ public class ConfigSentenceSimilarity extends Config
      * @param totalSentenceThreshold
      * @param consecutiveSentences
      * @param configEditDistance 
+     * @throws java.lang.Exception 
      */
     public ConfigSentenceSimilarity(    int sentenceSimilarityRange, 
                                         float sentenceSimilarityThreshold, 
                                         float totalSentenceThreshold, 
                                         int consecutiveSentences, 
-                                        ConfigEditDistance configEditDistance)
+                                        ConfigEditDistance configEditDistance) throws Exception
     {
         this.sentenceSimilarityRange = sentenceSimilarityRange;             
         this.sentenceSimilarityThreshold = sentenceSimilarityThreshold;      
@@ -97,97 +90,69 @@ public class ConfigSentenceSimilarity extends Config
         this.consecutiveSentences = consecutiveSentences;                   
         
         this.configEditDistance = new ConfigEditDistance(configEditDistance);
+        
+        // BOUNDS CHECK
+        if( sentenceSimilarityRange == 0        ||
+            sentenceSimilarityThreshold < 0     || 
+            sentenceSimilarityThreshold > 1.0   || 
+            totalSentenceThreshold < 0          || 
+            totalSentenceThreshold > 1.0        ||
+            consecutiveSentences < -1           ||
+            consecutiveSentences == 0)
+        {
+            throw new Exception("ConfigSentenceSimilarity::ConfigSentenceSimilarity value out of bounds");
+        }
     }
     
-    /**
-     *
-     * @return
-     */
     public ConfigEditDistance getConfigEditDistance() 
     {
         return configEditDistance;
     }
 
-    /**
-     *
-     * @param configEditDistance
-     */
     @XmlElement
     public void setConfigEditDistance(ConfigEditDistance configEditDistance) 
     {
         this.configEditDistance = configEditDistance;
     }
 
-    /**
-     *
-     * @return
-     */
     public float getTotalSentenceThreshold() 
     {
         return totalSentenceThreshold;
     }
 
-    /**
-     *
-     * @param totalSentenceThreshold
-     */
     @XmlElement
     public void setTotalSentenceThreshold(float totalSentenceThreshold) 
     {
         this.totalSentenceThreshold = totalSentenceThreshold;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getConsecutiveSentences() 
     {
         return consecutiveSentences;
     }
 
-    /**
-     *
-     * @param consecutiveSentences
-     */
     @XmlElement
     public void setConsecutiveSentences(int consecutiveSentences) 
     {
         this.consecutiveSentences = consecutiveSentences;
     }
 
-    /**
-     *
-     * @return
-     */
     public int getSentenceSimilarityRange() 
     {
         return sentenceSimilarityRange;
     }
 
-    /**
-     *
-     * @param sentenceSimilarityRange
-     */
     @XmlElement
     public void setSentenceSimilarityRange(int sentenceSimilarityRange) 
     {
         this.sentenceSimilarityRange = sentenceSimilarityRange;
     }
 
-    /**
-     *
-     * @return
-     */
     public float getSentenceSimilarityThreshold() 
     {
         return sentenceSimilarityThreshold;
     }
 
-    /**
-     *
-     * @param sentenceSimilarityThreshold
-     */
     @XmlElement
     public void setSentenceSimilarityThreshold(float sentenceSimilarityThreshold) 
     {

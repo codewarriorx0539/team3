@@ -4,19 +4,13 @@ package edu.uis.csc478b.team3.config;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * 
- * 
- * <h3>Class:</h3> ConfigEditDistance <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * Configuration for any classifier using the edit distance algorithm <br>
- * 
+ * Configuration for any classifier using the edit distance algorithm
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class ConfigEditDistance extends Config
@@ -26,19 +20,8 @@ public class ConfigEditDistance extends Config
     float deletionCost;      
     float substitutionCost; 
     
-    /**
-     *
-     */
     final protected String INSERT = "insertCost: ";
-
-    /**
-     *
-     */
     final protected String DELETION = "deletionCost: ";
-
-    /**
-     *
-     */
     final protected String SUBSTITUTION = "substitutionCost: ";
     
     /**
@@ -53,13 +36,20 @@ public class ConfigEditDistance extends Config
     
     /**
      * Copy constructor
+     * 
      * @param config 
      */
-    public ConfigEditDistance(ConfigEditDistance config)
+    public ConfigEditDistance(ConfigEditDistance config) throws Exception
     {
-        this.insertCost = config.getInsertCost();        
-        this.deletionCost = config.getDeletionCost();      
-        this.substitutionCost = config.getSubstitutionCost();
+        insertCost = config.getInsertCost();        
+        deletionCost = config.getDeletionCost();      
+        substitutionCost = config.getSubstitutionCost();
+        
+        // BOUNDS CHECK
+        if(insertCost < 0 || deletionCost < 0 || substitutionCost < 0)
+        {
+            throw new Exception("ConfigEditDistance::ConfigEditDistance value out of bounds");
+        }
     }
     
     /**
@@ -69,64 +59,46 @@ public class ConfigEditDistance extends Config
      * @param deletionCost
      * @param substitutionCost 
      */
-    public ConfigEditDistance(float insertCost, float deletionCost, float substitutionCost)
+    public ConfigEditDistance(float insertCost, float deletionCost, float substitutionCost) throws Exception
     {
         this.insertCost = insertCost;        
         this.deletionCost = deletionCost;      
         this.substitutionCost = substitutionCost; 
+        
+        // BOUNDS CHECK
+        if(insertCost < 0 || deletionCost < 0 || substitutionCost < 0)
+        {
+            throw new Exception("ConfigEditDistance::ConfigEditDistance value out of bounds");
+        }
     }
 
-    /**
-     *
-     * @return
-     */
     public float getInsertCost() 
     {
         return insertCost;
     }
 
-    /**
-     *
-     * @param insertCost
-     */
     @XmlElement
     public void setInsertCost(float insertCost) 
     {
         this.insertCost = insertCost;
     }
 
-    /**
-     *
-     * @return
-     */
     public float getDeletionCost() 
     {
         return deletionCost;
     }
 
-    /**
-     *
-     * @param deletionCost
-     */
     @XmlElement
     public void setDeletionCost(float deletionCost) 
     {
         this.deletionCost = deletionCost;
     }
 
-    /**
-     *
-     * @return
-     */
     public float getSubstitutionCost() 
     {
         return substitutionCost;
     }
 
-    /**
-     *
-     * @param substitutionCost
-     */
     @XmlElement
     public void setSubstitutionCost(float substitutionCost) 
     {

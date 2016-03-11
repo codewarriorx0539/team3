@@ -4,18 +4,13 @@ package edu.uis.csc478b.team3.config;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
+ * Configuration for the word frequency classifier.
  * 
- * <h3>Class:</h3> ConfigWordFrequency <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * Configuration for the word frequency classifier.<br>
- * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
- *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
+ * 
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class ConfigWordFrequency extends Config
@@ -42,65 +37,48 @@ public class ConfigWordFrequency extends Config
      * Copy constructor
      * 
      * @param config 
+     * @throws java.lang.Exception 
      */
-    public ConfigWordFrequency(ConfigWordFrequency config)
+    public ConfigWordFrequency(ConfigWordFrequency config) throws Exception
     {
         cosineSimilarityThreshold = config.getCosineSimilarityThreshold();   
         frequencyLowerBound = config.getFrequencyLowerBound();
         frequencyUpperBound = config.getFrequencyUpperBound();
+        
+        // BOUNDS CHECK
+        if(frequencyLowerBound < 0 || cosineSimilarityThreshold < -1 || cosineSimilarityThreshold > 1)
+        {
+            throw new Exception("ConfigWordFrequency::ConfigWordFrequency value out of bounds");
+        }
     }
 
-    /**
-     *
-     * @return
-     */
     public float getFrequencyLowerBound() 
     {
         return frequencyLowerBound;
     }
 
-    /**
-     *
-     * @param frequencyLowerBound
-     */
     @XmlElement
     public void setFrequencyLowerBound(float frequencyLowerBound) 
     {
         this.frequencyLowerBound = frequencyLowerBound;
     }
 
-    /**
-     *
-     * @return
-     */
     public float getFrequencyUpperBound() 
     {
         return frequencyUpperBound;
     }
 
-    /**
-     *
-     * @param frequencyUpperBound
-     */
     @XmlElement
     public void setFrequencyUpperBound(float frequencyUpperBound)
     {
         this.frequencyUpperBound = frequencyUpperBound;
     }
 
-    /**
-     *
-     * @return
-     */
     public float getCosineSimilarityThreshold() 
     {
         return cosineSimilarityThreshold;
     }
 
-    /**
-     *
-     * @param cosineSimilarityThreshold
-     */
     @XmlElement
     public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) 
     {

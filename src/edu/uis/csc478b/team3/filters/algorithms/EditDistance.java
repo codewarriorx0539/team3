@@ -4,14 +4,9 @@ package edu.uis.csc478b.team3.filters.algorithms;
 import edu.uis.csc478b.team3.config.ConfigEditDistance;
 
 /**
- * 
- * 
- * <h3>Class:</h3> EditDistance <br>
- * <h3>Project:</h3> Plagiarism <br>
- * <h3>Description:</h3> <br>
- * Edit distance is a way of quantifying how similar two strings are to one another by counting <br>
- * the minimum number of operations required to transform one string into the other. <br>
- * https://en.wikipedia.org/wiki/Edit_distance <br>
+ * Edit distance is a way of quantifying how similar two strings are to one another by counting
+ * the minimum number of operations required to transform one string into the other.
+ * https://en.wikipedia.org/wiki/Edit_distance
  * 
  * The solution is a classical dynamic programming problem. Below are the operations: <br>
  * <ul>
@@ -20,12 +15,11 @@ import edu.uis.csc478b.team3.config.ConfigEditDistance;
  *  <li>Substitution</li>
  * </ul>
  * 
- * 
- * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a>
+ * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
- * @author Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a>
+ * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
  *
- * @author Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a>
+ * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
 public class EditDistance 
@@ -36,6 +30,7 @@ public class EditDistance
     
     /**
      * Set configuration from config class
+     * 
      * @param config 
      */
     public EditDistance(ConfigEditDistance config)
@@ -48,13 +43,12 @@ public class EditDistance
     /**
      * Calculate the distance between two strings. A perfect match returns zero
      * 
-     * @param compareString
-     * @param masterString
-     * @return 
+     * @param compareString String to compare
+     * @param masterString String to compare
+     * @return Total distance the strings are different based on the weighted operations
      */
     public float getDistance( String compareString, String masterString )
     {
-
         int masterStringLen = masterString.length();
         int compareStringLen = compareString.length();
         
