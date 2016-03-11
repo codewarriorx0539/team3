@@ -15,7 +15,7 @@ import java.util.Map;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
-public class CosineSimilarity 
+public class SkewedCosineSimilarity 
 {
     /**
      * Calculate the Cosine Similarity and return the angle between the vectors.

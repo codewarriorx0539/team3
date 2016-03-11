@@ -1,8 +1,8 @@
 
 package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.filters.algorithms.CosineSimilarity;
 import edu.uis.csc478b.team3.config.ConfigWordFrequency;
+import edu.uis.csc478b.team3.filters.algorithms.SkewedCosineSimilarity;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -23,7 +23,7 @@ public class WordFrequency implements PlagiarismFilter
     final private float frequencyLowerBound;
     final private float frequencyUpperBound;
     final private float cosineSimilarityThreshold;
-    final private CosineSimilarity cosineSimilarity;
+    final private SkewedCosineSimilarity cosineSimilarity;
     
     ConfigWordFrequency config;
     
@@ -37,7 +37,7 @@ public class WordFrequency implements PlagiarismFilter
     final protected String COUNT1 = "Word count file1: ";
     final protected String COUNT2 = "Word count file2: ";
     final protected String SIMILAR_COUNT = "Similar word count: ";
-    final protected String COSINE = "Cosine Similarity: ";
+    final protected String COSINE = "Skewed Cosine Similarity: ";
    
     /**
      * Setup initial values
@@ -51,7 +51,7 @@ public class WordFrequency implements PlagiarismFilter
         frequencyUpperBound = configWordFrequency.getFrequencyUpperBound();
         cosineSimilarityThreshold = configWordFrequency.getCosineSimilarityThreshold();
         
-        cosineSimilarity = new CosineSimilarity();
+        cosineSimilarity = new SkewedCosineSimilarity();
         
         config = new ConfigWordFrequency( configWordFrequency );
     }
