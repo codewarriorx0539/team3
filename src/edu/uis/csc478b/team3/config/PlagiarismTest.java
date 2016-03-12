@@ -23,8 +23,8 @@ public class PlagiarismTest
     // Path to common words file; can be empty or null
     String commonWordsFile;
     
-    ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList<  > ();
-    ArrayList< PlagiarismFilter > wordFilters = new ArrayList<  > ();
+    ArrayList< PlagiarismFilter > sentenceFilters;
+    ArrayList< PlagiarismFilter > wordFilters;
     
     /**
      * Initialize values
@@ -32,9 +32,7 @@ public class PlagiarismTest
     public PlagiarismTest()
     {        
         commonWordsFile = "";
-        
-        sentenceFilters = new ArrayList<  > ();
-        wordFilters = new ArrayList<  > ();
+       
     }
 
     public ArrayList<String> getFiles() 
@@ -42,7 +40,7 @@ public class PlagiarismTest
         return files;
     }
 
-    @XmlElement
+    @XmlElement(name = "file")
     public void setFiles(ArrayList<String> files) 
     {
         this.files = files;

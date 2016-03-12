@@ -1,14 +1,14 @@
 
 package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.config.ConfigWordFrequency;
-import edu.uis.csc478b.team3.filters.algorithms.SkewedCosineSimilarity;
+import edu.uis.csc478b.team3.filters.algorithms.CosineSimilarity;
+import edu.uis.csc478b.team3.filters.algorithms.SimilarityResults;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * WordFrequency vectorizes the words of two documents and computes the cosine similarity. 
+ * Similarity vectorizes the words of two documents and computes the cosine similarity. 
  * https://en.wikipedia.org/wiki/Cosine_similarity 
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
@@ -18,42 +18,56 @@ import java.util.TreeMap;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
-public class WordFrequency implements PlagiarismFilter
+public class Similarity extends PlagiarismFilter
 {
-    final private float frequencyLowerBound;
-    final private float frequencyUpperBound;
-    final private float cosineSimilarityThreshold;
-    final private SkewedCosineSimilarity cosineSimilarity;
-    
-    ConfigWordFrequency config;
+    float frequencyLowerBound;
+    float frequencyUpperBound;
+    float cosineSimilarityThreshold;
+    CosineSimilarity cosineSimilarity;
     
     final protected String TAB = "\t";
-    final protected String CLASSIFIER =  "CLASSIFIER: WORD FREQUENCY";
-    final protected String FOUND = "Word Frequency: PLAGIARISM FOUND";
-    final protected String NOT_FOUND = "Word Frequency: PLAGIARISM NOT FOUND";
+    final protected String CLASSIFIER =  "CLASSIFIER: SIMILARITY";
+    final protected String FOUND = "Similarity: PLAGIARISM FOUND";
+    final protected String NOT_FOUND = "Similarity: PLAGIARISM NOT FOUND";
     final protected String OUTSIDE = "Word Difference: OUTSIDE BOUND";
     final protected String INSIDE = "Word Difference: INSIDE BOUND";
     final protected String CONFIGURATION = "CONFIGURATION:";
     final protected String COUNT1 = "Word count file1: ";
     final protected String COUNT2 = "Word count file2: ";
     final protected String SIMILAR_COUNT = "Similar word count: ";
-    final protected String COSINE = "Skewed Cosine Similarity: ";
+    final protected String COSINE = "Cosine Similarity: ";
+    final protected String SCALED_COSINE = "Scaled Cosine Similarity: ";
+    
+    final protected String UPPER = "frequencyUpperBound: ";
+    final protected String LOWER = "frequencyLowerBound: ";
+    final protected String THRESHOLD = "cosineSimilarityThreshold: ";
    
+    
     /**
-     * Setup initial values
-     * 
-     * @param configWordFrequency 
-     * @throws java.lang.Exception 
+     * Default values for Word frequency
      */
-    public WordFrequency( ConfigWordFrequency configWordFrequency ) throws Exception
+    public Similarity()
     {
-        frequencyLowerBound = configWordFrequency.getFrequencyLowerBound();
-        frequencyUpperBound = configWordFrequency.getFrequencyUpperBound();
-        cosineSimilarityThreshold = configWordFrequency.getCosineSimilarityThreshold();
+        cosineSimilarityThreshold  = .7f;
+        frequencyUpperBound  = 3.0f;
+        frequencyLowerBound  = .3f;
         
-        cosineSimilarity = new SkewedCosineSimilarity();
+        cosineSimilarity = new CosineSimilarity();
+    }
+
+    public Similarity(  float cosineSimilarityThreshold,
+                        float frequencyLowerBound,
+                        float frequencyUpperBound) throws Exception
+    {
+        this.cosineSimilarityThreshold = cosineSimilarityThreshold;   
+        this.frequencyLowerBound = frequencyLowerBound;
+        this.frequencyUpperBound = frequencyUpperBound;
         
-        config = new ConfigWordFrequency( configWordFrequency );
+        // BOUNDS CHECK
+        if(frequencyLowerBound < 0 || cosineSimilarityThreshold < -1 || cosineSimilarityThreshold > 1)
+        {
+            throw new Exception("Similarity::Similarity value out of bounds");
+        }
     }
 
     /**
@@ -124,13 +138,13 @@ public class WordFrequency implements PlagiarismFilter
             }
         }
 
-        float angle = cosineSimilarity.calcCosineSimilarity(map1, map2);
+        SimilarityResults cosineResults = cosineSimilarity.calcCosineSimilarity(map1, map2);
         
         String result = TAB + CLASSIFIER + System.lineSeparator();
         
         float ratioWords = (float) total1 / (float) total2;
         
-        if( cosineSimilarityThreshold < angle )
+        if( cosineSimilarityThreshold < cosineResults.angle )
         {
             result = result + TAB + FOUND + System.lineSeparator();
         }
@@ -153,11 +167,52 @@ public class WordFrequency implements PlagiarismFilter
         result = result + TAB + COUNT1 + total1 + System.lineSeparator();
         result = result + TAB + COUNT2 + total2 + System.lineSeparator();
         result = result + TAB + SIMILAR_COUNT + similarWords + System.lineSeparator();
-        result = result + TAB + COSINE + angle + System.lineSeparator();
+        result = result + TAB + COSINE + cosineResults.angle + System.lineSeparator();
+        result = result + TAB + SCALED_COSINE + cosineResults.scaledAngle + System.lineSeparator();
         result = result + TAB + CONFIGURATION + System.lineSeparator();
-        result = result + config.getConfigSetup();
+        result = result + getConfigSetup();
             
         return result;
+    }
+    
+    public float getFrequencyLowerBound() 
+    {
+        return frequencyLowerBound;
+    }
+
+    public void setFrequencyLowerBound(float frequencyLowerBound) 
+    {
+        this.frequencyLowerBound = frequencyLowerBound;
+    }
+
+    public float getFrequencyUpperBound() 
+    {
+        return frequencyUpperBound;
+    }
+
+    public void setFrequencyUpperBound(float frequencyUpperBound)
+    {
+        this.frequencyUpperBound = frequencyUpperBound;
+    }
+
+    public float getCosineSimilarityThreshold() 
+    {
+        return cosineSimilarityThreshold;
+    }
+
+    public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) 
+    {
+        this.cosineSimilarityThreshold = cosineSimilarityThreshold;
+    }
+    
+    @Override
+    public String getConfigSetup() 
+    {
+        String setup = TAB + UPPER + frequencyUpperBound + System.lineSeparator();
+        setup = setup + TAB + LOWER + frequencyLowerBound + System.lineSeparator();
+        setup = setup + TAB + THRESHOLD + cosineSimilarityThreshold + System.lineSeparator();
+        
+        return setup;
     }
     
 }

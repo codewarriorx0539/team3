@@ -1,34 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <configuration>
-	<configs>
-		<commonWordsFile>common.txt</commonWordsFile>
-		<configDocumentSimilarity>
-			<configEditDistance>
-				<DELETION_COST>1.0</DELETION_COST>
-				<INSERT_COST>1.0</INSERT_COST>
-				<SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
-			</configEditDistance>
-			<DOCUMENT_SIMILARITY_THRESHOLD>200</DOCUMENT_SIMILARITY_THRESHOLD>
-		</configDocumentSimilarity>
-		<configSentenceSimilarity>
-			<CONSECUTIVE_SENTENCES>-1</CONSECUTIVE_SENTENCES>
-			<configEditDistance>
-				<DELETION_COST>1.0</DELETION_COST>
-				<INSERT_COST>1.0</INSERT_COST>
-				<SUBSTITUTION_COST>1.5</SUBSTITUTION_COST>
-			</configEditDistance>
-			<SENTENCE_SIMILARITY_RANGE>3</SENTENCE_SIMILARITY_RANGE>
-			<SENTENCE_SIMILARITY_THRESHOLD>0.7</SENTENCE_SIMILARITY_THRESHOLD>
-			<TOTAL_SENTENCE_THRESHOLD>0.3</TOTAL_SENTENCE_THRESHOLD>
-		</configSentenceSimilarity>
-		<configWordFrequency>
-			<FREQUENCY_DIFFERENCE_THRESHOLD>0.7</FREQUENCY_DIFFERENCE_THRESHOLD>
-			<FREQUENCY_LOWER_BOUND>0.3</FREQUENCY_LOWER_BOUND>
-			<FREQUENCY_UPPER_BOUND>3.0</FREQUENCY_UPPER_BOUND>
-		</configWordFrequency>
-		<filterCommonWords>true</filterCommonWords>
-		<masterFile>master.txt</masterFile>
-		<suspectFile>suspect.txt</suspectFile>
-	</configs>
-	<notes>hello</notes>
+    <notes>Hello Roger, thanks for allowing us to put a great project together.</notes>
+    <test>
+        <commonWordsFile></commonWordsFile>
+        <file>master.txt</file>
+        <file>suspect.txt</file>
+        <file>other.txt</file>
+        <sentenceFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sentenceSimilarity">
+            <consecutiveSentences>-1</consecutiveSentences>
+            <editDistance>
+                <deletionCost>1.0</deletionCost>
+                <insertCost>1.0</insertCost>
+                <substitutionCost>1.5</substitutionCost>
+            </editDistance>
+            <sentenceSimilarityRange>3</sentenceSimilarityRange>
+            <sentenceSimilarityThreshold>0.7</sentenceSimilarityThreshold>
+            <totalSentenceThreshold>0.3</totalSentenceThreshold>
+        </sentenceFilters>
+        <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="similarity">
+            <cosineSimilarityThreshold>0.7</cosineSimilarityThreshold>
+            <frequencyLowerBound>0.3</frequencyLowerBound>
+            <frequencyUpperBound>3.0</frequencyUpperBound>
+        </wordFilters>
+    </test>
 </configuration>

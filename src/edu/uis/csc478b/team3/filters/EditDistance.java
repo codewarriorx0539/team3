@@ -1,7 +1,7 @@
 
-package edu.uis.csc478b.team3.filters.algorithms;
+package edu.uis.csc478b.team3.filters;
 
-import edu.uis.csc478b.team3.config.ConfigEditDistance;
+import java.util.ArrayList;
 
 /**
  * Edit distance is a way of quantifying how similar two strings are to one another by counting
@@ -22,22 +22,37 @@ import edu.uis.csc478b.team3.config.ConfigEditDistance;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
-public class EditDistance 
+public class EditDistance extends PlagiarismFilter
 {
-    final private float insertCost; 
-    final private float deletionCost;
-    final private float substitutionCost;
+    float insertCost; 
+    float deletionCost;
+    float substitutionCost;
     
-    /**
-     * Set configuration from config class
-     * 
-     * @param config 
-     */
-    public EditDistance(ConfigEditDistance config)
+    final protected String INSERT = "insertCost: ";
+    final protected String DELETION = "deletionCost: ";
+    final protected String SUBSTITUTION = "substitutionCost: ";
+    
+    public EditDistance()
     {
-        insertCost = config.getInsertCost(); 
-        deletionCost = config.getDeletionCost();
-        substitutionCost = config.getSubstitutionCost();
+        insertCost = 1.0f;        
+        deletionCost = 1.0f;      
+        substitutionCost = 1.5f; 
+    }
+    
+
+    public EditDistance(    float insertCost, 
+                            float deletionCost, 
+                            float substitutionCost) throws Exception
+    {
+        this.insertCost = insertCost;        
+        this.deletionCost = deletionCost;      
+        this.substitutionCost = substitutionCost; 
+        
+        // BOUNDS CHECK
+        if(insertCost < 0 || deletionCost < 0 || substitutionCost < 0)
+        {
+            throw new Exception("EditDistance::EditDistance value out of bounds");
+        }
     }
     
     /**
@@ -80,5 +95,51 @@ public class EditDistance
         }
 
         return table[masterStringLen][compareStringLen];
+    }
+    
+    public float getInsertCost() 
+    {
+        return insertCost;
+    }
+
+    public void setInsertCost(float insertCost) 
+    {
+        this.insertCost = insertCost;
+    }
+
+    public float getDeletionCost() 
+    {
+        return deletionCost;
+    }
+
+    public void setDeletionCost(float deletionCost) 
+    {
+        this.deletionCost = deletionCost;
+    }
+
+    public float getSubstitutionCost() 
+    {
+        return substitutionCost;
+    }
+
+    public void setSubstitutionCost(float substitutionCost) 
+    {
+        this.substitutionCost = substitutionCost;
+    }
+    
+    @Override
+    public String getConfigSetup() 
+    {
+        String setup = TAB + INSERT + insertCost + System.lineSeparator();
+        setup = setup + TAB + DELETION + deletionCost + System.lineSeparator();
+        setup = setup + TAB + SUBSTITUTION + substitutionCost + System.lineSeparator();
+    
+        return setup;
+    }
+
+    @Override
+    public String exec(ArrayList<String> list1, ArrayList<String> list2) throws Exception 
+    {
+        throw new UnsupportedOperationException("NOT SUPPORTED AS A FILTER");
     }
 }

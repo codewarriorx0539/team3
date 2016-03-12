@@ -13,8 +13,10 @@ import java.util.ArrayList;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
-public interface PlagiarismFilter 
+public abstract class PlagiarismFilter 
 {
+    final protected String TAB = "\t";
+    
     /**
      * Take in words or sentences and return the results
      * 
@@ -23,5 +25,11 @@ public interface PlagiarismFilter
      * @return Results of the execution of the filter
      * @throws java.lang.Exception
      */
-    String exec( ArrayList< String > list1, ArrayList< String > list2) throws Exception;
+    public abstract String exec( ArrayList< String > list1, ArrayList< String > list2) throws Exception;
+    
+    /**
+     * 
+     * @return 
+     */
+    public abstract String getConfigSetup();
 }

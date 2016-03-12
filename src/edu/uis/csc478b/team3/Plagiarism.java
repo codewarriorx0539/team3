@@ -1,13 +1,10 @@
 
 package edu.uis.csc478b.team3;
 
-import edu.uis.csc478b.team3.config.ConfigSentenceSimilarity;
-import edu.uis.csc478b.team3.config.ConfigWordFrequency;
+import edu.uis.csc478b.team3.config.ClassFiles;
 import edu.uis.csc478b.team3.config.Configuration;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import edu.uis.csc478b.team3.filters.PlagiarismFilter;
-import edu.uis.csc478b.team3.filters.SentenceSimilarity;
-import edu.uis.csc478b.team3.filters.WordFrequency;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -166,36 +163,25 @@ public class Plagiarism implements Runnable
         try
         {
             TestPairs testPairs = new TestPairs();
+            XmlConfig xmlConfig = new XmlConfig();
             
-            ///////////////////////
-            // Programmically set configuration
-            Configuration config = new Configuration();
-            ArrayList< PlagiarismTest > list = new ArrayList<>();
-            PlagiarismTest pt = new PlagiarismTest();
-            ArrayList< String > files = new ArrayList<>();
+            if(args.length == 0)
+            {
+                xmlConfig.createSampleProfile();
+                return;
+            }
             
-            files.add("master.txt");
-            files.add("suspect.txt");
-            files.add("other.txt");
+            if(args.length != 2)
+            {
+                throw new Exception("main::main Incorrect Number of Arguments");
+            }
             
-            SentenceSimilarity sent = new SentenceSimilarity(new ConfigSentenceSimilarity());
-            ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList< >();
-            sentenceFilters.add(sent);
+            ClassFiles classFiles = xmlConfig.readXmlClassFiles(args[0]);
             
-            WordFrequency wfreq = new WordFrequency( new ConfigWordFrequency());
-            ArrayList< PlagiarismFilter > wordFilters = new ArrayList< >();
-            wordFilters.add(wfreq);
+            Configuration configuration = xmlConfig.readXmlConfiguration( args[1], classFiles.getClasses());
             
-            pt.setFiles(files);
-            pt.setSentenceFilters(sentenceFilters);
-            pt.setWordFilters(wordFilters);
-            
-            list.add(pt);
-            config.setTests(list);
-            
-            ArrayList< PlagiarismTest > tests = config.getTests();         
-            ///////////////////////
-
+            // Get all the test sets
+            ArrayList< PlagiarismTest > tests = configuration.getTests();
             // Create a thread pool
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             
@@ -209,7 +195,7 @@ public class Plagiarism implements Runnable
             for(PlagiarismTest testCase : tests)
             {
                 // Get the files to test against
-                files = testCase.getFiles();
+                ArrayList< String > files = testCase.getFiles();
                 // Create all combinations of files to test for plagairism
                 ArrayList<TestPair> pairs = testPairs.createPairs(files);
                 

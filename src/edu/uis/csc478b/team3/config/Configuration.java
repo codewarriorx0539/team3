@@ -21,7 +21,7 @@ public class Configuration
 {
     String notes;
     ArrayList<PlagiarismTest> list;
-    
+        
     /**
      * Default notes
      */
@@ -46,9 +46,10 @@ public class Configuration
         return list;
     }
 
-    @XmlElement
+    @XmlElement(name = "test")
     public void setTests( ArrayList<PlagiarismTest> list )
     {
         this.list = list;
     }
+
 }
