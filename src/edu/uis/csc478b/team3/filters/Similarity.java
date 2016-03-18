@@ -6,6 +6,7 @@ import edu.uis.csc478b.team3.filters.algorithms.SimilarityResults;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Similarity vectorizes the words of two documents and computes the cosine similarity. 
@@ -18,6 +19,7 @@ import java.util.TreeMap;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
+@XmlRootElement
 public class Similarity extends PlagiarismFilter
 {
     float frequencyLowerBound;
@@ -76,6 +78,7 @@ public class Similarity extends PlagiarismFilter
      * @param list1
      * @param list2
      * @return
+     * @throws java.lang.Exception
      */
     @Override
     public String exec( ArrayList< String > list1, ArrayList< String > list2) throws Exception

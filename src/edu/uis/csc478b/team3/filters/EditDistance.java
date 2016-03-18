@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3.filters;
 
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Edit distance is a way of quantifying how similar two strings are to one another by counting
@@ -22,6 +23,7 @@ import java.util.ArrayList;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
+@XmlRootElement
 public class EditDistance extends PlagiarismFilter
 {
     float insertCost; 

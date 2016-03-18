@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3.filters;
 
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Abstract base for all filters including word and sentence filters.
@@ -13,6 +14,7 @@ import java.util.ArrayList;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
+@XmlRootElement
 public abstract class PlagiarismFilter 
 {
     final protected String TAB = "\t";

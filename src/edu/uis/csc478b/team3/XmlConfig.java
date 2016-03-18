@@ -48,7 +48,7 @@ public class XmlConfig
     public Configuration readXmlConfiguration(String fileName , Class[] classes) throws JAXBException
     {
         File file = new File(fileName);
-        JAXBContext jaxbContext = JAXBContext.newInstance( classes, null  );
+        JAXBContext jaxbContext = JAXBContext.newInstance( classes );
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         
         return (Configuration) jaxbUnmarshaller.unmarshal(file);

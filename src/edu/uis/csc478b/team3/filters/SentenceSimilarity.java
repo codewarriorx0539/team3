@@ -2,6 +2,7 @@
 package edu.uis.csc478b.team3.filters;
 
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * SentenceSimilarity classifier compares a sentence in one file against the other 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * Quality Control: <a href="mailto:jcoat2@uis.edu">Jim Coates</a> <br>
  *
  */
-
+@XmlRootElement
 public class SentenceSimilarity extends PlagiarismFilter 
 {
     EditDistance editDistance;

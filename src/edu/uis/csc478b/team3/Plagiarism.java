@@ -171,26 +171,43 @@ public class Plagiarism implements Runnable
                 return;
             }
             
-            if(args.length != 2)
+            ClassFiles classFiles = new ClassFiles();
+            String configFile;
+            
+            if(args.length == 1)
+            {
+                Class[] classes = new Class[3];
+                classes[0] = Class.forName( "edu.uis.csc478b.team3.config.Configuration");
+                classes[1] = Class.forName( "edu.uis.csc478b.team3.filters.SentenceSimilarity");
+                classes[2] = Class.forName( "edu.uis.csc478b.team3.filters.Similarity");
+                        
+                classFiles.setClasses(classes);
+                configFile = args[0];
+
+            }
+            else if(args.length == 2)
+            {
+                classFiles = xmlConfig.readXmlClassFiles(args[0]);
+                configFile = args[1];
+            }
+            else
             {
                 throw new Exception("main::main Incorrect Number of Arguments");
             }
-            
-            ClassFiles classFiles = xmlConfig.readXmlClassFiles(args[0]);
-            
-            Configuration configuration = xmlConfig.readXmlConfiguration( args[1], classFiles.getClasses());
-            
+
+            Configuration configuration = xmlConfig.readXmlConfiguration( configFile, classFiles.getClasses());
+
             // Get all the test sets
             ArrayList< PlagiarismTest > tests = configuration.getTests();
             // Create a thread pool
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-            
+
             Runtime runtime = Runtime.getRuntime();
             final float MEGABYTE = 1024*1024;
             final int SLEEP_MILLISECONDS = 10;
             final float REMAINING_HEAP_MB = 200;
             float heapMax = (runtime.maxMemory()/MEGABYTE);
-            
+
             // Iterate over a test set
             for(PlagiarismTest testCase : tests)
             {
@@ -198,7 +215,7 @@ public class Plagiarism implements Runnable
                 ArrayList< String > files = testCase.getFiles();
                 // Create all combinations of files to test for plagairism
                 ArrayList<TestPair> pairs = testPairs.createPairs(files);
-                
+
                 // Push each test onto the queue which will be run as a thread 
                 for(TestPair tp : pairs)
                 {
@@ -213,15 +230,17 @@ public class Plagiarism implements Runnable
                         {
                             runtime.gc();
                         }
-                        
+
                         Thread.sleep(SLEEP_MILLISECONDS);
                     }
                     executor.execute( new Plagiarism( tp.file1 , tp.file2, testCase  ) );
                 }
             }
-            
+
             // Close threadpool after all test suites are complete
             executor.shutdown();
+           
+            
         }
         catch(Exception ex)
         {
