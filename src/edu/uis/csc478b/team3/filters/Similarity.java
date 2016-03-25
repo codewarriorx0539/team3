@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.filters;
 
+import edu.uis.csc478b.team3.FileData;
 import edu.uis.csc478b.team3.filters.algorithms.CosineSimilarity;
 import edu.uis.csc478b.team3.filters.algorithms.SimilarityResults;
 import java.util.ArrayList;
@@ -34,8 +35,8 @@ public class Similarity extends PlagiarismFilter
     final protected String OUTSIDE = "Word Difference: OUTSIDE BOUND";
     final protected String INSIDE = "Word Difference: INSIDE BOUND";
     final protected String CONFIGURATION = "CONFIGURATION:";
-    final protected String COUNT1 = "Word count file1: ";
-    final protected String COUNT2 = "Word count file2: ";
+    final protected String COUNT1 = "Word count ";
+    final protected String COUNT2 = "Word count ";
     final protected String SIMILAR_COUNT = "Similar word count: ";
     final protected String COSINE = "Cosine Similarity: ";
     final protected String SCALED_COSINE = "Scaled Cosine Similarity: ";
@@ -73,16 +74,17 @@ public class Similarity extends PlagiarismFilter
     }
 
     /**
-     * Compute the cosine similarity
      * 
-     * @param list1
-     * @param list2
-     * @return
-     * @throws java.lang.Exception
+     * @param data1
+     * @param data2
+     * @return 
      */
     @Override
-    public String exec( ArrayList< String > list1, ArrayList< String > list2) throws Exception
+    public String exec( FileData data1, FileData data2 ) throws Exception 
     {
+        ArrayList< String > list1 = data1.getWords();
+        ArrayList< String > list2 = data2.getWords();
+        
         int total1 = 0;
         int total2 = 0;
         
@@ -167,8 +169,8 @@ public class Similarity extends PlagiarismFilter
             result = result + TAB + INSIDE + System.lineSeparator();
         }
 
-        result = result + TAB + COUNT1 + total1 + System.lineSeparator();
-        result = result + TAB + COUNT2 + total2 + System.lineSeparator();
+        result = result + TAB + COUNT1 + data1.getFileName() + ": " + total1 + System.lineSeparator();
+        result = result + TAB + COUNT2 + data2.getFileName() + ": " + total2 + System.lineSeparator();
         result = result + TAB + SIMILAR_COUNT + similarWords + System.lineSeparator();
         result = result + TAB + COSINE + cosineResults.angle + System.lineSeparator();
         result = result + TAB + SCALED_COSINE + cosineResults.scaledAngle + System.lineSeparator();

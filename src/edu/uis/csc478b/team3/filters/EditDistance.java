@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.filters;
 
+import edu.uis.csc478b.team3.FileData;
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -140,7 +141,7 @@ public class EditDistance extends PlagiarismFilter
     }
 
     @Override
-    public String exec(ArrayList<String> list1, ArrayList<String> list2) throws Exception 
+    public String exec( FileData data1, FileData data2 ) throws Exception 
     {
         throw new UnsupportedOperationException("NOT SUPPORTED AS A FILTER");
     }

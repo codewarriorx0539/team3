@@ -114,13 +114,13 @@ public class Plagiarism implements Runnable
             // Word filters
             for( PlagiarismFilter filter : wordFilters)
             {
-                results.wordResults.add( filter.exec( dataSet1.getWords() , dataSet2.getWords() )  );
+                results.wordResults.add( filter.exec( dataSet1 , dataSet2 )  );
             }
             
             // Sentence filters
             for( PlagiarismFilter filter : sentenceFilters)
             {
-                results.sentenceResults.add( filter.exec( dataSet1.getSentences() , dataSet2.getSentences() )  );
+                results.sentenceResults.add( filter.exec( dataSet1 , dataSet2 )  );
             }
             
             // Print output

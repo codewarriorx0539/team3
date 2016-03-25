@@ -121,5 +121,12 @@ public class FileData
     {
         return words;
     }
+
+    public String getFileName() 
+    {
+        return fileName;
+    }
+    
+    
     
 }

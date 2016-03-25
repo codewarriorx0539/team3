@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.filters;
 
+import edu.uis.csc478b.team3.FileData;
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -27,7 +28,7 @@ public abstract class PlagiarismFilter
      * @return Results of the execution of the filter
      * @throws java.lang.Exception
      */
-    public abstract String exec( ArrayList< String > list1, ArrayList< String > list2) throws Exception;
+    public abstract String exec( FileData data1, FileData data2 ) throws Exception;
     
     /**
      * 

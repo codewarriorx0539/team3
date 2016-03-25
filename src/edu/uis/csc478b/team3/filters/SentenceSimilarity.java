@@ -1,6 +1,7 @@
 
 package edu.uis.csc478b.team3.filters;
 
+import edu.uis.csc478b.team3.FileData;
 import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,8 +32,8 @@ public class SentenceSimilarity extends PlagiarismFilter
     final protected String FOUND = "Sentence Similarity: PLAGIARISM FOUND";
     final protected String NOT_FOUND = "SentenceSimilarity: PLAGIARISM NOT FOUND";
     final protected String CONFIGURATION = "CONFIGURATION: ";
-    final protected String TOTAL1 = "Total sentences file1: ";
-    final protected String TOTAL2 = "Total sentences file2: ";
+    final protected String TOTAL1 = "Total sentences ";
+    final protected String TOTAL2 = "Total sentences ";
     final protected String SIMILAR = "Total similar sentences: ";
     final protected String SIMILAR_RATIO = "Sentence Similarity Ratio: ";
     
@@ -78,16 +79,12 @@ public class SentenceSimilarity extends PlagiarismFilter
         }
     }
    
-    /**
-     * Run similarity
-     * 
-     * @param list1
-     * @param list2
-     * @return
-     */
+    
     @Override
-    public String exec( ArrayList< String > list1, ArrayList< String > list2) 
+    public String exec(  FileData data1, FileData data2 ) 
     {
+        ArrayList< String > list1 = data1.getSentences();
+        ArrayList< String > list2 = data2.getSentences();
         int total = 0;
         int totalConsecutiveSentences = 0;
         int indexLastTrigger = 0;
@@ -164,8 +161,8 @@ public class SentenceSimilarity extends PlagiarismFilter
             }
         }
         
-        result = result + TAB + TOTAL1 + total1 + System.lineSeparator();
-        result = result + TAB + TOTAL2 + total2 + System.lineSeparator();
+        result = result + TAB + TOTAL1 + data1.getFileName() + ": " + total1 + System.lineSeparator();
+        result = result + TAB + TOTAL2 + data2.getFileName() + ": " + total2 + System.lineSeparator();
         result = result + TAB + SIMILAR + total + System.lineSeparator();
         result = result + TAB + SIMILAR_RATIO + sentenceSimilarityRatio + System.lineSeparator();
         result = result + TAB + CONFIGURATION + System.lineSeparator();
