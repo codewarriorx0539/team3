@@ -6,7 +6,8 @@ import edu.uis.csc478b.team3.config.Configuration;
 import edu.uis.csc478b.team3.config.PlagiarismTest;
 import edu.uis.csc478b.team3.filters.PlagiarismFilter;
 import edu.uis.csc478b.team3.filters.SentenceSimilarity;
-import edu.uis.csc478b.team3.filters.Similarity;
+import edu.uis.csc478b.team3.filters.WordSimilarity;
+
 import java.io.File;
 import java.util.ArrayList;
 import javax.xml.bind.JAXBContext;
@@ -82,7 +83,7 @@ public class XmlConfig
         ArrayList< PlagiarismFilter > sentenceFilters = new ArrayList< >();
         sentenceFilters.add(sent);
 
-        Similarity wfreq = new Similarity( );
+        WordSimilarity wfreq = new WordSimilarity( );
         ArrayList< PlagiarismFilter > wordFilters = new ArrayList< >();
         wordFilters.add(wfreq);
 
@@ -97,7 +98,7 @@ public class XmlConfig
         
         classes[0] = Configuration.class;
         classes[1] = SentenceSimilarity.class;
-        classes[2] = Similarity.class;
+        classes[2] = WordSimilarity.class;
         
         writeXmlClassFiles("classes.xml", new ClassFiles(classes) );
         writeXmlConfiguration("configuration.xml", configuration, classes);

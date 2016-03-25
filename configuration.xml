@@ -17,7 +17,7 @@
             <sentenceSimilarityThreshold>0.7</sentenceSimilarityThreshold>
             <totalSentenceThreshold>0.3</totalSentenceThreshold>
         </sentenceFilters>
-        <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="similarity">
+        <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wordSimilarity">
             <cosineSimilarityThreshold>0.7</cosineSimilarityThreshold>
             <frequencyLowerBound>0.3</frequencyLowerBound>
             <frequencyUpperBound>3.0</frequencyUpperBound>

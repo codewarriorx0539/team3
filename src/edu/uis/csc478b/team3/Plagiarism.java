@@ -179,7 +179,7 @@ public class Plagiarism implements Runnable
                 Class[] classes = new Class[3];
                 classes[0] = Class.forName( "edu.uis.csc478b.team3.config.Configuration");
                 classes[1] = Class.forName( "edu.uis.csc478b.team3.filters.SentenceSimilarity");
-                classes[2] = Class.forName( "edu.uis.csc478b.team3.filters.Similarity");
+                classes[2] = Class.forName( "edu.uis.csc478b.team3.filters.WordSimilarity");
                         
                 classFiles.setClasses(classes);
                 configFile = args[0];

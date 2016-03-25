@@ -2,5 +2,5 @@
 <classFiles>
     <classes>edu.uis.csc478b.team3.config.Configuration</classes>
     <classes>edu.uis.csc478b.team3.filters.SentenceSimilarity</classes>
-    <classes>edu.uis.csc478b.team3.filters.Similarity</classes>
+    <classes>edu.uis.csc478b.team3.filters.WordSimilarity</classes>
 </classFiles>

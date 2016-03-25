@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class Similarity extends PlagiarismFilter
+public class WordSimilarity extends PlagiarismFilter
 {
     float frequencyLowerBound;
     float frequencyUpperBound;
@@ -29,9 +29,9 @@ public class Similarity extends PlagiarismFilter
     CosineSimilarity cosineSimilarity;
     
     final protected String TAB = "\t";
-    final protected String CLASSIFIER =  "CLASSIFIER: SIMILARITY";
-    final protected String FOUND = "Similarity: PLAGIARISM FOUND";
-    final protected String NOT_FOUND = "Similarity: PLAGIARISM NOT FOUND";
+    final protected String CLASSIFIER =  "CLASSIFIER: WORD SIMILARITY";
+    final protected String FOUND = "Word Similarity: PLAGIARISM FOUND";
+    final protected String NOT_FOUND = "Word Similarity: PLAGIARISM NOT FOUND";
     final protected String OUTSIDE = "Word Difference: OUTSIDE BOUND";
     final protected String INSIDE = "Word Difference: INSIDE BOUND";
     final protected String CONFIGURATION = "CONFIGURATION:";
@@ -41,15 +41,15 @@ public class Similarity extends PlagiarismFilter
     final protected String COSINE = "Cosine Similarity: ";
     final protected String SCALED_COSINE = "Scaled Cosine Similarity: ";
     
-    final protected String UPPER = "frequencyUpperBound: ";
-    final protected String LOWER = "frequencyLowerBound: ";
-    final protected String THRESHOLD = "cosineSimilarityThreshold: ";
+    final protected String UPPER = "Word frequency UpperBound: ";
+    final protected String LOWER = "Word frequency LowerBound: ";
+    final protected String THRESHOLD = "CosineSimilarity Threshold: ";
    
     
     /**
      * Default values for Word frequency
      */
-    public Similarity()
+    public WordSimilarity()
     {
         cosineSimilarityThreshold  = .7f;
         frequencyUpperBound  = 3.0f;
@@ -58,7 +58,7 @@ public class Similarity extends PlagiarismFilter
         cosineSimilarity = new CosineSimilarity();
     }
 
-    public Similarity(  float cosineSimilarityThreshold,
+    public WordSimilarity(  float cosineSimilarityThreshold,
                         float frequencyLowerBound,
                         float frequencyUpperBound) throws Exception
     {
