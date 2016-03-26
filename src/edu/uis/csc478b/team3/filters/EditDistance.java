@@ -2,7 +2,6 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.FileData;
-import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**

@@ -17,8 +17,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Main point of entry into the program. Implements Runnable so it cab be used in 
- * Java's cached thread pool.
+ * The Plagiarism class runs all filters on the two test files. Plagiarism implements 
+ * Runnable so it is a thread of execution. A Plagiarism instance is pushed onto the cached 
+ * thread pool in the main function in this class.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -29,21 +30,28 @@ import java.util.logging.Logger;
  */
 public class Plagiarism implements Runnable 
 {
+    // Used to split common words files that are comma delimited
     final private String COMMA = ",";
+    // Used to split common words files that are newline delimited
     final private String REGEX_NEWLINE = "\\r\\n";
     
+    // Data structure to hold the common words
     final HashSet<String> commonWords = new HashSet<>();        
     
+    // The deserialized XML configuration 
     PlagiarismTest config;
     
+    // Holds the two file names
     final String fileName1;
     final String fileName2;
+    final String commonWordsFileName;
     
+    // Lists of the filters to run on the files
     ArrayList< PlagiarismFilter > sentenceFilters;
     ArrayList< PlagiarismFilter > wordFilters;
     
     /**
-     * Set the files to test and set the filters to run against those files. 
+     * Constructor: Set the test file names and send in the configuration
      * 
      * @param fileName1
      * @param fileName2
@@ -56,6 +64,7 @@ public class Plagiarism implements Runnable
              
         this.sentenceFilters = testCase.getSentenceFilters();
         this.wordFilters = testCase.getWordFilters();
+        this.commonWordsFileName = testCase.getCommonWordsFile();
     }
     
     /**
@@ -84,7 +93,7 @@ public class Plagiarism implements Runnable
      * @param file
      * @throws IOException 
      */
-    public  void readCommonWordFile( String file ) throws IOException
+    private  void readCommonWordFile( String file ) throws IOException
     {
         String commonText = new String( Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
          
@@ -98,17 +107,25 @@ public class Plagiarism implements Runnable
     }
     
     /**
-     * Main entry point for a thread. The files will be opened and processed in the 
-     * thread. All filters are run on the sentences or words. Output is synchronized.
+     * Files will be opened from within the thread to reduce io delays on the main thread.
+     * All filters are run on the sentences or words. Output is synchronized.
      */
     @Override
     public void run()
     {
         try 
         {
+            // Read in common words if configured
+            if( (commonWordsFileName != null) && (!commonWordsFileName.isEmpty()) )
+            {
+                readCommonWordCsvFile(commonWordsFileName);
+            }
+            
+            // Clean up files from noise and optionally filter out common words
             FileData dataSet1 = new FileData( fileName1, commonWords );
             FileData dataSet2 = new FileData( fileName2, commonWords );
             
+            // Holds the results from the filters
             Results results = new Results();
             
             // Word filters
@@ -154,17 +171,38 @@ public class Plagiarism implements Runnable
     }
    
     /**
-     * Main entry for program.
+     * Main entry for the program.
      * 
      * @param args 
      */
     public static void main(String[] args) 
     {
+        // Class names of the basic filters. These need to be declared since the base class
+        // for all filters is abstract and XML needs to know how to build specific abstract XML types
+        final String CONFIG_CLASS = "edu.uis.csc478b.team3.config.Configuration";
+        final String SENTENCE_SIMILARITY_CLASS = "edu.uis.csc478b.team3.filters.SentenceSimilarity";
+        final String CONFIG_WORD_SIMILARITY_CLASS = "edu.uis.csc478b.team3.filters.WordSimilarity";
+        ArrayList<Class> listOfClasses = new ArrayList<>();
+        
+        // The runtime information below is used to scale the throughput of adding new test cases
+        Runtime runtime = Runtime.getRuntime();
+        // Number of bytes in a MegaByte
+        final float MEGABYTE = 1024*1024;
+        // Used to wait for new memory to be reclaimed by the JVM
+        final int SLEEP_MILLISECONDS = 10;
+        // The threshold of the last available MB free in the JVM before we wait for tasks to complete.
+        final float REMAINING_HEAP_MB = 200;
+        // Max size of the heap
+        float heapMax = (runtime.maxMemory()/MEGABYTE);
+        
         try
         {
+            // Test pairs hold a combination of all files
             TestPairs testPairs = new TestPairs();
+            // Serialization/Deserialization of the XML configuration
             XmlConfig xmlConfig = new XmlConfig();
             
+            // If zero arguments create a sample configuration
             if(args.length == 0)
             {
                 xmlConfig.createSampleProfile();
@@ -174,17 +212,19 @@ public class Plagiarism implements Runnable
             ClassFiles classFiles = new ClassFiles();
             String configFile;
             
+            // If only the XML config file is given then use basic steup 
             if(args.length == 1)
             {
-                Class[] classes = new Class[3];
-                classes[0] = Class.forName( "edu.uis.csc478b.team3.config.Configuration");
-                classes[1] = Class.forName( "edu.uis.csc478b.team3.filters.SentenceSimilarity");
-                classes[2] = Class.forName( "edu.uis.csc478b.team3.filters.WordSimilarity");
+                listOfClasses.add( Class.forName(CONFIG_CLASS) );
+                listOfClasses.add( Class.forName(SENTENCE_SIMILARITY_CLASS) );
+                listOfClasses.add( Class.forName(CONFIG_WORD_SIMILARITY_CLASS) );
+                
                         
-                classFiles.setClasses(classes);
+                classFiles.setClasses((Class []) listOfClasses.toArray());
                 configFile = args[0];
 
             }
+            // If Class XML and Config XML are given
             else if(args.length == 2)
             {
                 classFiles = xmlConfig.readXmlClassFiles(args[0]);
@@ -195,20 +235,15 @@ public class Plagiarism implements Runnable
                 throw new Exception("main::main Incorrect Number of Arguments");
             }
 
+            // Read in the XML config file
             Configuration configuration = xmlConfig.readXmlConfiguration( configFile, classFiles.getClasses());
 
             // Get all the test sets
             ArrayList< PlagiarismTest > tests = configuration.getTests();
             // Create a thread pool
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
-
-            Runtime runtime = Runtime.getRuntime();
-            final float MEGABYTE = 1024*1024;
-            final int SLEEP_MILLISECONDS = 10;
-            final float REMAINING_HEAP_MB = 200;
-            float heapMax = (runtime.maxMemory()/MEGABYTE);
-
-            // Iterate over a test set
+            
+            // Iterate over the test sets
             for(PlagiarismTest testCase : tests)
             {
                 // Get the files to test against
@@ -219,13 +254,14 @@ public class Plagiarism implements Runnable
                 // Push each test onto the queue which will be run as a thread 
                 for(TestPair tp : pairs)
                 {
+                    // Test to see if we have enough memory
                     float heapFree = (runtime.freeMemory()/MEGABYTE);
                     float heapTotal = (runtime.totalMemory()/MEGABYTE);
                     int count = 0;
                     while( (heapMax - (heapTotal - heapFree))  < REMAINING_HEAP_MB)
                     {
                         count++;
-                        // If we've paused for 1 second
+                        // If we've paused for 1 second in total then try to force a garbage collection cycle
                         if(count > 100)
                         {
                             runtime.gc();
@@ -239,7 +275,6 @@ public class Plagiarism implements Runnable
 
             // Close threadpool after all test suites are complete
             executor.shutdown();
-           
             
         }
         catch(Exception ex)

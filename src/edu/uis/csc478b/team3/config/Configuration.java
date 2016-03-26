@@ -19,11 +19,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Configuration 
 {
+    // Holds any notes
     String notes;
+    // Holds the list of tests
     ArrayList<PlagiarismTest> list;
         
     /**
-     * Default notes
+     * Set the notes
      */
     public Configuration()
     {

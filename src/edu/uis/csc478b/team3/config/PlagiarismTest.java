@@ -56,7 +56,7 @@ public class PlagiarismTest
     {
         this.commonWordsFile = commonWordsFile;
     }
-
+    
     public ArrayList<PlagiarismFilter> getSentenceFilters() 
     {
         return sentenceFilters;

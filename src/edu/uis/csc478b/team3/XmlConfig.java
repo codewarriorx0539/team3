@@ -16,6 +16,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 /**
+ * XmlConfig serializes/deserializes XML configuration files and creates a sample
+ * when requested.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -26,6 +28,13 @@ import javax.xml.bind.Unmarshaller;
  */
 public class XmlConfig 
 {
+    /**
+     * Read the XML class files
+     * 
+     * @param fileName
+     * @return
+     * @throws JAXBException 
+     */
     public ClassFiles readXmlClassFiles(String fileName ) throws JAXBException
     {
         File file = new File(fileName);
@@ -35,6 +44,13 @@ public class XmlConfig
         return (ClassFiles) jaxbUnmarshaller.unmarshal(file);
     }
     
+    /**
+     * Write XML class files
+     * 
+     * @param fileName
+     * @param classFiles
+     * @throws JAXBException 
+     */
     public void writeXmlClassFiles(String fileName, ClassFiles classFiles) throws JAXBException
     {
         JAXBContext jaxbContext = JAXBContext.newInstance( ClassFiles.class );
@@ -46,6 +62,14 @@ public class XmlConfig
         jaxbMarshaller.marshal(classFiles, System.out);
     }
     
+    /**
+     * Read the XML configuration
+     * 
+     * @param fileName
+     * @param classes
+     * @return
+     * @throws JAXBException 
+     */
     public Configuration readXmlConfiguration(String fileName , Class[] classes) throws JAXBException
     {
         File file = new File(fileName);
@@ -54,7 +78,15 @@ public class XmlConfig
         
         return (Configuration) jaxbUnmarshaller.unmarshal(file);
     }
-       
+    
+    /**
+     * Write the XML configuration
+     * 
+     * @param fileName
+     * @param configuration
+     * @param classes
+     * @throws JAXBException 
+     */
     public void writeXmlConfiguration(String fileName, Configuration configuration, Class[] classes) throws JAXBException
     {
         JAXBContext jaxbContext = JAXBContext.newInstance( classes, null );
@@ -66,6 +98,12 @@ public class XmlConfig
         jaxbMarshaller.marshal(configuration, System.out);
     }
     
+    /**
+     * Create sample profile
+     * 
+     * @throws JAXBException
+     * @throws Exception 
+     */
     public void createSampleProfile() throws JAXBException, Exception
     {
         // Programmically set configuration
@@ -104,8 +142,4 @@ public class XmlConfig
         writeXmlConfiguration("configuration.xml", configuration, classes);
     }
     
-    
-    
-    
-
 }

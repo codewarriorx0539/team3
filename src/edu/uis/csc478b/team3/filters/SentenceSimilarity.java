@@ -27,7 +27,6 @@ public class SentenceSimilarity extends PlagiarismFilter
     float totalSentenceThreshold;
     int consecutiveSentences;
     
-    final protected String TAB = "\t";
     final protected String CLASSIFIER = "CLASSIFIER: SENTENCE SIMILARITY";
     final protected String FOUND = "Sentence Similarity: PLAGIARISM FOUND";
     final protected String NOT_FOUND = "SentenceSimilarity: PLAGIARISM NOT FOUND";

@@ -2,7 +2,6 @@
 package edu.uis.csc478b.team3.filters;
 
 import edu.uis.csc478b.team3.FileData;
-import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -21,16 +20,17 @@ public abstract class PlagiarismFilter
     final protected String TAB = "\t";
     
     /**
-     * Take in words or sentences and return the results
+     * Send in parsed files.
      * 
-     * @param list1
-     * @param list2
-     * @return Results of the execution of the filter
-     * @throws java.lang.Exception
+     * @param data1
+     * @param data2
+     * @return
+     * @throws Exception 
      */
     public abstract String exec( FileData data1, FileData data2 ) throws Exception;
     
     /**
+     * Get the configuration of this specific filter
      * 
      * @return 
      */
