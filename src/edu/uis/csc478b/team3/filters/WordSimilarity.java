@@ -46,6 +46,7 @@ public class WordSimilarity extends PlagiarismFilter
     final protected String SIMILAR_COUNT = "Similar word count: ";
     final protected String COSINE = "Cosine Similarity: ";
     final protected String SCALED_COSINE = "Scaled Cosine Similarity: ";
+    final protected String WORD_FREQ_RATIO = "Word frequency ratio: ";
     
     final protected String UPPER = "Word frequency UpperBound: ";
     final protected String LOWER = "Word frequency LowerBound: ";
@@ -203,6 +204,7 @@ public class WordSimilarity extends PlagiarismFilter
         result = result + TAB + SIMILAR_COUNT + similarWords + System.lineSeparator();
         result = result + TAB + COSINE + cosineResults.angle + System.lineSeparator();
         result = result + TAB + SCALED_COSINE + cosineResults.scaledAngle + System.lineSeparator();
+        result = result + TAB + WORD_FREQ_RATIO + ratioWords + System.lineSeparator();
         result = result + TAB + CONFIGURATION + System.lineSeparator();
         result = result + getConfigSetup();
             
