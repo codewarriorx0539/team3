@@ -24,7 +24,7 @@ import java.util.HashSet;
 public class FileData 
 {
     // Used to split the sentences. This can be an issue with acronymns but acceptable per customer
-    final private String REGEX_SENTENCE_ENDING = "\\.\\?!";
+    final private String REGEX_SENTENCE_ENDING = "[\\.\\?!]";
     // Used to remove punctuation
     final private String REGEX_NON_ALPHANUMERIC_SYNTAX = "[^a-zA-Z\\d\\s]";
     // Used to split on whitespace boundaries

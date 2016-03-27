@@ -10,8 +10,10 @@ import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Similarity vectorizes the words of two documents and computes the cosine similarity. 
- * https://en.wikipedia.org/wiki/Cosine_similarity 
+ * Similarity vectorizes the words of the two documents and computes the cosine similarity 
+ * https://en.wikipedia.org/wiki/Cosine_similarity and a calculated value called
+ * scaled similarity. Scaled similarity is the Cosine Similarity multiplied by the 
+ * ratio of the word counts with the minimum of the two in the numerator.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -23,8 +25,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class WordSimilarity extends PlagiarismFilter
 {
+    // Used in descriptive stats to describe if the two documents are similar in
+    // word count
     float frequencyLowerBound;
     float frequencyUpperBound;
+    
+    // Threshold of acceptable closeness
     float cosineSimilarityThreshold;
     CosineSimilarity cosineSimilarity;
     
@@ -47,7 +53,7 @@ public class WordSimilarity extends PlagiarismFilter
    
     
     /**
-     * Default values for Word frequency
+     * Constructor: Default values for Word frequency
      */
     public WordSimilarity()
     {
@@ -58,9 +64,17 @@ public class WordSimilarity extends PlagiarismFilter
         cosineSimilarity = new CosineSimilarity();
     }
 
+    /**
+     * Constructor: Set bounding values
+     * 
+     * @param cosineSimilarityThreshold
+     * @param frequencyLowerBound
+     * @param frequencyUpperBound
+     * @throws Exception 
+     */
     public WordSimilarity(  float cosineSimilarityThreshold,
-                        float frequencyLowerBound,
-                        float frequencyUpperBound) throws Exception
+                            float frequencyLowerBound,
+                            float frequencyUpperBound) throws Exception
     {
         this.cosineSimilarityThreshold = cosineSimilarityThreshold;   
         this.frequencyLowerBound = frequencyLowerBound;
@@ -74,6 +88,7 @@ public class WordSimilarity extends PlagiarismFilter
     }
 
     /**
+     * Calculate stats and determine Plagiarism
      * 
      * @param data1
      * @param data2
@@ -91,6 +106,7 @@ public class WordSimilarity extends PlagiarismFilter
         Map<String, Integer> map1 = new TreeMap<>();
         Map<String, Integer> map2 = new TreeMap<>();
         
+        // Create a word histogram for both files
         for( String word : list1)
         {
             if( map1.containsKey(word) == true)
@@ -125,6 +141,7 @@ public class WordSimilarity extends PlagiarismFilter
 
         float similarWords = 0;
 
+        // Calcualte total word similarity
         for(Map.Entry<String,Integer> entry : map1.entrySet())
         {
             if( map2.containsKey(entry.getKey()) == true)
@@ -143,12 +160,24 @@ public class WordSimilarity extends PlagiarismFilter
             }
         }
 
+        // Calculate cosine similairty and scaled cosine similarity
         SimilarityResults cosineResults = cosineSimilarity.calcCosineSimilarity(map1, map2);
         
         String result = TAB + CLASSIFIER + System.lineSeparator();
         
-        float ratioWords = (float) total1 / (float) total2;
+        float ratioWords;
         
+        // Calculate the ratio of words and determine if we are in acceptable bounds
+        if( total1 > total2)
+        {
+            ratioWords = (float) total2 / (float) total1;
+        }
+        else
+        {
+            ratioWords = (float) total1 / (float) total2;
+        } 
+        
+        // Determine if there is plagiarism
         if( cosineSimilarityThreshold < cosineResults.angle )
         {
             result = result + TAB + FOUND + System.lineSeparator();

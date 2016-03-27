@@ -36,6 +36,7 @@ public class CosineSimilarity
            throw new NullPointerException("CosineSimilarity::calcCosineSimilarity");
         }
 
+        // Calculate Cosine Similarity
         for (Map.Entry<String, Integer> entry : wordFrequency1.entrySet()) 
         {
            String key = entry.getKey();

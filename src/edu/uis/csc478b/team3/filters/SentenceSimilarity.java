@@ -149,7 +149,18 @@ public class SentenceSimilarity extends PlagiarismFilter
         }
         else
         {
-            sentenceSimilarityRatio = (float)total/(float)total1;
+            float smallest;
+            
+            if(total1 > total2)
+            {
+                smallest = total2;
+            }
+            else
+            {
+                smallest = total1;
+            }
+            
+            sentenceSimilarityRatio = (float)total/(float)smallest;
             if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {
                 result = result + TAB + FOUND + System.lineSeparator();

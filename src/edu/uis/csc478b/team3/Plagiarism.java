@@ -177,26 +177,27 @@ public class Plagiarism implements Runnable
      */
     public static void main(String[] args) 
     {
-        // Class names of the basic filters. These need to be declared since the base class
-        // for all filters is abstract and XML needs to know how to build specific abstract XML types
-        final String CONFIG_CLASS = "edu.uis.csc478b.team3.config.Configuration";
-        final String SENTENCE_SIMILARITY_CLASS = "edu.uis.csc478b.team3.filters.SentenceSimilarity";
-        final String CONFIG_WORD_SIMILARITY_CLASS = "edu.uis.csc478b.team3.filters.WordSimilarity";
-        ArrayList<Class> listOfClasses = new ArrayList<>();
-        
-        // The runtime information below is used to scale the throughput of adding new test cases
-        Runtime runtime = Runtime.getRuntime();
-        // Number of bytes in a MegaByte
-        final float MEGABYTE = 1024*1024;
-        // Used to wait for new memory to be reclaimed by the JVM
-        final int SLEEP_MILLISECONDS = 10;
-        // The threshold of the last available MB free in the JVM before we wait for tasks to complete.
-        final float REMAINING_HEAP_MB = 200;
-        // Max size of the heap
-        float heapMax = (runtime.maxMemory()/MEGABYTE);
-        
         try
         {
+            // Class names of the basic filters. These need to be declared since the base class
+            // for all filters is abstract and XML needs to know how to build specific abstract XML types
+            final String CONFIG_CLASS = "edu.uis.csc478b.team3.config.Configuration";
+            final String SENTENCE_SIMILARITY_CLASS = "edu.uis.csc478b.team3.filters.SentenceSimilarity";
+            final String CONFIG_WORD_SIMILARITY_CLASS = "edu.uis.csc478b.team3.filters.WordSimilarity";
+            Class [] listOfClasses = new Class [3];
+
+            // The runtime information below is used to scale the throughput of adding new test cases
+            Runtime runtime = Runtime.getRuntime();
+            // Number of bytes in a MegaByte
+            final float MEGABYTE = 1024*1024;
+            // Used to wait for new memory to be reclaimed by the JVM
+            final int SLEEP_MILLISECONDS = 10;
+            // The threshold of the last available MB free in the JVM before we wait for tasks to complete.
+            final float REMAINING_HEAP_MB = 200;
+            // Max size of the heap
+            float heapMax = (runtime.maxMemory()/MEGABYTE);
+        
+        
             // Test pairs hold a combination of all files
             TestPairs testPairs = new TestPairs();
             // Serialization/Deserialization of the XML configuration
@@ -215,12 +216,11 @@ public class Plagiarism implements Runnable
             // If only the XML config file is given then use basic steup 
             if(args.length == 1)
             {
-                listOfClasses.add( Class.forName(CONFIG_CLASS) );
-                listOfClasses.add( Class.forName(SENTENCE_SIMILARITY_CLASS) );
-                listOfClasses.add( Class.forName(CONFIG_WORD_SIMILARITY_CLASS) );
-                
-                        
-                classFiles.setClasses((Class []) listOfClasses.toArray());
+                listOfClasses[0] = Class.forName(CONFIG_CLASS);
+                listOfClasses[1] =  Class.forName(SENTENCE_SIMILARITY_CLASS);
+                listOfClasses[2] = Class.forName(CONFIG_WORD_SIMILARITY_CLASS);
+                  
+                classFiles.setClasses(listOfClasses);
                 configFile = args[0];
 
             }

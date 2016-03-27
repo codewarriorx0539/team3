@@ -34,6 +34,9 @@ public class EditDistance extends PlagiarismFilter
     final protected String DELETION = "deletionCost: ";
     final protected String SUBSTITUTION = "substitutionCost: ";
     
+    /**
+     * Default operation costs.
+     */
     public EditDistance()
     {
         insertCost = 1.0f;        
@@ -41,7 +44,14 @@ public class EditDistance extends PlagiarismFilter
         substitutionCost = 1.5f; 
     }
     
-
+    /**
+     * Constructor: Set the values for the operations
+     * 
+     * @param insertCost
+     * @param deletionCost
+     * @param substitutionCost
+     * @throws Exception 
+     */
     public EditDistance(    float insertCost, 
                             float deletionCost, 
                             float substitutionCost) throws Exception
@@ -58,34 +68,35 @@ public class EditDistance extends PlagiarismFilter
     }
     
     /**
-     * Calculate the distance between two strings. A perfect match returns zero
+     * Calculate the edit distance between two strings. A perfect match returns zero.
      * 
-     * @param compareString String to compare
-     * @param masterString String to compare
+     * @param string1
+     * @param string2
      * @return Total distance the strings are different based on the weighted operations
      */
-    public float getDistance( String compareString, String masterString )
+    public float getDistance( String string1, String string2 )
     {
-        int masterStringLen = masterString.length();
-        int compareStringLen = compareString.length();
+        int string1Len = string1.length();
+        int string2Len = string2.length();
         
-        float table[][] = new float[ masterStringLen + 1 ][ compareStringLen + 1];
         
-        for(int i =0; i < masterStringLen + 1; i++)
+        float table[][] = new float[ string2Len + 1 ][ string1Len + 1];
+        
+        for(int i =0; i < string2Len + 1; i++)
         {
             table[i][0] = insertCost * i;
         }
         
-        for(int j =0; j < compareStringLen + 1; j++)
+        for(int j =0; j < string1Len + 1; j++)
         {
             table[0][j] = deletionCost * j;
         }
 
-        for(int i = 1; i < masterStringLen + 1; i++)
+        for(int i = 1; i < string2Len + 1; i++)
         {
-            for(int j = 1; j < compareStringLen + 1; j++)
+            for(int j = 1; j < string1Len + 1; j++)
             {
-                if(masterString.charAt(i - 1) == compareString.charAt(j - 1))
+                if(string2.charAt(i - 1) == string1.charAt(j - 1))
                 {
                     table[i][j] = Math.min(table[i -1 ][j -1], Math.min( table[i ][j -1] + deletionCost , table[i -1 ][j] + insertCost));
                 }
@@ -96,7 +107,7 @@ public class EditDistance extends PlagiarismFilter
             }
         }
 
-        return table[masterStringLen][compareStringLen];
+        return table[string2Len][string1Len];
     }
     
     public float getInsertCost() 
