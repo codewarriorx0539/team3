@@ -2,7 +2,7 @@
 package edu.uis.csc478b.team3;
 
 /**
- * Holds two files to test for plagiarism.
+ * TestPair: holds two files to test for plagiarism.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *

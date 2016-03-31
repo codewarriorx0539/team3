@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 /**
- * The class FileData opens a file and pre-filters the data cleaning capitalization, 
+ * FileData: opens a file and pre-filters the data removing capitalization, 
  * punctuation, and extra whitespace. FileData holds two arrays of the filtered data. 
  * One array contains the words of the file and the other array holds the sentences 
  * of the file.  

@@ -6,8 +6,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Configuration is the top level XML node. This contains system wide 
- * information. A child node is a list of all the Plagiarism tests to be preformed.
+ * Configuration: is the top level XML node. This contains system wide 
+ * information. A child node is a list of all the Plagiarism tests to be preformed
+ * and related configuration.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *

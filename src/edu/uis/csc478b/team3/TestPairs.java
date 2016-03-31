@@ -4,7 +4,7 @@ package edu.uis.csc478b.team3;
 import java.util.ArrayList;
 
 /**
- * Creates all the combinations possible of two files to test for plagiarism.
+ * TestPairs: creates all the combinations possible of two files to test for plagiarism.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *

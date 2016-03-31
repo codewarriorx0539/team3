@@ -5,7 +5,7 @@ import edu.uis.csc478b.team3.FileData;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Abstract base for all filters including word and sentence filters.
+ * PlagiarismFilter: abstract base for all filters including word and sentence filters.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -20,11 +20,11 @@ public abstract class PlagiarismFilter
     final protected String TAB = "\t";
     
     /**
-     * Send in parsed files.
+     * Run the filter on the parsed files and return results as a string.
      * 
      * @param data1
      * @param data2
-     * @return
+     * @return Results of filtering
      * @throws Exception 
      */
     public abstract String exec( FileData data1, FileData data2 ) throws Exception;

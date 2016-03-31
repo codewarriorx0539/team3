@@ -16,7 +16,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 /**
- * XmlConfig serializes/deserializes XML configuration files and creates a sample
+ * XmlConfig: serializes/deserializes XML configuration files and creates a sample
  * when requested.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
@@ -99,7 +99,7 @@ public class XmlConfig
     }
     
     /**
-     * Create sample profile
+     * Create a sample XML config and serialize it.
      * 
      * @throws JAXBException
      * @throws Exception 

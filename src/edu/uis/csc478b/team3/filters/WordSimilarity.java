@@ -10,7 +10,7 @@ import java.util.TreeMap;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Similarity vectorizes the words of the two documents and computes the cosine similarity 
+ * Word Similarity: vectorizes the words of the two documents and computes the cosine similarity 
  * https://en.wikipedia.org/wiki/Cosine_similarity and a calculated value called
  * scaled similarity. Scaled similarity is the Cosine Similarity multiplied by the 
  * ratio of the word counts with the minimum of the two in the numerator.
@@ -46,7 +46,7 @@ public class WordSimilarity extends PlagiarismFilter
     final protected String SIMILAR_COUNT = "Similar word count: ";
     final protected String COSINE = "Cosine Similarity: ";
     final protected String SCALED_COSINE = "Scaled Cosine Similarity: ";
-    final protected String WORD_FREQ_RATIO = "Word frequency ratio: ";
+    final protected String WORD_FREQ_RATIO = "Words ratio: ";
     
     final protected String UPPER = "Word frequency UpperBound: ";
     final protected String LOWER = "Word frequency LowerBound: ";
@@ -89,11 +89,12 @@ public class WordSimilarity extends PlagiarismFilter
     }
 
     /**
-     * Calculate stats and determine Plagiarism
+     * Calculate stats, cosine similarity, and determine Plagiarism
      * 
      * @param data1
      * @param data2
      * @return 
+     * @throws java.lang.Exception 
      */
     @Override
     public String exec( FileData data1, FileData data2 ) throws Exception 

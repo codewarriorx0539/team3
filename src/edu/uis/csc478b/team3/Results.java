@@ -4,7 +4,7 @@ package edu.uis.csc478b.team3;
 import java.util.ArrayList;
 
 /**
- * The results class holds all the results for all the tests.
+ * Results: holds all the results for all the tests.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *

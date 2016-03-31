@@ -4,9 +4,8 @@ package edu.uis.csc478b.team3.filters.algorithms;
 import java.util.Map;
 
 /**
- * Characterize the words as vector components and compute the angle between the 
- * two vectors. The smaller the angle the more similar the vector.
- * https://en.wikipedia.org/wiki/Cosine_similarity
+ * CosineSimilarity: characterize words as vector components and compute the 
+ * angle between the two vectors. https://en.wikipedia.org/wiki/Cosine_similarity
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *

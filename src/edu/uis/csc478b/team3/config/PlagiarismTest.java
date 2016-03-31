@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlElement;
 
 /**
- * PlagiarismTest contains all the information to test a set of files against each other.
+ * PlagiarismTest: contains all the information to test a set of files against each other.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -23,16 +23,16 @@ public class PlagiarismTest
     // Path to common words file; can be empty or null
     String commonWordsFile;
     
+    // Specific filters
     ArrayList< PlagiarismFilter > sentenceFilters;
     ArrayList< PlagiarismFilter > wordFilters;
     
     /**
-     * Initialize values
+     * Constructor: Initialize values
      */
     public PlagiarismTest()
     {        
         commonWordsFile = "";
-       
     }
 
     public ArrayList<String> getFiles() 

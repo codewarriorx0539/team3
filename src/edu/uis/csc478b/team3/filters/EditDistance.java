@@ -5,7 +5,7 @@ import edu.uis.csc478b.team3.FileData;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Edit distance is a way of quantifying how similar two strings are to one another by counting
+ * Edit distance: is a way of quantifying how similar two strings are to one another by counting
  * the minimum number of operations required to transform one string into the other.
  * https://en.wikipedia.org/wiki/Edit_distance
  * 
@@ -35,7 +35,7 @@ public class EditDistance extends PlagiarismFilter
     final protected String SUBSTITUTION = "substitutionCost: ";
     
     /**
-     * Default operation costs.
+     * Constructor: Default operation costs.
      */
     public EditDistance()
     {

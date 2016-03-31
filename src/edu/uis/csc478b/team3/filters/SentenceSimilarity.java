@@ -6,10 +6,12 @@ import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * SentenceSimilarity classifier compares a sentence in one file against the other 
- * file N number of sentences ahead, behind, and exact. A short circuit option 
- * is available that tests the number of consecutive sentences. If a block of 
- * sentences are the same one after the other An early detection can trigger.
+ * SentenceSimilarity: is a classifier that compares a sentence in one file against the other 
+ * file N number of sentences ahead and behind. This classifier makes the
+ * implicit assumption that someone who plagiarizes a document will plagiarize 
+ * in the same locality. A short circuit option is available that tests the number 
+ * of consecutive sentences. If a block of sentences are the same one after the 
+ * other plagiarism detection can trigger.
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -21,11 +23,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SentenceSimilarity extends PlagiarismFilter 
 {
-    EditDistance editDistance;
-    float threshold;
-    int range;
-    float totalSentenceThreshold;
-    int consecutiveSentences;
+    EditDistance editDistance;          // Used to calculate distance between sentences
+    float threshold;                    // Distance threshold when sweeping a sentence against a set of sentences in another file
+    int range;                          // The number of sentences to sweep behind and ahead.
+    float totalSentenceThreshold;       // Ratio of plagiarized sentences that triggers plagiarism
+    int consecutiveSentences;           // Optional short circuit plagiarism based on plagiarized consecutive sentences
     
     final protected String CLASSIFIER = "CLASSIFIER: SENTENCE SIMILARITY";
     final protected String FOUND = "Sentence Similarity: PLAGIARISM FOUND";
@@ -41,17 +43,29 @@ public class SentenceSimilarity extends PlagiarismFilter
     final protected String TOTAL_THRESHOLD =  "totalSentenceThreshold: ";
     final protected String CONSECUTIVE = "consecutiveSentences: ";
 
+    /**
+     * Constructor: default that works for most situations
+     */
     public SentenceSimilarity()
     {
         range = 3;                      // 3 behind 3 ahead
-        threshold = .70f;               // if sentence is 70% 
-        totalSentenceThreshold = .30f;  // If 30% of sentences in document are similar
-        consecutiveSentences = -1;      // (-1 ignore blocks as a trigger) or (num consecutive or total sentence that are similar)
+        threshold = .70f;               // if sentence is 70% similar
+        totalSentenceThreshold = .30f;  // If 30% of the sentences in document are similar
+        consecutiveSentences = -1;      // -1 ignore blocks of similarity as a trigger
         
         editDistance = new EditDistance();
     }
     
-
+    /**
+     * Constructor: set all thresholds and configurations
+     * 
+     * @param range
+     * @param threshold
+     * @param totalSentenceThreshold
+     * @param consecutiveSentences
+     * @param editDistance
+     * @throws Exception 
+     */
     public  SentenceSimilarity( int range, 
                                 float threshold, 
                                 float totalSentenceThreshold, 
@@ -78,7 +92,13 @@ public class SentenceSimilarity extends PlagiarismFilter
         }
     }
    
-    
+    /**
+     * Run the filter and try to detect plagiarism.
+     * 
+     * @param data1
+     * @param data2
+     * @return 
+     */
     @Override
     public String exec(  FileData data1, FileData data2 ) 
     {
@@ -143,10 +163,12 @@ public class SentenceSimilarity extends PlagiarismFilter
         
         String result = TAB + CLASSIFIER + System.lineSeparator();
         
-        if(consecutiveSentences != -1 && done == true)
+        // Test to see if we are testing consecutive blocks and if we short circuited.
+        if( done == true)
         {
             result = result + TAB + FOUND + System.lineSeparator();
         }
+        // If we have not short circuited see if we have plagiarism
         else
         {
             float smallest;
@@ -160,6 +182,7 @@ public class SentenceSimilarity extends PlagiarismFilter
                 smallest = total1;
             }
             
+            // Test to see if we surpassed the threshold
             sentenceSimilarityRatio = (float)total/(float)smallest;
             if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {

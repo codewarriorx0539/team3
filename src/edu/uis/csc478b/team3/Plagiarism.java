@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The Plagiarism class runs all filters on the two test files. Plagiarism implements 
+ * Plagiarism: runs all filters on the two test files. Plagiarism implements 
  * Runnable so it is a thread of execution. A Plagiarism instance is pushed onto the cached 
  * thread pool in the main function in this class.
  * 
@@ -33,7 +33,7 @@ public class Plagiarism implements Runnable
     // Used to split common words files that are comma delimited
     final private String COMMA = ",";
     // Used to split common words files that are newline delimited
-    final private String REGEX_NEWLINE = "\\r\\n";
+    final private String REGEX_NEWLINE = "\\r\\n|\\n";
     
     // Data structure to hold the common words
     final HashSet<String> commonWords = new HashSet<>();        
@@ -103,12 +103,12 @@ public class Plagiarism implements Runnable
         {
             commonWords.add( word.trim() );
         }
-        
     }
     
     /**
      * Files will be opened from within the thread to reduce io delays on the main thread.
      * All filters are run on the sentences or words. Output is synchronized.
+     * 
      */
     @Override
     public void run()

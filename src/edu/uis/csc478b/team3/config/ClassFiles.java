@@ -5,7 +5,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Classes file holds all the class names for the filters (due to abstract filter types).
+ * ClassFiles: holds all the class names for the filters used in the XML file 
+ * (due to abstract filter types).
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
