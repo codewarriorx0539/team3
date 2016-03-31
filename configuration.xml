@@ -13,6 +13,7 @@
         <file>test_reagan.txt</file>
         <file>test_reagan_delete_last_paragraph.txt</file>
         <file>test_bryan.txt</file>
+        <file>test_jobs_copy.txt</file>
         <sentenceFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sentenceSimilarity">
             <consecutiveSentences>-1</consecutiveSentences>
             <editDistance>
