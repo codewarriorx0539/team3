@@ -115,7 +115,7 @@ public class EditDistance extends PlagiarismFilter
         return insertCost;
     }
 
-    public void setInsertCost(float insertCost) 
+    synchronized public void setInsertCost(float insertCost) 
     {
         this.insertCost = insertCost;
     }
@@ -125,7 +125,7 @@ public class EditDistance extends PlagiarismFilter
         return deletionCost;
     }
 
-    public void setDeletionCost(float deletionCost) 
+    synchronized public void setDeletionCost(float deletionCost) 
     {
         this.deletionCost = deletionCost;
     }
@@ -135,7 +135,7 @@ public class EditDistance extends PlagiarismFilter
         return substitutionCost;
     }
 
-    public void setSubstitutionCost(float substitutionCost) 
+    synchronized public void setSubstitutionCost(float substitutionCost) 
     {
         this.substitutionCost = substitutionCost;
     }

@@ -217,7 +217,7 @@ public class WordSimilarity extends PlagiarismFilter
         return frequencyLowerBound;
     }
 
-    public void setFrequencyLowerBound(float frequencyLowerBound) 
+    synchronized  public void setFrequencyLowerBound(float frequencyLowerBound) 
     {
         this.frequencyLowerBound = frequencyLowerBound;
     }
@@ -227,7 +227,7 @@ public class WordSimilarity extends PlagiarismFilter
         return frequencyUpperBound;
     }
 
-    public void setFrequencyUpperBound(float frequencyUpperBound)
+    synchronized public void setFrequencyUpperBound(float frequencyUpperBound)
     {
         this.frequencyUpperBound = frequencyUpperBound;
     }
@@ -237,7 +237,7 @@ public class WordSimilarity extends PlagiarismFilter
         return cosineSimilarityThreshold;
     }
 
-    public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) 
+    synchronized public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) 
     {
         this.cosineSimilarityThreshold = cosineSimilarityThreshold;
     }

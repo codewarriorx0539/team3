@@ -100,7 +100,7 @@ public class SentenceSimilarity extends PlagiarismFilter
      * @return 
      */
     @Override
-    public String exec(  FileData data1, FileData data2 ) 
+    public String exec( FileData data1, FileData data2 ) 
     {
         ArrayList< String > list1 = data1.getSentences();
         ArrayList< String > list2 = data2.getSentences();
@@ -209,7 +209,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         return editDistance;
     }
 
-    public void setEditDistance(EditDistance editDistance) 
+    synchronized public void setEditDistance(EditDistance editDistance) 
     {
         this.editDistance = editDistance;
     }
@@ -219,7 +219,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         return totalSentenceThreshold;
     }
 
-    public void setTotalSentenceThreshold(float totalSentenceThreshold) 
+    synchronized public void setTotalSentenceThreshold(float totalSentenceThreshold) 
     {
         this.totalSentenceThreshold = totalSentenceThreshold;
     }
@@ -229,7 +229,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         return consecutiveSentences;
     }
 
-    public void setConsecutiveSentences(int consecutiveSentences) 
+    synchronized public void setConsecutiveSentences(int consecutiveSentences) 
     {
         this.consecutiveSentences = consecutiveSentences;
     }
@@ -239,7 +239,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         return range;
     }
 
-    public void setSentenceSimilarityRange(int sentenceSimilarityRange) 
+    synchronized public void setSentenceSimilarityRange(int sentenceSimilarityRange) 
     {
         range = sentenceSimilarityRange;
     }
@@ -249,7 +249,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         return threshold;
     }
 
-    public void setSentenceSimilarityThreshold(float sentenceSimilarityThreshold) 
+    synchronized public void setSentenceSimilarityThreshold(float sentenceSimilarityThreshold) 
     {
         threshold = sentenceSimilarityThreshold;
     }
