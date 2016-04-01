@@ -2,7 +2,7 @@
 <configuration>
     <notes>Hello Roger, thanks for allowing us to put a great project together.</notes>
     <test>
-        <commonWordsFile></commonWordsFile>
+        <commonWordsFile>common.txt</commonWordsFile>
         <file>test_jake.txt</file>
         <file>test_jfk.txt</file>
         <file>test_jfk_insert_random_text.txt</file>
@@ -28,7 +28,6 @@
         <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wordSimilarity">
             <cosineSimilarityThreshold>0.7</cosineSimilarityThreshold>
             <frequencyLowerBound>0.3</frequencyLowerBound>
-            <frequencyUpperBound>3.0</frequencyUpperBound>
         </wordFilters>
     </test>
 </configuration>

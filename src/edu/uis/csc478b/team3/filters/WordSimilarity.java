@@ -28,7 +28,6 @@ public class WordSimilarity extends PlagiarismFilter
     // Used in descriptive stats to describe if the two documents are similar in
     // word count
     float frequencyLowerBound;
-    float frequencyUpperBound;
     
     // Threshold of acceptable closeness
     float cosineSimilarityThreshold;
@@ -48,7 +47,6 @@ public class WordSimilarity extends PlagiarismFilter
     final protected String SCALED_COSINE = "Scaled Cosine Similarity: ";
     final protected String WORD_FREQ_RATIO = "Words ratio: ";
     
-    final protected String UPPER = "Word frequency UpperBound: ";
     final protected String LOWER = "Word frequency LowerBound: ";
     final protected String THRESHOLD = "CosineSimilarity Threshold: ";
    
@@ -59,7 +57,6 @@ public class WordSimilarity extends PlagiarismFilter
     public WordSimilarity()
     {
         cosineSimilarityThreshold  = .7f;
-        frequencyUpperBound  = 3.0f;
         frequencyLowerBound  = .3f;
         
         cosineSimilarity = new CosineSimilarity();
@@ -79,7 +76,6 @@ public class WordSimilarity extends PlagiarismFilter
     {
         this.cosineSimilarityThreshold = cosineSimilarityThreshold;   
         this.frequencyLowerBound = frequencyLowerBound;
-        this.frequencyUpperBound = frequencyUpperBound;
         
         // BOUNDS CHECK
         if(frequencyLowerBound < 0 || cosineSimilarityThreshold < -1 || cosineSimilarityThreshold > 1)
@@ -191,7 +187,7 @@ public class WordSimilarity extends PlagiarismFilter
          
         // Means the ratio of words is absurdly differently like one document as 
         // 1000 words and the other 2 words. Tested as a percentages/ratio
-        if( (frequencyUpperBound < ratioWords)  || (frequencyLowerBound > ratioWords) )
+        if( frequencyLowerBound > ratioWords )
         {
             result = result + TAB + OUTSIDE + System.lineSeparator();
         }
@@ -222,16 +218,6 @@ public class WordSimilarity extends PlagiarismFilter
         this.frequencyLowerBound = frequencyLowerBound;
     }
 
-    public float getFrequencyUpperBound() 
-    {
-        return frequencyUpperBound;
-    }
-
-    synchronized public void setFrequencyUpperBound(float frequencyUpperBound)
-    {
-        this.frequencyUpperBound = frequencyUpperBound;
-    }
-
     public float getCosineSimilarityThreshold() 
     {
         return cosineSimilarityThreshold;
@@ -245,8 +231,7 @@ public class WordSimilarity extends PlagiarismFilter
     @Override
     public String getConfigSetup() 
     {
-        String setup = TAB + UPPER + frequencyUpperBound + System.lineSeparator();
-        setup = setup + TAB + LOWER + frequencyLowerBound + System.lineSeparator();
+        String setup = TAB + LOWER + frequencyLowerBound + System.lineSeparator();
         setup = setup + TAB + THRESHOLD + cosineSimilarityThreshold + System.lineSeparator();
         
         return setup;
