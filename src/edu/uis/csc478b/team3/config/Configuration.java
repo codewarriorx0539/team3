@@ -9,6 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Configuration: is the top level XML node. This contains system wide 
  * information. A child node is a list of all the Plagiarism tests to be preformed
  * and related configuration.
+ * Req 8.1.0
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -22,7 +23,7 @@ public class Configuration
 {
     // Holds any notes
     String notes;
-    // Holds the list of tests
+    // Holds the list of tests - Req 6.0.0
     ArrayList<PlagiarismTest> list;
         
     /**

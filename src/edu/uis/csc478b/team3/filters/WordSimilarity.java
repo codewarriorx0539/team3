@@ -4,6 +4,7 @@ package edu.uis.csc478b.team3.filters;
 import edu.uis.csc478b.team3.FileData;
 import edu.uis.csc478b.team3.filters.algorithms.CosineSimilarity;
 import edu.uis.csc478b.team3.filters.algorithms.SimilarityResults;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -27,10 +28,10 @@ public class WordSimilarity extends PlagiarismFilter
 {
     // Used in descriptive stats to describe if the two documents are similar in
     // word count
-    float frequencyLowerBound;
+    float frequencyLowerBound; // Req 13.2.0, Req 18.2.0, Req 18.3.0
     
     // Threshold of acceptable closeness
-    float cosineSimilarityThreshold;
+    float cosineSimilarityThreshold; // Req 13.1.0
     CosineSimilarity cosineSimilarity;
     
     final protected String TAB = "\t";
@@ -53,6 +54,7 @@ public class WordSimilarity extends PlagiarismFilter
     
     /**
      * Constructor: Default values for Word frequency
+     * Req 7.4.1, 7.4.2
      */
     public WordSimilarity()
     {
@@ -78,7 +80,7 @@ public class WordSimilarity extends PlagiarismFilter
         this.frequencyLowerBound = frequencyLowerBound;
         
         // BOUNDS CHECK
-        if(frequencyLowerBound < 0 || cosineSimilarityThreshold < -1 || cosineSimilarityThreshold > 1)
+        if(frequencyLowerBound < 0 || frequencyLowerBound > 1.0 || cosineSimilarityThreshold < -1 || cosineSimilarityThreshold > 1 )
         {
             throw new Exception("Similarity::Similarity value out of bounds");
         }
@@ -166,6 +168,7 @@ public class WordSimilarity extends PlagiarismFilter
         float ratioWords;
         
         // Calculate the ratio of words and determine if we are in acceptable bounds
+        // Req 18.5.0
         if( total1 > total2)
         {
             ratioWords = (float) total2 / (float) total1;
@@ -176,6 +179,7 @@ public class WordSimilarity extends PlagiarismFilter
         } 
         
         // Determine if there is plagiarism
+        // Req 18.5.2, Req 18.6.0
         if( cosineSimilarityThreshold < cosineResults.angle )
         {
             result = result + TAB + FOUND + System.lineSeparator();
@@ -187,6 +191,7 @@ public class WordSimilarity extends PlagiarismFilter
          
         // Means the ratio of words is absurdly differently like one document as 
         // 1000 words and the other 2 words. Tested as a percentages/ratio
+        // Req 18.5.3, Req 18.5.4, Req 18.5.5
         if( frequencyLowerBound > ratioWords )
         {
             result = result + TAB + OUTSIDE + System.lineSeparator();
@@ -196,12 +201,14 @@ public class WordSimilarity extends PlagiarismFilter
             result = result + TAB + INSIDE + System.lineSeparator();
         }
 
+        // Req 20.5.1, Req 20.5.2, Req 20.5.3, Req 20.5.4
+        DecimalFormat df = new DecimalFormat("###.##%");
         result = result + TAB + COUNT1 + data1.getFileName() + ": " + total1 + System.lineSeparator();
         result = result + TAB + COUNT2 + data2.getFileName() + ": " + total2 + System.lineSeparator();
         result = result + TAB + SIMILAR_COUNT + similarWords + System.lineSeparator();
         result = result + TAB + COSINE + cosineResults.angle + System.lineSeparator();
         result = result + TAB + SCALED_COSINE + cosineResults.scaledAngle + System.lineSeparator();
-        result = result + TAB + WORD_FREQ_RATIO + ratioWords + System.lineSeparator();
+        result = result + TAB + WORD_FREQ_RATIO + df.format(ratioWords) + System.lineSeparator();
         result = result + TAB + CONFIGURATION + System.lineSeparator();
         result = result + getConfigSetup();
             
@@ -213,8 +220,14 @@ public class WordSimilarity extends PlagiarismFilter
         return frequencyLowerBound;
     }
 
-    synchronized  public void setFrequencyLowerBound(float frequencyLowerBound) 
+    synchronized  public void setFrequencyLowerBound(float frequencyLowerBound) throws Exception 
     {
+        // BOUNDS CHECK
+        if(frequencyLowerBound < 0 || frequencyLowerBound > 1.0 )
+        {
+            throw new Exception("Similarity::setFrequencyLowerBound value out of bounds: " + frequencyLowerBound);
+        }
+        
         this.frequencyLowerBound = frequencyLowerBound;
     }
 
@@ -223,16 +236,22 @@ public class WordSimilarity extends PlagiarismFilter
         return cosineSimilarityThreshold;
     }
 
-    synchronized public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) 
+    synchronized public void setCosineSimilarityThreshold(float cosineSimilarityThreshold) throws Exception 
     {
+        // BOUNDS CHECK
+        if( cosineSimilarityThreshold < -1 || cosineSimilarityThreshold > 1)
+        {
+            throw new Exception("Similarity::setCosineSimilarityThreshold value out of bounds: " + cosineSimilarityThreshold);
+        }
         this.cosineSimilarityThreshold = cosineSimilarityThreshold;
     }
     
     @Override
     public String getConfigSetup() 
     {
-        String setup = TAB + LOWER + frequencyLowerBound + System.lineSeparator();
-        setup = setup + TAB + THRESHOLD + cosineSimilarityThreshold + System.lineSeparator();
+        DecimalFormat df = new DecimalFormat("###.##%");
+        String setup = TAB + LOWER + df.format(frequencyLowerBound ) + System.lineSeparator();
+        setup = setup + TAB + THRESHOLD + df.format(cosineSimilarityThreshold ) + System.lineSeparator();
         
         return setup;
     }

@@ -36,6 +36,7 @@ public class EditDistance extends PlagiarismFilter
     
     /**
      * Constructor: Default operation costs.
+     * Req 7.3.2.1,7.3.2.2,7.3.2.3
      */
     public EditDistance()
     {
@@ -115,8 +116,14 @@ public class EditDistance extends PlagiarismFilter
         return insertCost;
     }
 
-    synchronized public void setInsertCost(float insertCost) 
+    synchronized public void setInsertCost(float insertCost) throws Exception 
     {
+        // BOUNDS CHECK
+        if(insertCost < 0 )
+        {
+            throw new Exception("EditDistance::setInsertCost value out of bounds: " + insertCost);
+        }
+        
         this.insertCost = insertCost;
     }
 
@@ -125,8 +132,13 @@ public class EditDistance extends PlagiarismFilter
         return deletionCost;
     }
 
-    synchronized public void setDeletionCost(float deletionCost) 
+    synchronized public void setDeletionCost(float deletionCost) throws Exception 
     {
+        // BOUNDS CHECK
+        if(deletionCost < 0 )
+        {
+            throw new Exception("EditDistance::setDeletionCost value out of bounds: " + deletionCost);
+        }
         this.deletionCost = deletionCost;
     }
 
@@ -135,8 +147,13 @@ public class EditDistance extends PlagiarismFilter
         return substitutionCost;
     }
 
-    synchronized public void setSubstitutionCost(float substitutionCost) 
+    synchronized public void setSubstitutionCost(float substitutionCost) throws Exception 
     {
+        // BOUNDS CHECK
+        if(substitutionCost < 0)
+        {
+            throw new Exception("EditDistance::setSubstitutionCost value out of bounds: " + substitutionCost);
+        }
         this.substitutionCost = substitutionCost;
     }
     

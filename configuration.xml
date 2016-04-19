@@ -30,4 +30,25 @@
             <frequencyLowerBound>0.3</frequencyLowerBound>
         </wordFilters>
     </test>
+    <test>
+        <commonWordsFile>common.txt</commonWordsFile>
+        <file>test_jake.txt</file>
+        <file>test_jfk.txt</file>
+        <file>test_jfk_insert_random_text.txt</file>
+        <sentenceFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sentenceSimilarity">
+            <consecutiveSentences>-1</consecutiveSentences>
+            <editDistance>
+                <deletionCost>1.0</deletionCost>
+                <insertCost>1.0</insertCost>
+                <substitutionCost>1.5</substitutionCost>
+            </editDistance>
+            <sentenceSimilarityRange>3</sentenceSimilarityRange>
+            <sentenceSimilarityThreshold>0.7</sentenceSimilarityThreshold>
+            <totalSentenceThreshold>0.3</totalSentenceThreshold>
+        </sentenceFilters>
+        <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wordSimilarity">
+            <cosineSimilarityThreshold>0.7</cosineSimilarityThreshold>
+            <frequencyLowerBound>0.3</frequencyLowerBound>
+        </wordFilters>
+    </test>
 </configuration>

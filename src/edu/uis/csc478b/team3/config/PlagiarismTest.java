@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 /**
  * PlagiarismTest: contains all the information to test a set of files against each other.
+ * Req 6.1.0, 6.2.0
  * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
@@ -17,13 +18,13 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class PlagiarismTest 
 {
-    // Set of files to test
+    // Set of files to test Req 9.0.0, Req 9.1.0
     ArrayList< String > files;
     
-    // Path to common words file; can be empty or null
+    // Path to common words file; can be empty or null - Req 7.1.0, Req 11.0.0, Req 11.1.0, Req 15.1.0, Req 15.2.0
     String commonWordsFile;
     
-    // Specific filters
+    // Specific filters - Req 7.3.0, Req 7.4.0, Req 8.2.0, Req 8.3.0, Req 12.0.0, Req 13.0.0
     ArrayList< PlagiarismFilter > sentenceFilters;
     ArrayList< PlagiarismFilter > wordFilters;
     

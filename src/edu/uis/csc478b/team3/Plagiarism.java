@@ -52,6 +52,7 @@ public class Plagiarism implements Runnable
     
     /**
      * Constructor: Set the test file names and send in the configuration
+     * Req 14.0.0
      * 
      * @param fileName1
      * @param fileName2
@@ -115,7 +116,7 @@ public class Plagiarism implements Runnable
     {
         try 
         {
-            // Read in common words if configured
+            // Read in common words if configured - Req 11.2.0, Req 15.0.0
             if( (commonWordsFileName != null) && (!commonWordsFileName.isEmpty()) )
             {
                 readCommonWordCsvFile(commonWordsFileName);
@@ -147,8 +148,19 @@ public class Plagiarism implements Runnable
                 System.out.println( "\tFile Name: " + fileName1);
                 System.out.println( "\tFile Name: " + fileName2);
                 
+                // Req 20.4.0
+                if( commonWordsFileName != null )
+                {
+                    System.out.println( "\tCommon Words File Name: " + commonWordsFileName);
+                }
+                else
+                {
+                    System.out.println( "\tCommon Words File Name: ");
+                }
+                
                 System.out.println( "Word Filters:" );
                 
+                // Req 20.0.0, Req 20.1.0, Req 20.5.0, Req 20.6.0
                 for(String output : results.wordResults)
                 {
                     System.out.print(output);
@@ -166,7 +178,12 @@ public class Plagiarism implements Runnable
    
         } catch (Exception ex) 
         {
-            Logger.getLogger(Plagiarism.class.getName()).log(Level.SEVERE, null, ex);
+            synchronized(System.out)
+            {
+                System.out.println("Skipping Test: " + fileName1 + "  " + fileName2);
+                System.out.println(ex);
+                System.out.println();
+            }
         }
     }
    
@@ -204,6 +221,7 @@ public class Plagiarism implements Runnable
             XmlConfig xmlConfig = new XmlConfig();
             
             // If zero arguments create a sample configuration
+            // Req 8.0.0
             if(args.length == 0)
             {
                 xmlConfig.createSampleProfile();
@@ -243,6 +261,7 @@ public class Plagiarism implements Runnable
             // Create a thread pool
             ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
             
+            //Collections.reverse(tests);
             // Iterate over the test sets
             for(PlagiarismTest testCase : tests)
             {
@@ -269,7 +288,12 @@ public class Plagiarism implements Runnable
 
                         Thread.sleep(SLEEP_MILLISECONDS);
                     }
-                    executor.execute( new Plagiarism( tp.file1 , tp.file2, testCase  ) );
+                    
+                    // Req 9.2.0, Req 10.0.0, Req 10.1.0
+                    if(tp.file1 != null && tp.file2 != null && !tp.file1.isEmpty() && !tp.file2.isEmpty()  )
+                    {
+                        executor.execute( new Plagiarism( tp.file1 , tp.file2, testCase  ) );
+                    }
                 }
             }
 

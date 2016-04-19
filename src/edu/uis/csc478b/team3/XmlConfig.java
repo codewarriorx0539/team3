@@ -63,7 +63,8 @@ public class XmlConfig
     }
     
     /**
-     * Read the XML configuration
+     * Read the XML configuration.
+     * Req 5.0.0
      * 
      * @param fileName
      * @param classes
@@ -73,7 +74,7 @@ public class XmlConfig
     public Configuration readXmlConfiguration(String fileName , Class[] classes) throws JAXBException
     {
         File file = new File(fileName);
-        JAXBContext jaxbContext = JAXBContext.newInstance( classes );
+        JAXBContext jaxbContext = JAXBContext.newInstance( classes);
         Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         
         return (Configuration) jaxbUnmarshaller.unmarshal(file);
@@ -100,6 +101,7 @@ public class XmlConfig
     
     /**
      * Create a sample XML config and serialize it.
+     * Req 7.2.0, 7.2.1, 7.2.2, 7.2.3
      * 
      * @throws JAXBException
      * @throws Exception 
