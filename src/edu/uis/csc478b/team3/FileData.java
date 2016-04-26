@@ -27,6 +27,8 @@ public class FileData
     final private String REGEX_SENTENCE_ENDING = "[\\.\\?!]";
     // Used to remove punctuation
     final private String REGEX_NON_ALPHANUMERIC_SYNTAX = "[^a-zA-Z\\d\\s]";
+    // Remove repeated whitespace
+    final private String REGEX_REPEATED_WHITESPACE = "\\s+";
     // Used to split on whitespace boundaries
     final private String REGEX_WHITESPACE = "\\s";
     // File name of parsed files
@@ -75,7 +77,7 @@ public class FileData
         for(String s : textSentences)
         {
             // Remove punctuation commas, apostrophes, dollar sign, dash, etc - Req 16.0.0
-            String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim();
+            String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim().replaceAll(REGEX_REPEATED_WHITESPACE, " ");
             
             // Split up document up into words (split on whitespace boundaries)
             String [] textWords = formatedSentence.split( REGEX_WHITESPACE );

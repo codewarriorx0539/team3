@@ -116,29 +116,48 @@ public class SentenceSimilarity extends PlagiarismFilter
         int total1 = list1.size();
         int total2 = list2.size();
         
-        int lastSentence = Math.min( total1, total2);
+        int lastSentence;
+        int endLargest;
+        int endSmallest;
+        ArrayList< String > smallerList;
+        ArrayList< String > largerList;
+        
+        if(total1 > total2)
+        {
+            endSmallest = total2;
+            endLargest = total1;
+            smallerList = list2;
+            largerList = list1;
+        }
+        else
+        {
+            endSmallest = total1;
+            endLargest = total2;
+            smallerList = list1;
+            largerList = list2;
+        }
 
         // Check behind and ahead - Req 19.6.1
-        for(int index = 0; (index < lastSentence) && (done == false); index++ )
+        for(int index = 0; (index < endSmallest) && (done == false); index++ )
         {
             boolean foundSimilar = false;
             int start = 0;
-            int end = lastSentence;
+            int end = endLargest;
             
             if( (index - range) > 0)
             {
                 start = index - range;
             }
             
-            if((index + range) < lastSentence )
+            if((index + range) < endLargest )
             {
                 end = index + range;
             }
             
             for(int i = start; (i < end) && (foundSimilar != true); i++)
             {
-                String sentence1 = list1.get(index);
-                String sentence2 = list2.get(i);
+                String sentence1 = smallerList.get(index);
+                String sentence2 = largerList.get(i);
                 
                 float cost =  sentence1.length() * Math.max(editDistance.getInsertCost(), editDistance.getSubstitutionCost() );
                 float distance = editDistance.getDistance( sentence1 , sentence2 );
