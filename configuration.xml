@@ -2,37 +2,7 @@
 <configuration>
     <notes>Hello Roger, thanks for allowing us to put a great project together.</notes>
     <test>
-        <commonWordsFile>common.txt</commonWordsFile>
-        <file>test_jake.txt</file>
-        <file>test_jfk.txt</file>
-        <file>test_jfk_insert_random_text.txt</file>
-        <file>test_jobs.txt</file>
-        <file>test_jobs_delete_sentences.txt</file>
-        <file>test_macarthur.txt</file>
-        <file>test_macarthur_swap_paragraphs.txt</file>
-        <file>test_reagan.txt</file>
-        <file>test_reagan_delete_last_paragraph.txt</file>
-        <file>test_bryan.txt</file>
-        <file>test_jobs_copy.txt</file>
-        <sentenceFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sentenceSimilarity">
-            <consecutiveSentences>-1</consecutiveSentences>
-            <editDistance>
-                <deletionCost>1.0</deletionCost>
-                <insertCost>1.0</insertCost>
-                <substitutionCost>1.5</substitutionCost>
-            </editDistance>
-            <sentenceSimilarityRange>3</sentenceSimilarityRange>
-            <sentenceSimilarityThreshold>0.7</sentenceSimilarityThreshold>
-            <totalSentenceThreshold>0.3</totalSentenceThreshold>
-        </sentenceFilters>
-        <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wordSimilarity">
-            <cosineSimilarityThreshold>0.7</cosineSimilarityThreshold>
-            <frequencyLowerBound>0.3</frequencyLowerBound>
-        </wordFilters>
-    </test>
-    <test>
-        <commonWordsFile>common.txt</commonWordsFile>
-        <file>test_jake.txt</file>
+        <commonWordsFile></commonWordsFile>
         <file>test_jfk.txt</file>
         <file>test_jfk_insert_random_text.txt</file>
         <sentenceFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sentenceSimilarity">
@@ -43,7 +13,7 @@
                 <substitutionCost>1.5</substitutionCost>
             </editDistance>
             <sentenceSimilarityRange>3</sentenceSimilarityRange>
-            <sentenceSimilarityThreshold>0.7</sentenceSimilarityThreshold>
+            <sentenceSimilarityThreshold>0.15</sentenceSimilarityThreshold>
             <totalSentenceThreshold>0.3</totalSentenceThreshold>
         </sentenceFilters>
         <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wordSimilarity">

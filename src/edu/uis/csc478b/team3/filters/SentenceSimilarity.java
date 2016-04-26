@@ -115,29 +115,38 @@ public class SentenceSimilarity extends PlagiarismFilter
         
         int total1 = list1.size();
         int total2 = list2.size();
+        
+        int lastSentence = Math.min( total1, total2);
 
         // Check behind and ahead - Req 19.6.1
-        for(int index = 0; index < total1 && index < total2 && done == false; index++ )
+        for(int index = 0; (index < lastSentence) && (done == false); index++ )
         {
             boolean foundSimilar = false;
+            int start = 0;
+            int end = lastSentence;
             
-            for(int i = index; (i < total1) && (i < total2) && (i - index <= range) && (foundSimilar != true) ; i++)
+            if( (index - range) > 0)
             {
-               // Req 19.6.2.1, Req 19.6.2.2
-               if( threshold >= editDistance.getDistance( list1.get(i), list2.get(index)) )
-               {
-                   foundSimilar = true;
-               }
+                start = index - range;
             }
-
-            if(foundSimilar == false)
+            
+            if((index + range) < lastSentence )
             {
-                for(int i = index; (i >= 0) && (i > (index - range)) && (foundSimilar != true); i--)
+                end = index + range;
+            }
+            
+            for(int i = start; (i < end) && (foundSimilar != true); i++)
+            {
+                String sentence1 = list1.get(index);
+                String sentence2 = list2.get(i);
+                
+                float cost =  sentence1.length() * Math.max(editDistance.getInsertCost(), editDistance.getSubstitutionCost() );
+                float distance = editDistance.getDistance( sentence1 , sentence2 );
+                float ratioOfCorrectness = distance/cost;
+
+                if( ratioOfCorrectness <= threshold  )
                 {
-                    if( threshold >= editDistance.getDistance( list1.get(i), list2.get(index)) )
-                    {
-                        foundSimilar = true;
-                    }
+                    foundSimilar = true;
                 }
             }
 
@@ -162,7 +171,6 @@ public class SentenceSimilarity extends PlagiarismFilter
                     indexLastTrigger = index;
                     totalConsecutiveSentences = 1;
                 }
-                
             }
 
         }

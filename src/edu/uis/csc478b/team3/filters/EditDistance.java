@@ -172,4 +172,16 @@ public class EditDistance extends PlagiarismFilter
     {
         throw new UnsupportedOperationException("NOT SUPPORTED AS A FILTER");
     }
+    
+    public static void main(String[] args) 
+    {
+        String s1 = "hello";
+        String s2 = "Chellos";
+        
+        EditDistance ed = new EditDistance();
+        
+        System.out.println("String1: " + s1);
+        System.out.println("String2: " + s2);
+        System.out.println( "Distance: " + ed.getDistance(s1,s2) );
+    }
 }
