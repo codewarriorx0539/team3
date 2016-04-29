@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Plagiarism: runs all filters on the two test files. Plagiarism implements 
@@ -52,7 +50,7 @@ public class Plagiarism implements Runnable
     
     /**
      * Constructor: Set the test file names and send in the configuration
-     * Req 14.0.0
+     * 
      * 
      * @param fileName1
      * @param fileName2
@@ -116,7 +114,7 @@ public class Plagiarism implements Runnable
     {
         try 
         {
-            // Read in common words if configured - Req 11.2.0, Req 15.0.0
+            // Read in common words if configured - Req 11.2.0
             if( (commonWordsFileName != null) && (!commonWordsFileName.isEmpty()) )
             {
                 readCommonWordCsvFile(commonWordsFileName);
@@ -142,13 +140,14 @@ public class Plagiarism implements Runnable
             }
             
             // Print output
+            // Req 20.0.0, 20.1.0, 20.2.0, 20.3.0, 20.4.0, 20.4.1, 20.4.2, 20.4.3, 20.4.4, 20.5.0
             synchronized(System.out)
             {
                 System.out.println( "Test Results:" );
                 System.out.println( "\tFile Name: " + fileName1);
                 System.out.println( "\tFile Name: " + fileName2);
                 
-                // Req 20.4.0
+                
                 if( commonWordsFileName != null )
                 {
                     System.out.println( "\tCommon Words File Name: " + commonWordsFileName);
@@ -160,7 +159,7 @@ public class Plagiarism implements Runnable
                 
                 System.out.println( "Word Filters:" );
                 
-                // Req 20.0.0, Req 20.1.0, Req 20.5.0, Req 20.6.0
+                
                 for(String output : results.wordResults)
                 {
                     System.out.print(output);

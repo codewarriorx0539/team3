@@ -26,11 +26,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SentenceSimilarity extends PlagiarismFilter 
 {
-    EditDistance editDistance;          // Used to calculate distance between sentences
-    float threshold;                    // Distance threshold when sweeping a sentence against a set of sentences in another file - Req 12.3.0, Req 19.3.0
-    int range;                          // The number of sentences to sweep behind and ahead. - Req 12.2.0, Req 19.4.0
-    float totalSentenceThreshold;       // Ratio of plagiarized sentences that triggers plagiarism - Req 12.4.0, Req 19.5.0
-    int consecutiveSentences;           // Optional short circuit plagiarism based on plagiarized consecutive sentences - Req 12.1.0, Req 19.2.0
+    EditDistance editDistance;          // Used to calculate distance between sentences - Req 19.5.0, 19.6.0, 19.7.0
+    float threshold;                    // Distance threshold when sweeping a sentence against a set of sentences in another file - Req 12.3.0, 19.2.0
+    int range;                          // The number of sentences to sweep behind and ahead. - Req 12.2.0, 19.3.0
+    float totalSentenceThreshold;       // Ratio of plagiarized sentences that triggers plagiarism - Req 12.4.0,  19.4.0
+    int consecutiveSentences;           // Optional short circuit plagiarism based on plagiarized consecutive sentences - Req 12.1.0, 19.1.0
     
     final protected String CLASSIFIER = "CLASSIFIER: SENTENCE SIMILARITY";
     final protected String FOUND = "Sentence Similarity: PLAGIARISM FOUND";
@@ -55,7 +55,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         range = 3;                      // 3 behind 3 ahead
         threshold = .70f;               // if sentence is 70% similar
         totalSentenceThreshold = .30f;  // If 30% of the sentences in document are similar
-        consecutiveSentences = -1;      // -1 ignore blocks of similarity as a trigger
+        consecutiveSentences = -1;      // -1 ignore blocks of similarity as a trigger 
         
         editDistance = new EditDistance();
     }
@@ -137,18 +137,20 @@ public class SentenceSimilarity extends PlagiarismFilter
             largerList = list2;
         }
 
-        // Check behind and ahead - Req 19.6.1
+        // Check behind and ahead - 
         for(int index = 0; (index < endSmallest) && (done == false); index++ )
         {
             boolean foundSimilar = false;
             int start = 0;
             int end = endLargest;
             
+            // Req 19.8.1
             if( (index - range) > 0)
             {
                 start = index - range;
             }
             
+            // Req 19.8.1
             if((index + range) < endLargest )
             {
                 end = index + range;
@@ -160,26 +162,29 @@ public class SentenceSimilarity extends PlagiarismFilter
                 String sentence2 = largerList.get(i);
                 
                 float cost =  sentence1.length() * Math.max(editDistance.getInsertCost(), editDistance.getSubstitutionCost() );
+                // Req 19.8.2
                 float distance = editDistance.getDistance( sentence1 , sentence2 );
                 float ratioOfCorrectness = distance/cost;
 
+                // Req 19.8.2.1
                 if( ratioOfCorrectness <= threshold  )
                 {
                     foundSimilar = true;
                 }
             }
 
+            // Req 19.8.2.2
             if(foundSimilar == true)
             {
                 total++;
                 
                 if(indexLastTrigger == (index - 1) )
-                {
-                    // Req 19.6.3
+                {             
+                    // Req 19.8.3
                     totalConsecutiveSentences++;
                     indexLastTrigger = index;
                     
-                    // Req 19.2.1, Req 19.6.3.1, Req 19.6.3.2
+                    // Req 19.1.1,  19.8.3.1, 19.8.3.2
                     if(consecutiveSentences != -1 && totalConsecutiveSentences >= consecutiveSentences)
                     {
                         done = true;
@@ -199,6 +204,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         String result = TAB + CLASSIFIER + System.lineSeparator();
         
         // Test to see if we are testing consecutive blocks and if we short circuited.
+        // Req 19.8.4
         if( done == true)
         {
             result = result + TAB + FOUND + System.lineSeparator();
@@ -217,7 +223,8 @@ public class SentenceSimilarity extends PlagiarismFilter
                 smallest = total1;
             }
             
-            // Test to see if we surpassed the threshold - Req 19.6.0, Req 19.7.0
+            // Test to see if we surpassed the threshold
+            // Req 19.8.0, 19.8.4.1, 19.8.4.2, Req 19.9.0
             sentenceSimilarityRatio = (float)total/(float)smallest;
             if( sentenceSimilarityRatio >= totalSentenceThreshold )
             {
@@ -229,7 +236,7 @@ public class SentenceSimilarity extends PlagiarismFilter
             }
         }
         
-        // Req 20.5.1, Req 20.5.2, Req 20.5.3, Req 20.5.4
+        
         DecimalFormat df = new DecimalFormat("###.##%");
         result = result + TAB + TOTAL1 + data1.getFileName() + ": " + total1 + System.lineSeparator();
         result = result + TAB + TOTAL2 + data2.getFileName() + ": " + total2 + System.lineSeparator();

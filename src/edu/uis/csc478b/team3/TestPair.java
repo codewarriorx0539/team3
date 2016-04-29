@@ -16,6 +16,7 @@ public class TestPair
 
     /**
      * Constructor to set files.
+     * Req 14.1.0
      * 
      * @param file1
      * @param file2

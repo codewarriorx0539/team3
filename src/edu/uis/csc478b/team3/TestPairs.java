@@ -18,6 +18,7 @@ public class TestPairs
 
     /**
      * Create pairs of tests.
+     * Req 14.2.0
      * 
      * @param files List of files from the configuration file
      * @return Pairs to test

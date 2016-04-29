@@ -67,7 +67,8 @@ public class FileData
         // Read entire file in as a single String
         String text = new String( Files.readAllBytes( Paths.get(this.fileName) ), StandardCharsets.UTF_8);
         
-        // Make the String lowercase - Req 17.0.0
+        // Make the String lowercase
+        // Req 17.0.0
         String firstPass = text.toLowerCase();
         
         // Split the string into sentences. 
@@ -76,7 +77,8 @@ public class FileData
         // Parse each sentence
         for(String s : textSentences)
         {
-            // Remove punctuation commas, apostrophes, dollar sign, dash, etc - Req 16.0.0
+            // Remove punctuation commas, apostrophes, dollar sign, dash, etc
+            // Req 16.0.0, 16.1.0
             String formatedSentence = s.replaceAll( REGEX_NON_ALPHANUMERIC_SYNTAX, "").trim().replaceAll(REGEX_REPEATED_WHITESPACE, " ");
             
             // Split up document up into words (split on whitespace boundaries)
@@ -84,6 +86,7 @@ public class FileData
             String sentence = "";
             
             // If a dictionary of common words was given
+            // Req 15.0.0, 15.1.0
             if(this.commonWords != null)
             {
                 for(String word : textWords)

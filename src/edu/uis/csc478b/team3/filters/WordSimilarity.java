@@ -16,6 +16,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  * scaled similarity. Scaled similarity is the Cosine Similarity multiplied by the 
  * ratio of the word counts with the minimum of the two in the numerator.
  * 
+ * Req 18.0.0
+ * 
  * @author Architect: <a href="mailto:jerak2@uis.edu">Jacob Eraklidis</a> <br>
  *
  * Documentation: <a href="mailto:rrich9@uis.edu">Ron Richard</a> <br>
@@ -28,10 +30,10 @@ public class WordSimilarity extends PlagiarismFilter
 {
     // Used in descriptive stats to describe if the two documents are similar in
     // word count
-    float frequencyLowerBound; // Req 13.2.0, Req 18.2.0, Req 18.3.0
+    float frequencyLowerBound; // Req 13.2.0, 18.2.0
     
     // Threshold of acceptable closeness
-    float cosineSimilarityThreshold; // Req 13.1.0
+    float cosineSimilarityThreshold; // Req 13.1.0, 18.1.0
     CosineSimilarity cosineSimilarity;
     
     final protected String TAB = "\t";
@@ -88,6 +90,8 @@ public class WordSimilarity extends PlagiarismFilter
 
     /**
      * Calculate stats, cosine similarity, and determine Plagiarism
+     * 
+     * Req 18.1.2
      * 
      * @param data1
      * @param data2
@@ -161,6 +165,7 @@ public class WordSimilarity extends PlagiarismFilter
         }
 
         // Calculate cosine similairty and scaled cosine similarity
+        // Req 18.1.3
         SimilarityResults cosineResults = cosineSimilarity.calcCosineSimilarity(map1, map2);
         
         String result = TAB + CLASSIFIER + System.lineSeparator();
@@ -168,7 +173,7 @@ public class WordSimilarity extends PlagiarismFilter
         float ratioWords;
         
         // Calculate the ratio of words and determine if we are in acceptable bounds
-        // Req 18.5.0
+        // Req 18.3.0
         if( total1 > total2)
         {
             ratioWords = (float) total2 / (float) total1;
@@ -179,7 +184,7 @@ public class WordSimilarity extends PlagiarismFilter
         } 
         
         // Determine if there is plagiarism
-        // Req 18.5.2, Req 18.6.0
+        // Req 18.1.4, 18.4.0
         if( cosineSimilarityThreshold < cosineResults.angle )
         {
             result = result + TAB + FOUND + System.lineSeparator();
@@ -191,7 +196,7 @@ public class WordSimilarity extends PlagiarismFilter
          
         // Means the ratio of words is absurdly differently like one document as 
         // 1000 words and the other 2 words. Tested as a percentages/ratio
-        // Req 18.5.3, Req 18.5.4, Req 18.5.5
+        // Req 18.3.1, 18.3.2
         if( frequencyLowerBound > ratioWords )
         {
             result = result + TAB + OUTSIDE + System.lineSeparator();
@@ -201,7 +206,6 @@ public class WordSimilarity extends PlagiarismFilter
             result = result + TAB + INSIDE + System.lineSeparator();
         }
 
-        // Req 20.5.1, Req 20.5.2, Req 20.5.3, Req 20.5.4
         DecimalFormat df = new DecimalFormat("###.##%");
         result = result + TAB + COUNT1 + data1.getFileName() + ": " + total1 + System.lineSeparator();
         result = result + TAB + COUNT2 + data2.getFileName() + ": " + total2 + System.lineSeparator();
