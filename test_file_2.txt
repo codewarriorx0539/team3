@@ -1,0 +1,3 @@
+test file 2
+
+When test_file_1.txt and test_file_2.txt are compared, it should result in plagiarism.

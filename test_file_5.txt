@@ -1,0 +1,3 @@
+test file 3
+
+These files should be completely different.

@@ -3,8 +3,8 @@
     <notes>Hello Roger, thanks for allowing us to put a great project together.</notes>
     <test>
         <commonWordsFile></commonWordsFile>
-        <file>test_jfk.txt</file>
-        <file>test_jfk_insert_random_text.txt</file>
+        <file>Test_Case_Jim_File_1.txt</file>
+        <file>test_file_5.txt</file>
         <sentenceFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="sentenceSimilarity">
             <consecutiveSentences>-1</consecutiveSentences>
             <editDistance>
@@ -14,7 +14,7 @@
             </editDistance>
             <sentenceSimilarityRange>3</sentenceSimilarityRange>
             <sentenceSimilarityThreshold>0.15</sentenceSimilarityThreshold>
-            <totalSentenceThreshold>0.3</totalSentenceThreshold>
+            <totalSentenceThreshold>0.7</totalSentenceThreshold>
         </sentenceFilters>
         <wordFilters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="wordSimilarity">
             <cosineSimilarityThreshold>0.7</cosineSimilarityThreshold>

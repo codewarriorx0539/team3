@@ -84,7 +84,7 @@ public class SentenceSimilarity extends PlagiarismFilter
         this.editDistance = editDistance;
         
         // BOUNDS CHECK
-        if( range == 0                      ||
+        if( range <= 0                      ||
             threshold < 0                   || 
             threshold > 1.0                 || 
             totalSentenceThreshold < 0      || 
